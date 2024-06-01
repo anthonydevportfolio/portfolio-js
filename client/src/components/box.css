@@ -1,0 +1,58 @@
+.box {
+    margin-bottom: 5vh;
+    position: relative;
+    text-align: center;
+    top: 10vh;
+    overflow-x: hidden;
+}
+.projectsBox, .eBox {
+    margin-top: 5vh;
+}
+.box .header {
+    color: #e2dfe7;
+    font-size: 10vw;
+    position: relative;
+}
+.box .subHeader {
+    margin-top: 1.5vh;
+    color: #cfcbd7;
+    font-size: 6vw;
+}
+.box p {
+    width: 80%;
+    margin: 1vh auto auto auto;
+    line-height: 7vw;
+}
+.Typewriter__cursor {
+    color: #4aaba4;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+@media all and (min-width: 770px) {
+    .box {
+        top: 30vh;
+        left: 15vw;
+        text-align: left;
+        letter-spacing: 1px;
+    }
+    .box .header {
+        font-size: 50pt;
+    }
+    .box .subHeader {
+        font-size: 2.3rem;
+    }
+    .box p {
+        max-width: 45vw;
+        font-size: 1.5vw;
+        margin: 1vh 0px 0px 0px;
+        line-height: 2vw;
+    }
+    .box ul {
+        margin: 0px;
+        padding: 0px;
+        text-align: left;
+    }
+    .box ul li:first-of-type {
+        padding: 0.1vw;
+    }
+}

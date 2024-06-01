@@ -1,0 +1,34 @@
+.box .header {
+    color: #e2dfe7;
+    font-size: 10vw;
+    position: relative;
+}
+.box .subHeader {
+    margin-top: 1.5vh;
+    color: #cfcbd7;
+}
+.box p {
+    width: 80%;
+    margin: 1vh auto auto auto;
+    line-height: 7vw;
+}
+.Typewriter__cursor {
+    color: #4aaba4;
+    font-family: Arial, Helvetica, sans-serif;
+}
+@media all and (min-width: 770px) {
+    .box {
+        top: 30vh;
+        left: 15vw;
+        text-align: left;
+    }
+    .box .header {
+        font-size: 50pt;
+    }
+    .box p {
+        max-width: 45vw;
+        font-size: 1.5vw;
+        margin: 1vh 0px 0px 0px;
+        line-height: 2vw;
+    }
+}

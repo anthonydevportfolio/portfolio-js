@@ -1,0 +1,50 @@
+@font-face {
+  font-family: main-font;
+  src: url('./util/mainFont-base.ttf');
+}
+@font-face {
+  font-family: main-font-bold;
+  src: url('./util/mainFont.ttf');
+}
+body {
+  font-family: main-font, Arial, Helvetica, sans-serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  background-color: #342f3e;
+  color: #e2dfe7;
+  /* color: #4aaba4; */
+  height: 1500px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.test {
+  position: absolute;
+  top: 300px;
+}
+.arrow {
+  position: absolute;
+  width: 60%;
+  height: 10%;
+  top: 57%;
+  left: calc(50% - 60% / 2);
+  filter: opacity(0.2);
+  margin: 0px;
+}
+#offset {
+  position: fixed;
+  top: 100px;
+  left: 10px;
+}
+@media all and (min-width: 720px) {
+  body {
+    height: 2000px;
+  }
+  .arrow {
+    width: 20%;
+    height: 10%;
+    top: 80%;
+    left: 21%;
+  }
+}
