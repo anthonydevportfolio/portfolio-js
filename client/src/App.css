@@ -48,3 +48,9 @@ body {
     left: 21%;
   }
 }
+
+@media all and (max-width: 719px) {
+  body {
+    overflow-x: hidden;
+  }
+} 

@@ -16,7 +16,37 @@
     color: #4aaba4;
     font-family: Arial, Helvetica, sans-serif;
 }
-@media all and (min-width: 770px) {
+
+.introIcon {
+    position: relative;
+    width: 10vw;
+    margin: 5px;
+    border-radius: 10px;
+    transition: all 1s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 4px 8px rgba(0, 0, 0, .1);
+}
+
+.socialIcon:hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .1), 0 6px 10px rgba(0, 0, 0, .1);
+}
+
+.languageIcon:nth-of-type(1) {
+    background-color: white;
+    padding-bottom: 0;
+}
+
+.linksBox {
+    display: flex;
+    justify-content: center;
+    column-gap: 3rem;
+    height: 100px;
+    margin: auto;
+    margin-top: 25px;
+}
+
+@media all and (min-width: 720px) {
     .box {
         top: 30vh;
         left: 15vw;
@@ -30,5 +60,24 @@
         font-size: 1.5vw;
         margin: 1vh 0px 0px 0px;
         line-height: 2vw;
+    }
+
+    .introIcon {
+        width: 3vw;
+        transition: all 1s;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 4px 8px rgba(0, 0, 0, .1);
+    }
+    
+    .socialIcon:hover {
+        cursor: pointer;
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, .1), 0 6px 10px rgba(0, 0, 0, .1);
+    }
+    
+    .linksBox {
+        display: flex;
+        justify-content: flex-start;
+        column-gap: 5rem;
+        height: 100px;
     }
 }
