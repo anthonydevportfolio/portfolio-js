@@ -19,11 +19,11 @@ const IntroBox = ({ slideIn, subHeader }) => {
                 <motion.section initial={{ y: '10vh' }} animate={slideIn}>
                     <h2 className='subHeader'>{subHeader}</h2>
                     <p>
-                    I'm a software engineer from Washington State, now based in Portland, OR. 
-                    I specialize in crafting solutions using the latest tech, with my strongest skills being in Java and Java/TypeScript. 
-                    Software development is my passion, and I'm constantly on the lookout for my next adventure in the field.
+                        I'm a software engineer from Washington State, now based in Portland, OR. I specialize in
+                        crafting solutions using the latest tech, with my strongest skills being in Java and
+                        Java/TypeScript. Software development is my passion, and I'm constantly on the lookout for my
+                        next adventure in the field.
                     </p>
-
                 </motion.section>
             </AnimatePresence>
             <Links />

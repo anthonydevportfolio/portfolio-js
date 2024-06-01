@@ -14,26 +14,29 @@ const ExperienceBox = ({ yOffset, slideIn, mobile, subHeader }) => {
     const [detailsShowing, setDetailsShowing] = useState(true);
     const yOffsetReq = mobile ? 161 : 451;
 
-    const detailAnimationDelays = useMemo(() =>
-        activeDetails?.info.map((_, index) => index * 0.1) || [], 
+    const detailAnimationDelays = useMemo(
+        () => activeDetails?.info.map((_, index) => index * 0.1) || [],
         [activeDetails]
     );
 
-    const handleClick = useCallback((item) => {
-        if(experience[item] === activeDetails) {
-            return;
-        }
-        const index = Object.keys(experience).indexOf(item);
-        setActive(index);
-        setActiveDetails(experience[item]);
-        setDetailsShowing(false);
-    }, [activeDetails]);
+    const handleClick = useCallback(
+        item => {
+            if (experience[item] === activeDetails) {
+                return;
+            }
+            const index = Object.keys(experience).indexOf(item);
+            setActive(index);
+            setActiveDetails(experience[item]);
+            setDetailsShowing(false);
+        },
+        [activeDetails]
+    );
 
     useEffect(() => {
         setDetailsShowing(true);
     }, [activeDetails]);
 
-    console.log(listRef.current)
+    console.log(listRef.current);
     return (
         <AnimatePresence>
             {yOffset > yOffsetReq && (

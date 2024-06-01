@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 export const Bar = ({ mobile, listRef, active }) => {
     const barRef = useRef();
@@ -14,15 +14,9 @@ export const Bar = ({ mobile, listRef, active }) => {
     }, [window.innerWidth, window.innerHeight]);
 
     const activeChild = listRef.current.children[active];
-    const commonStyles = mobile 
-        ? { left: activeChild.offsetLeft, width: activeChild.offsetWidth } 
+    const commonStyles = mobile
+        ? { left: activeChild.offsetLeft, width: activeChild.offsetWidth }
         : { top: activeChild.offsetTop + activeChild.offsetHeight / 15, height: activeChild.offsetHeight };
 
-    return (
-        <section
-            ref={barRef}
-            className={`bar ${mobile ? 'horizontal' : ''}`}
-            style={commonStyles}
-        ></section>
-    );
+    return <section ref={barRef} className={`bar ${mobile ? 'horizontal' : ''}`} style={commonStyles}></section>;
 };

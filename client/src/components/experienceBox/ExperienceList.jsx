@@ -1,4 +1,3 @@
-
 const ExperienceList = ({ listRef, experience, handleClick }) => (
     <ul className='experienceList' ref={listRef}>
         {Object.keys(experience).map((item, key) => (
