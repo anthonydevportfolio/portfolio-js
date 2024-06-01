@@ -49,7 +49,7 @@ const entries = [
         href: 'https://www.pokedle.co',
         label: 'pokedle',
         description: `
-            Wordle-themed Pokemon guessing game developed using the standard MERN stack
+            Wordle-inspired, Pokémon-themed guessing game developed using the standard MERN stack
         `
     },
     {

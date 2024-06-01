@@ -11,6 +11,7 @@
     width: 80%;
     margin: 1vh auto auto auto;
     line-height: 7vw;
+    text-align: justify;
 }
 .Typewriter__cursor {
     color: #4aaba4;

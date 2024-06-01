@@ -15,7 +15,7 @@ body {
   background-color: #342f3e;
   color: #e2dfe7;
   /* color: #4aaba4; */
-  height: 1500px;
+  height: 2000px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -27,7 +27,7 @@ body {
   position: absolute;
   width: 60%;
   height: 10%;
-  top: 57%;
+  top: 70%;
   left: calc(50% - 60% / 2);
   filter: opacity(0.2);
   margin: 0px;
@@ -45,7 +45,7 @@ body {
     width: 20%;
     height: 10%;
     top: 80%;
-    left: 21%;
+    left: 15%;
   }
 }
 
