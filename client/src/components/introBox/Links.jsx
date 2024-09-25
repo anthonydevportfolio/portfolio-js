@@ -45,7 +45,7 @@ const socials = [
     ]
 ];
 const languages = [
-    ['https://education.oracle.com/file/general/p-80-java.png'],
+    ['https://sbr-technologies.com/wp-content/uploads/2021/06/java-logo.png'],
     [
         'https://media.licdn.com/dms/image/D4D12AQEL9aeB8WqRaw/article-cover_image-shrink_600_2000/0/1685204779306?e=2147483647&v=beta&t=jr7Um-vZDvcgCCzx0a48zCEr3RtUyRVqelGOzrpL4bs'
     ],
