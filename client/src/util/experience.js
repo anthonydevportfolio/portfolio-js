@@ -6,13 +6,7 @@ const experience = {
         from: 'May 2023',
         to: 'present',
         info: [
-            'Spearheaded the design and implementation of a React-based user interface for an internal application, enhancing user experience and functionality',
-            'Led the integration of Cypress into our testing platform, beginning with a proof of concept that tested our application. This initiative aligned with industry trends and facilitated the transition from outdated technology',
-            'Optimized the CI/CD pipeline for this project, achieving ~50% reduction in build time and improving overall development efficiency',
-            'Conducted pre-release and post-release presentations to end-users, gathered feedback, and identified actionable feature requests to drive product improvements',
-            'Collaborated effectively with the back-end team to communicate feature requirements',
-            'Organized and led bug bash sessions, identifying and resolving critical issues across both front-end and back-end systems',
-            'Continuously developed and maintained self-service automated testing platform, significantly utilized within the Workday Extend organization for quality assurance and testing automation.'
+            'Developing the front-end of an internal Workday product used by many users to efficiently test and deliver high-quality code.'
         ]
     },
     hexaware: {
