@@ -5,6 +5,7 @@ import svgr from 'vite-plugin-svgr';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base: '/portfolio-js/',
     plugins: [react(), svgr()],
     define: {
         'process.env': {}, // Define an empty process.env to prevent errors
