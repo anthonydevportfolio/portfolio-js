@@ -1,6 +1,8 @@
+import { keyframes } from '@emotion/css';
 import styled from '@emotion/styled';
 import { FC } from 'react';
 import { useSelectorw } from '../../redux/hooks';
+import { cb } from '../landing/greeting';
 import { Stars } from '../stars/stars';
 import { Filter } from './filter';
 
@@ -8,18 +10,32 @@ interface BackgroundProps {
     children: React.ReactNode;
 }
 
+const fadeOut = keyframes({
+    from: {
+        opacity: 1
+    },
+    to: {
+        opacity: 0
+    }
+});
+
 export const Background: FC<BackgroundProps> = ({ children }) => {
+    const isExited = useSelectorw(state => state.landing.isExited);
+    const isExiting = useSelectorw(state => state.landing.isExiting);
     const isOnLandingPage = useSelectorw(state => state.global.isOnLandingPage);
+
     return (
-        <BackgroundBase>
-            <Stars isOnLandingPage={isOnLandingPage} />
-            <Filter />
-            {children}
-        </BackgroundBase>
+        !isExited && (
+            <BackgroundBase isExiting={isExiting}>
+                <Stars isOnLandingPage={isOnLandingPage} />
+                <Filter />
+                {children}
+            </BackgroundBase>
+        )
     );
 };
 
-const BackgroundBase = styled('div')({
+const BackgroundBase = styled('div')<{ isExiting: boolean }>(({ isExiting }) => ({
     backgroundColor: 'rgb(0, 0, 0)',
     position: 'relative',
     overflow: 'hidden',
@@ -33,6 +49,7 @@ const BackgroundBase = styled('div')({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    animation: `${isExiting && fadeOut} 1s ${cb} forwards 600ms`,
 
     // Mobile
     '@media (max-width: 768px)': {
@@ -44,4 +61,4 @@ const BackgroundBase = styled('div')({
         overflowY: 'auto',
         flexWrap: 'wrap'
     }
-});
+}));

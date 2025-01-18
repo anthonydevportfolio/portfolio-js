@@ -13,9 +13,9 @@ export const useTabBar = (
         const activeTabElement = tabsContainerRef.current.children[activeTab] as HTMLElement;
 
         if (activeTabElement) {
-            const left = activeTabElement.offsetLeft;
-            const width = activeTabElement.offsetWidth;
+            const width = activeTabElement.offsetWidth * 1.1;
 
+            const left = activeTabElement.offsetLeft + (activeTabElement.offsetWidth - width) / 2;
             setBarStyle({ left, width });
         }
     };

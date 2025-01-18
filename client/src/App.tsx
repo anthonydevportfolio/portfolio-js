@@ -10,8 +10,8 @@ function App() {
         <Provider store={store}>
             <Background>
                 <Greeting />
-                <View />
             </Background>
+            <View />
         </Provider>
     );
 }

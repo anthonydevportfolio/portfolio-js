@@ -1,27 +1,59 @@
 import { keyframes } from '@emotion/css';
 import styled from '@emotion/styled';
-import { FC, memo, useRef, useState } from 'react';
+import { FC, memo, useEffect, useRef, useState } from 'react';
 import { useInViewport } from 'react-in-viewport';
-import { useLogger } from '../../redux/hooks';
+import { useDispatch } from 'react-redux';
+import { useLogger, useSelectorw } from '../../redux/hooks';
+import { setContainerSizeEstablished } from '../../redux/slices/global';
 import { MQ } from '../../util';
 import { cb } from '../landing/greeting';
 import { technologies } from './data';
 
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
+
 export const Me = memo(() => {
     useLogger('Me');
+    const containerHeight = useRef<number | undefined>();
+    const baseRef = useRef<HTMLDivElement | null>(null);
+    const containerSizeEstablished = useSelectorw(state => state.global.containerSizeEstablished);
+
+    const dispatch = useDispatch();
+
     const isMobile = window.innerWidth < 800;
     const [initialized, setInitialized] = useState(false);
     const viewSentinel = useRef<HTMLDivElement | null>(null);
-    const { inViewport, enterCount } = useInViewport(viewSentinel, {}, {disconnectOnLeave: true});
+    const { inViewport, enterCount } = useInViewport(viewSentinel, {}, { disconnectOnLeave: true });
 
-    const shouldRender = (isMobile && enterCount > 0 )|| inViewport
+    const shouldRender = (isMobile && enterCount > 0) || inViewport;
+
+    useEffect(() => {
+        if (baseRef.current) {
+            containerHeight.current = Number(baseRef.current?.clientHeight);
+        }
+    }, [inViewport]);
+
+    if (!containerSizeEstablished && containerHeight.current) {
+        dispatch(setContainerSizeEstablished(true));
+    }
 
     return (
-        <>
+        <Base
+            ref={baseRef}
+            style={{
+                minHeight: containerHeight.current,
+                opacity: 0,
+                animation: `${fadeIn} 1s ${cb} forwards`
+            }}>
             <Sentinel className='sentinel' id='sent' ref={viewSentinel} />
-            {!shouldRender && <Base />}
             {shouldRender && (
-                <Base>
+                <BaseBody style={{ marginTop: '15vh' }}>
                     <BaseHeader>About</BaseHeader>
                     <BaseContent>
                         <MeParagraph>
@@ -45,36 +77,24 @@ export const Me = memo(() => {
                             ))}
                         </MeTechnologies>
                     </BaseContent>
-                </Base>
+                </BaseBody>
             )}
-        </>
+        </Base>
     );
 });
 
-const Sentinel = styled('span')({
-    width: '100px',
-    height: '100px',
-    transform: 'translateY(70vh)',
-    position: 'relative',
-
-    [MQ.mobile]: {
-        transform: 'translateY(60vh)',
-    }
-});
+export const Sentinel = styled('span')<{ color?: string }>(({ color }) => ({
+    position: 'absolute',
+    width: (import.meta.env.VITE_DEBUG && '10px') || '0',
+    height: '100%',
+    backgroundColor: (import.meta.env.VITE_DEBUG && (color ?? 'red')) || 'transparent'
+}));
 
 export const Base = styled('div')({
     flexDirection: 'column',
     position: 'relative',
     display: 'flex',
     zIndex: 1,
-    width: '100%',
-    minHeight: '62%',
-    minWidth: '1020px',
-    gap: '100px',
-
-    '& > *': {
-        position: 'relative'
-    },
 
     [MQ.mobile]: {
         gap: 0,
@@ -83,8 +103,13 @@ export const Base = styled('div')({
     }
 });
 
+export const BaseBody = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2rem'
+});
+
 export const BaseHeader = styled('div')({
-    color: 'rgb(230, 230, 230)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -102,7 +127,7 @@ export const BaseHeader = styled('div')({
 
 export const BaseContent = styled('div')({
     position: 'relative',
-    color: 'rgb(230, 230, 230)',
+
     display: 'flex',
     margin: 'auto',
     width: '70%',
@@ -166,7 +191,7 @@ const Tech: FC<TechProps> = ({ src, bgc = 'rgb(255, 255, 255)', idx, initialized
     };
 
     // Use the mapped index to calculate the animation delay
-    const animationDelay = (initialized ? 100 : 1600) + getMappedIndex(idx) * 110;
+    const animationDelay = (initialized ? 100 : 300) + getMappedIndex(idx) * 110;
 
     if (!initialized && getMappedIndex(idx) === 6) {
         setTimeout(() => {
@@ -194,18 +219,9 @@ const MeTechnologies = styled('div')({
 
     [MQ.mobile]: {
         maxWidth: '100%',
-        transform: 'scale(0.8)',
+        transform: 'scale(0.8)'
     }
 });
-
-const fadeIn = keyframes`
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-`;
 
 const HexagonalWrapper = styled('div')<{ bgc: string; delay: number }>(({ bgc, delay }) => ({
     width: '100px',

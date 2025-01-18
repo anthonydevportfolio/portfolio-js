@@ -1,10 +1,11 @@
 import { keyframes } from '@emotion/css';
 import styled from '@emotion/styled';
-import { FC, memo, useRef } from 'react';
+import { FC, memo, useEffect, useRef } from 'react';
 import { useInViewport } from 'react-in-viewport';
 import extLinkIcon from '../../assets/external-link.png';
 import { MQ } from '../../util';
 import { cb } from '../landing/greeting';
+import { Base, Sentinel } from '../me/me';
 import { ProjectData } from './projectsData';
 
 interface ProjectProps {
@@ -12,18 +13,32 @@ interface ProjectProps {
     idx: number;
 }
 
+const randomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+
 export const Project: FC<ProjectProps> = memo(({ project, idx }) => {
     const isOdd = idx % 2 !== 0;
 
     const sentinel = useRef<HTMLDivElement | null>(null);
-    const { inViewport, enterCount } = useInViewport(sentinel);
 
-    const shouldRender = inViewport || enterCount > 0;
+    const baseRef = useRef<HTMLDivElement | null>(null);
+    const containerHeight = useRef<number | undefined>();
+
+    const { inViewport } = useInViewport(sentinel);
+
+    useEffect(() => {
+        if (baseRef.current) {
+            const newHeight = Number(baseRef.current?.clientHeight);
+
+            if (!containerHeight.current || (!isNaN(newHeight) && newHeight > containerHeight.current)) {
+                containerHeight.current = Number(baseRef.current?.clientHeight);
+            }
+        }
+    }, [inViewport]);
+
     return (
-        <>
-            <Sentinel className='sentinel' ref={sentinel} />
-            {!shouldRender && <ProjectContainer isOdd />}
-            {shouldRender && (
+        <Base ref={baseRef} style={{ minHeight: containerHeight.current }}>
+            <Sentinel ref={sentinel} color={randomColor()} />
+            {inViewport && (
                 <ProjectContainer isOdd={isOdd}>
                     <ProjectImage isOdd={isOdd} src={project.img} />
                     <ProjectDetails isOdd={isOdd}>
@@ -52,71 +67,61 @@ export const Project: FC<ProjectProps> = memo(({ project, idx }) => {
                     </ProjectDetails>
                 </ProjectContainer>
             )}
-        </>
+        </Base>
     );
-});
-
-const Sentinel = styled('span')({
-    width: '100px',
-    height: '100px',
-    transform: 'translateY(15vh)',
-    [MQ.mobile]: {
-        transform: 'translateY(25vh)',
-    }
 });
 
 const slideInEven = keyframes({
     from: {
-        transform: 'translateX(-1vw)',
+        transform: 'translateX(-1vw)'
     },
     to: {
-        transform: 'translateX(0)',
+        transform: 'translateX(0)'
     }
 });
 
 const slideInOdd = keyframes({
     from: {
-        transform: 'translateX(1vw)',
+        transform: 'translateX(1vw)'
     },
     to: {
-        transform: 'translateX(0)',
+        transform: 'translateX(0)'
     }
 });
 
-
 const slideInDetailsEven = keyframes({
     from: {
-        transform: 'translateX(-8vw)',
+        transform: 'translateX(-8vw)'
     },
     to: {
-        transform: 'translateX(-9vw)',
+        transform: 'translateX(-9vw)'
     }
 });
 
 const slideInDetailsOdd = keyframes({
     from: {
-        transform: 'translateX(10vw)',
+        transform: 'translateX(10vw)'
     },
     to: {
-        transform: 'translateX(11vw)',
+        transform: 'translateX(11vw)'
     }
 });
 
 const slideDown = keyframes({
     from: {
-        transform: 'translateY(-2vh)',
+        transform: 'translateY(-2vh)'
     },
     to: {
-        transform: 'translateY(1vh)',
+        transform: 'translateY(1vh)'
     }
 });
 
 const slideUp = keyframes({
     from: {
-        transform: 'translateY(2vh)',
+        transform: 'translateY(2vh)'
     },
     to: {
-        transform: 'translateY(-1vh)',
+        transform: 'translateY(-1vh)'
     }
 });
 
@@ -172,6 +177,10 @@ const ProjectDetails = styled('div')<Props>(({ isOdd }) => ({
         marginRight: isOdd ? '10rem' : 0
     },
 
+    '& *:not(a)': {
+        color: 'rgb(30, 30, 30)'
+    },
+
     [MQ.mobile]: {
         transform: 'translateY(5vh)',
         width: '100%',
@@ -181,8 +190,7 @@ const ProjectDetails = styled('div')<Props>(({ isOdd }) => ({
         '& > *': {
             marginLeft: 0,
             marginRight: 0
-        },
-       
+        }
     }
 }));
 
@@ -211,7 +219,7 @@ const ProjectStack = styled('div')({
     padding: '1rem 0',
     columnGap: '.5rem',
     fontStyle: 'italic',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
 });
 
 const Icon = styled('img')({

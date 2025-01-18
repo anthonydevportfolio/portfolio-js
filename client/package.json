@@ -39,6 +39,7 @@
     "scripts": {
         "start": "vite",
         "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json|tsx|jsx)\"",
+        "debug": "VITE_DEBUG=true vite",
         "build": "tsc -b && vite build",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d build"

@@ -21,7 +21,7 @@ const LineBase = styled('div')({
     position: 'absolute',
     width: '100%',
     height: '5px',
-    backgroundColor: 'black',
+    backgroundColor: 'red',
     transformOrigin: 'left',
     transform: 'scaleX(0)',
     zIndex: 2
