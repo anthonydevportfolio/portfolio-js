@@ -2,6 +2,7 @@ import { keyframes } from '@emotion/css';
 import styled from '@emotion/styled';
 import React, { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useInViewport } from 'react-in-viewport';
+import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import { MQ } from '../../util';
 import { cb } from '../landing/greeting';
@@ -163,7 +164,7 @@ const ImageComponent: FC<{ src: string }> = memo(({ src }) => {
 
     return (
         <ImageWrapper rotation={rotationRef.current}>
-            <ExperienceImage imgUrl={src} />
+            <ExperienceImage src={src} onError={handleImageError} />
         </ImageWrapper>
     );
 });
@@ -213,17 +214,15 @@ const ExperienceContentWrapper = styled('div')({
     alignItems: 'flex-start'
 });
 
-const ExperienceImage = styled('div')<{ imgUrl?: string }>(({ imgUrl }) => ({
+const ExperienceImage = styled('img')({
     width: '97%',
     height: '97%',
     borderRadius: '50%',
     zIndex: 2,
     transition: 'all 0.3s',
-    backgroundImage: `url(${imgUrl})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
+    objectFit: 'cover',
     position: 'relative'
-}));
+});
 
 const downAndRotate = keyframes({
     '0%': {

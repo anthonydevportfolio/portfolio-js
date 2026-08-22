@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { FC, memo, useEffect, useRef, useState } from 'react';
 import { useInViewport } from 'react-in-viewport';
 import { useDispatch } from 'react-redux';
+import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import { setContainerSizeEstablished } from '../../redux/slices/global';
 import { MQ } from '../../util';
@@ -201,7 +202,7 @@ const Tech: FC<TechProps> = ({ src, bgc = 'rgb(255, 255, 255)', idx, initialized
 
     return (
         <HexagonalWrapper bgc={bgc} delay={animationDelay}>
-            <HexagonalImage src={src} />
+            <HexagonalImage src={src} onError={handleImageError} />
         </HexagonalWrapper>
     );
 };

@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { FC, memo, useEffect, useRef } from 'react';
 import { useInViewport } from 'react-in-viewport';
 import extLinkIcon from '../../assets/external-link.png';
+import { handleImageError } from '../../imageFallback';
 import { MQ } from '../../util';
 import { cb } from '../landing/greeting';
 import { Base, Sentinel } from '../me/me';
@@ -40,7 +41,7 @@ export const Project: FC<ProjectProps> = memo(({ project, idx }) => {
             <Sentinel ref={sentinel} color={randomColor()} />
             {inViewport && (
                 <ProjectContainer isOdd={isOdd}>
-                    <ProjectImage isOdd={isOdd} src={project.img} />
+                    <ProjectImage isOdd={isOdd} src={project.img} onError={handleImageError} />
                     <ProjectDetails isOdd={isOdd}>
                         <ProjectName>
                             <h1>{project.name}</h1>
