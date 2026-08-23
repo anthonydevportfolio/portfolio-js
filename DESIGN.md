@@ -11,6 +11,18 @@ colors:
     slate-metadata: '#747b8c'
     hairline: 'rgba(199, 207, 255, 0.13)'
     hairline-strong: 'rgba(199, 207, 255, 0.22)'
+    editorial-paper: '#f0eee8'
+    editorial-ink: '#171815'
+    editorial-signal: '#ad3f2b'
+    signal-night: '#07111c'
+    signal-surface: '#0c1a29'
+    signal-mint: '#62d6c7'
+    work-ink: '#10100f'
+    work-paper: '#f6f2e9'
+    work-signal: '#e0ff65'
+    brief-paper: '#f5f7fa'
+    brief-ink: '#17202b'
+    brief-signal: '#3157d5'
 typography:
     display:
         fontFamily: 'Manrope, Segoe UI, sans-serif'
@@ -41,6 +53,12 @@ typography:
         fontWeight: 500
         lineHeight: 1.4
         letterSpacing: '0.05em'
+    editorial-display:
+        fontFamily: 'Newsreader, Georgia, serif'
+        fontSize: 'clamp(3.7rem, 7.2vw, 6rem)'
+        fontWeight: 500
+        lineHeight: 0.88
+        letterSpacing: '-0.03em'
 rounded:
     focus: '4px'
     control: '12px'
@@ -89,6 +107,10 @@ showcase cards, and theatrical scroll motion.
 -   Faint constellation geometry used only as connective atmosphere.
 -   Short, accessible state transitions with reduced-motion fallbacks.
 
+The post-landing surface also ships a direction selector for the active design grill. It exposes Proof Index, Editorial
+Dossier, Signal Rail, Work First, and Profile Brief against the same factual content. Proof Index remains the default;
+the alternate palettes and Newsreader display face are scoped to their named directions.
+
 ## Colors
 
 The palette is a restrained cool-dark system in which the accent behaves like a status light, not a decorative fill.
@@ -113,8 +135,8 @@ The palette is a restrained cool-dark system in which the accent behaves like a 
 
 ## Typography
 
-**Display Font:** Manrope (with Segoe UI and sans-serif fallbacks)
-**Body Font:** Manrope (with Segoe UI and sans-serif fallbacks)
+**Display Font:** Manrope (with Segoe UI and sans-serif fallbacks) **Body Font:** Manrope (with Segoe UI and sans-serif
+fallbacks)
 
 **Character:** Manrope keeps the interface contemporary and human without leaning on a monospace developer costume.
 Weight and measure create hierarchy; decoration does not.

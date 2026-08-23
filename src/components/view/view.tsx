@@ -1,12 +1,15 @@
-import { FC } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import { ExperienceData } from '../experience/data';
 import { projectsData } from '../projects/projectsData';
+import { DesignPicker, portfolioDesigns } from './designPicker';
 import './view.css';
 
 const GITHUB_URL = 'https://github.com/anthonydevportfolio';
 const CORE_TECHNOLOGIES = ['TypeScript', 'Java', 'React', 'Node.js', 'AWS', 'SQL'];
+const CURRENT_ROLE_SUMMARY =
+    'Built a React interface for an internal application and a self-service automated testing platform used for QA and automation.';
 const experienceEntries = [...ExperienceData].reverse();
 const currentExperience = experienceEntries[0];
 
@@ -50,11 +53,33 @@ export const View: FC = () => {
     useLogger('View');
 
     const isExited = useSelectorw(state => state.landing.isExited);
+    const [activeDesignIndex, setActiveDesignIndex] = useState(0);
+    const activeDesign = portfolioDesigns[activeDesignIndex];
+
+    const selectDesign = useCallback((index: number) => {
+        setActiveDesignIndex((index + portfolioDesigns.length) % portfolioDesigns.length);
+        window.scrollTo({ behavior: 'auto', top: 0 });
+    }, []);
+
+    useEffect(() => {
+        if (!isExited) return;
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const target = event.target as HTMLElement | null;
+            if (target?.matches('input, textarea, select') || target?.isContentEditable) return;
+
+            if (event.key === 'ArrowLeft') selectDesign(activeDesignIndex - 1);
+            if (event.key === 'ArrowRight') selectDesign(activeDesignIndex + 1);
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [activeDesignIndex, isExited, selectDesign]);
 
     if (!isExited) return null;
 
     return (
-        <main className='portfolio' id='main-content'>
+        <main className='portfolio' data-design={activeDesign.id} id='main-content'>
             <a className='portfolio-skip-link' href='#about'>
                 Skip to content
             </a>
@@ -84,11 +109,10 @@ export const View: FC = () => {
             <div className='portfolio-shell'>
                 <section aria-labelledby='about-title' className='portfolio-intro' id='about'>
                     <div className='portfolio-intro__copy'>
-                        <h1 id='about-title'>Software engineer building thoughtful, reliable products.</h1>
+                        <h1 id='about-title'>React interfaces, testing platforms, and tools for complex work.</h1>
                         <p>
-                            I’m Anthony, a full-stack engineer based in Portland, Oregon. I work across TypeScript and
-                            Java to build interfaces, services, and developer tooling that make complex work easier to
-                            understand.
+                            I’m Anthony Griffin, a full-stack software engineer in Portland. I work across TypeScript
+                            and Java, from the interface people use to the services and test infrastructure behind it.
                         </p>
                         <ul aria-label='Core technologies' className='portfolio-tech-list'>
                             {CORE_TECHNOLOGIES.map(technology => (
@@ -98,20 +122,20 @@ export const View: FC = () => {
                     </div>
 
                     <aside aria-label='Current role' className='portfolio-current-role'>
-                        <h2>Currently at {currentExperience.company}</h2>
+                        <h2>{currentExperience.company}</h2>
                         <p className='portfolio-current-role__title'>{currentExperience.title}</p>
                         <div className='portfolio-meta'>
                             <span>{currentExperience.location}</span>
                             <span>{formatPeriod(currentExperience.startDate, currentExperience.endDate)}</span>
                         </div>
-                        <p>{currentExperience.description[0]}</p>
+                        <p>{CURRENT_ROLE_SUMMARY}</p>
                     </aside>
                 </section>
 
                 <section aria-labelledby='experience-title' className='portfolio-section' id='experience'>
                     <header className='portfolio-section__header'>
                         <h2 id='experience-title'>Experience</h2>
-                        <p>Selected roles and the work I contributed along the way.</p>
+                        <p>Roles, responsibilities, and the engineering work behind them.</p>
                     </header>
 
                     <ol className='experience-ledger'>
@@ -138,7 +162,7 @@ export const View: FC = () => {
                 <section aria-labelledby='work-title' className='portfolio-section' id='work'>
                     <header className='portfolio-section__header portfolio-section__header--work'>
                         <h2 id='work-title'>Selected work</h2>
-                        <p>Small products built to explore useful ideas and ship them in public.</p>
+                        <p>Working products are the clearest evidence. These two are live and inspectable.</p>
                     </header>
 
                     <div className='project-ledger'>
@@ -195,11 +219,11 @@ export const View: FC = () => {
 
                 <section aria-labelledby='github-title' className='portfolio-close'>
                     <div>
-                        <h2 id='github-title'>More work lives on GitHub.</h2>
-                        <p>Explore the projects, experiments, and implementation details behind the portfolio.</p>
+                        <h2 id='github-title'>See the code behind the work.</h2>
+                        <p>Projects, experiments, and implementation details continue on GitHub.</p>
                     </div>
                     <a className='portfolio-close__action' href={GITHUB_URL} rel='noreferrer' target='_blank'>
-                        View GitHub
+                        Open GitHub
                         <ExternalLinkIcon />
                     </a>
                 </section>
@@ -209,6 +233,8 @@ export const View: FC = () => {
                     <span>Portland, Oregon</span>
                 </footer>
             </div>
+
+            <DesignPicker activeIndex={activeDesignIndex} onSelect={selectDesign} />
         </main>
     );
 };
