@@ -1,11 +1,38 @@
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: Montserrat, Arial;
-    color: rgb(230, 230, 230)
+}
+
+:root {
+    color: #f3f4f7;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+}
+
+html {
+    background: #090b0f;
+    scroll-behavior: smooth;
 }
 
 body {
-    background-color: rgb(30, 30, 30);
+    background: #090b0f;
+    min-width: 320px;
+}
+
+button,
+a {
+    font: inherit;
+}
+
+::selection {
+    background: rgba(139, 145, 255, 0.28);
+    color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
 }

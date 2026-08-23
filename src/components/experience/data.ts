@@ -17,10 +17,10 @@ export const ExperienceData: ExperienceDataItem[] = [
         startDate: '06/2021',
         endDate: '05/2022',
         description: [
-            'Deployed to a project in service to a client. Developed creative and effective web solutions for real estate organization using Java, JavaScript, and SQL',
-            'Collaborated with my team to expedite the testing and deployment process of several intranet applications. This was achieved using Cucumber, JUnit, and other testing tools and frameworks in an Agile environment',
-            'Assisted external teams in the development and testing of several microservices used to process large amounts of data',
-            'Designed and developed automated tests for internal API using XML spreadsheet input data.'
+            'Built web solutions for a real-estate client using Java, JavaScript, and SQL.',
+            'Worked with the team to accelerate testing and deployment for several intranet applications using Cucumber, JUnit, and an Agile delivery process.',
+            'Supported external teams developing and testing microservices that process high-volume data.',
+            'Designed automated API tests driven by XML spreadsheet input data.'
         ],
         img: 'https://api.getkoala.com/web/companies/hexaware.com/logo',
         borderColor: '#2d73d3'
@@ -32,12 +32,12 @@ export const ExperienceData: ExperienceDataItem[] = [
         startDate: '05/2022',
         endDate: 'present',
         description: [
-            'Led design and implementation of a React UI for internal application, enhancing user experience.',
-            'Introduced Cypress into our testing platform via proof of concept, facilitating transition from outdated tech.',
-            'Presented to end-users pre- and post-release, gathering feedback for actionable improvements.',
-            'Organized bug bash sessions, resolving critical front-end and back-end issues.',
-            'Developed and maintained a self-service automated testing platform widely used for QA and automation.'
-        ],        
+            'Led the design and implementation of a React interface for an internal application, improving its user experience.',
+            'Prototyped Cypress integration for the testing platform, helping the team move away from outdated tooling.',
+            'Presented to end users before and after release, translating feedback into product improvements.',
+            'Organized bug bashes that surfaced and resolved critical frontend and backend issues.',
+            'Built and maintained a self-service automated testing platform used for QA and automation.'
+        ],
         img: 'https://avatars.slack-edge.com/2019-06-04/654730471380_7818728cd67608896caa_512.png',
         borderColor: 'white'
     }

@@ -13,14 +13,17 @@ export const projectsData: ProjectData[] = [
     {
         name: 'Pokedle',
         img: pokedle,
-        description: ['Wordle inspired, Pokemon themed guessing game', 'New monsters to guess daily'],
+        description: ['Daily Pokémon guessing game inspired by Wordle', 'A new Pokémon to identify every day'],
         stack: ['JavaScript', 'Node', 'MongoDB', 'Express.js'],
         url: 'https://pokedle.co'
     },
     {
         name: 'pol.ai',
         img: polai,
-        description: ['For fun ChatGPT wrapper', 'Analyzes and highlights political bias in text', 'Provides alternative phrasing when bias is detected'],
+        description: [
+            'ChatGPT-powered experiment that analyzes political bias in text',
+            'Highlights potentially biased language and suggests alternative phrasing'
+        ],
         stack: ['TypeScript', 'Node', 'MongoDB', 'Express.js', 'ChatGPT'],
         url: 'https://anthony4834.github.io/polai/'
     }

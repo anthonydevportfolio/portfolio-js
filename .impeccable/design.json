@@ -1,0 +1,160 @@
+{
+    "schemaVersion": 2,
+    "generatedAt": "2026-08-23T06:22:45.5162808Z",
+    "title": "Design System: Anthony Griffin Portfolio",
+    "extensions": {
+        "colorMeta": {
+            "violet-status": {
+                "role": "primary",
+                "displayName": "Violet Status",
+                "canonical": "#8b91ff",
+                "tonalRamp": ["#17182e", "#25284d", "#3a3e75", "#555a9e", "#7379c9", "#8b91ff", "#b4b8ff", "#e3e4ff"]
+            },
+            "graphite-void": {
+                "role": "neutral",
+                "displayName": "Graphite Void",
+                "canonical": "#090b0f",
+                "tonalRamp": ["#090b0f", "#12161e", "#252a35", "#414754", "#626977", "#8b919e", "#bec2ca", "#f3f4f7"]
+            },
+            "warm-white": {
+                "role": "neutral",
+                "displayName": "Warm White",
+                "canonical": "#f3f4f7",
+                "tonalRamp": ["#161719", "#2b2c2f", "#45474b", "#64666b", "#878a90", "#adb0b6", "#d2d4d9", "#f3f4f7"]
+            },
+            "cool-steel": {
+                "role": "neutral",
+                "displayName": "Cool Steel",
+                "canonical": "#a9afbd",
+                "tonalRamp": ["#16191f", "#292e39", "#404755", "#596272", "#747e8f", "#929bab", "#bdc3ce", "#eef0f4"]
+            }
+        },
+        "typographyMeta": {
+            "display": {
+                "displayName": "Compact Introduction",
+                "purpose": "The single opening statement, capped below conventional hero scale."
+            },
+            "headline": {
+                "displayName": "Ledger Headline",
+                "purpose": "Section and closing headings."
+            },
+            "body": {
+                "displayName": "Evidence Copy",
+                "purpose": "Readable descriptions and work evidence."
+            },
+            "label": {
+                "displayName": "Release Metadata",
+                "purpose": "Dates, locations, versions, and stacks."
+            }
+        },
+        "shadows": [],
+        "motion": [
+            {
+                "name": "ease-portfolio",
+                "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+                "purpose": "The post-landing reveal and restrained state transitions."
+            },
+            {
+                "name": "state-fast",
+                "value": "180ms",
+                "purpose": "Navigation, focus-adjacent, and external-link feedback."
+            },
+            {
+                "name": "entrance",
+                "value": "600ms",
+                "purpose": "The single post-landing opacity, blur, and translate reveal."
+            }
+        ],
+        "breakpoints": [
+            {
+                "name": "compact",
+                "value": "640px"
+            },
+            {
+                "name": "ledger-collapse",
+                "value": "900px"
+            }
+        ]
+    },
+    "components": [
+        {
+            "name": "External Action",
+            "kind": "button",
+            "refersTo": "external-action",
+            "description": "A restrained bordered action for GitHub and other decisive external destinations.",
+            "html": "<a class=\"ds-external-action\" href=\"#\">View GitHub<svg aria-hidden=\"true\" viewBox=\"0 0 20 20\"><path d=\"M6.75 13.25 13.25 6.75M8 6.75h5.25V12\" /></svg></a>",
+            "css": ".ds-external-action { align-items:center; background:transparent; border:1px solid rgba(199,207,255,.22); border-radius:12px; color:#f3f4f7; display:inline-flex; font:650 .9375rem Manrope,sans-serif; gap:.75rem; height:52px; padding:0 1.25rem; text-decoration:none; transition:background-color 180ms cubic-bezier(.16,1,.3,1),border-color 180ms cubic-bezier(.16,1,.3,1); } .ds-external-action svg { fill:none; height:18px; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round; stroke-width:1.5; width:18px; } .ds-external-action:hover { background:rgba(139,145,255,.12); border-color:rgba(139,145,255,.42); } .ds-external-action:focus-visible { outline:2px solid #8b91ff; outline-offset:4px; }"
+        },
+        {
+            "name": "Portfolio Navigation",
+            "kind": "nav",
+            "refersTo": "nav-link",
+            "description": "A slim sticky index with 44px links and one violet identity signal.",
+            "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\"><span></span>Anthony Griffin</a><a href=\"#\">Experience</a><a href=\"#\">Work</a></nav>",
+            "css": ".ds-nav { align-items:center; background:#090b0f; border-bottom:1px solid rgba(199,207,255,.13); display:flex; gap:2rem; min-height:64px; padding:0 24px; } .ds-nav a { align-items:center; color:#a9afbd; display:inline-flex; font:500 .875rem Manrope,sans-serif; min-height:44px; text-decoration:none; } .ds-nav-brand { color:#f3f4f7 !important; font-weight:650 !important; margin-right:auto; } .ds-nav-brand span { background:#8b91ff; border-radius:50%; height:6px; margin-right:.5rem; width:6px; } .ds-nav a:hover { color:#f3f4f7; } .ds-nav a:focus-visible { outline:2px solid #8b91ff; outline-offset:4px; }"
+        },
+        {
+            "name": "Experience Ledger Row",
+            "kind": "custom",
+            "description": "A complete role rendered as period, position, and evidence rather than a résumé card.",
+            "html": "<article class=\"ds-ledger\"><div><time>May 2022 — Present</time><small>Beaverton, OR</small></div><div><h3>Workday</h3><p>Software Development Engineer</p></div><p>Built and maintained thoughtful product and testing systems.</p></article>",
+            "css": ".ds-ledger { border-top:1px solid rgba(199,207,255,.13); display:grid; gap:3rem; grid-template-columns:.55fr .75fr 1.7fr; padding:3rem 0; } .ds-ledger time,.ds-ledger small,.ds-ledger p { color:#a9afbd; font:400 .875rem/1.65 Manrope,sans-serif; } .ds-ledger small { color:#747b8c; display:block; font-size:.75rem; margin-top:.5rem; } .ds-ledger h3 { color:#f3f4f7; font:600 1.125rem/1.25 Manrope,sans-serif; margin:0 0 .5rem; } @media(max-width:640px){.ds-ledger{gap:1.5rem;grid-template-columns:1fr;padding:2rem 0;}}"
+        },
+        {
+            "name": "Project Artifact",
+            "kind": "card",
+            "refersTo": "project-media",
+            "description": "Screenshot-first evidence with a single hairline frame and no simulated elevation.",
+            "html": "<figure class=\"ds-artifact\"><div class=\"ds-artifact-preview\"></div><figcaption><small>v01</small><strong>Pokedle</strong><span>Daily guessing game built and shipped in public.</span></figcaption></figure>",
+            "css": ".ds-artifact { align-items:center; display:grid; gap:4rem; grid-template-columns:1.35fr .65fr; margin:0; } .ds-artifact-preview { aspect-ratio:16/9; background:#0e1117; border:1px solid rgba(199,207,255,.13); border-radius:14px; } .ds-artifact figcaption { display:grid; gap:.75rem; } .ds-artifact small { color:#8b91ff; font:500 .75rem Manrope,sans-serif; } .ds-artifact strong { color:#f3f4f7; font:560 2rem/1.1 Manrope,sans-serif; } .ds-artifact span { color:#a9afbd; font:400 .9375rem/1.65 Manrope,sans-serif; } @media(max-width:900px){.ds-artifact{grid-template-columns:1fr;gap:2rem;}}"
+        }
+    ],
+    "narrative": {
+        "northStar": "The Engineering Release Notebook",
+        "overview": "The portfolio treats Anthony's work as a precise, evolving record rather than a promotional spectacle. Graphite surfaces recede, evidence stays in the foreground, and small pieces of release-style metadata give the page an engineering character without turning code aesthetics into a costume. The system is calm, exact, and technically credible. A sparse constellation layer connects it to the landing experience, while the post-landing interface refuses oversized portfolio typography, decorative logo clouds, overlapping white showcase cards, and theatrical scroll motion.",
+        "keyCharacteristics": [
+            "Evidence-led ledgers instead of résumé cards.",
+            "Warm-white hierarchy on layered graphite surfaces.",
+            "One rare violet-blue status signal.",
+            "Faint constellation geometry used only as connective atmosphere.",
+            "Short, accessible state transitions with reduced-motion fallbacks."
+        ],
+        "rules": [
+            {
+                "name": "The One Signal Rule",
+                "body": "Violet Status is rare enough that every use communicates navigation, focus, or identity.",
+                "section": "colors"
+            },
+            {
+                "name": "The Quiet Hierarchy Rule",
+                "body": "No text grows merely to create excitement; the work artifact is allowed to become the focal point.",
+                "section": "typography"
+            },
+            {
+                "name": "The Natural Flow Rule",
+                "body": "Do not use translated layouts, desktop minimum widths, fixed mobile content heights, or overflow as a compositional technique.",
+                "section": "layout"
+            },
+            {
+                "name": "The Flat Evidence Rule",
+                "body": "Content earns prominence through scale, placement, and contrast—not simulated elevation.",
+                "section": "elevation"
+            }
+        ],
+        "dos": [
+            "Do lead sections with factual work, roles, screenshots, or decisions.",
+            "Do keep body copy left-aligned and within a readable measure.",
+            "Do preserve the single Warm White → Cool Steel → Slate Metadata hierarchy.",
+            "Do use Violet Status only for identity, focus, navigation, or state.",
+            "Do keep content mounted and useful before below-fold images finish loading.",
+            "Do preserve semantic headings, landmarks, lists, image alternatives, and reduced-motion behavior."
+        ],
+        "donts": [
+            "Don't bring back centered oversized headings, justified paragraphs, logo clouds, or floating white cards.",
+            "Don't use fixed content heights, translated layout offsets, or minimum widths that can overflow the viewport.",
+            "Don't add gradients, glass, glow, or monospace styling as shorthand for technology.",
+            "Don't animate every section; the post-landing entrance is the single authored reveal.",
+            "Don't fabricate metrics, testimonials, contact details, or project outcomes."
+        ]
+    }
+}

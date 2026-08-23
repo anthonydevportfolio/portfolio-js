@@ -2,7 +2,7 @@ import { keyframes } from '@emotion/css';
 import styled from '@emotion/styled';
 import { FC } from 'react';
 import { useSelectorw } from '../../redux/hooks';
-import { cb } from '../landing/greeting';
+import { LANDING_EXIT_DURATION_MS } from '../landing/greeting';
 import { Stars } from '../stars/stars';
 import { Filter } from './filter';
 
@@ -49,7 +49,7 @@ const BackgroundBase = styled('div')<{ isExiting: boolean }>(({ isExiting }) => 
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    animation: `${isExiting && fadeOut} 1s ${cb} forwards 600ms`,
+    animation: isExiting ? `${fadeOut} ${LANDING_EXIT_DURATION_MS}ms cubic-bezier(0.4, 0, 1, 1) forwards` : 'none',
 
     // Mobile
     '@media (max-width: 768px)': {

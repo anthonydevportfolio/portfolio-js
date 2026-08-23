@@ -39,27 +39,8 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const starsRef = useStars();
-    const { mouseX, mouseY, mouseHasMoved, mouseTrackingExited } = useMouse();
+    const { mouseXRef, mouseYRef, mouseHasMovedRef, mouseTrackingExitedRef } = useMouse();
     const isMobile = window.innerWidth < 768;
-
-    // Create refs for mouse positions
-    const mouseXRef = useRef(mouseX);
-    const mouseYRef = useRef(mouseY);
-    const mouseHasMovedRef = useRef(mouseHasMoved);
-    const mouseTrackingExitedRef = useRef(mouseTrackingExited);
-
-    useEffect(() => {
-        mouseXRef.current = mouseX;
-        mouseYRef.current = mouseY;
-    }, [mouseX, mouseY]);
-
-    useEffect(() => {
-        mouseHasMovedRef.current = mouseHasMoved;
-    }, [mouseHasMoved]);
-
-    useEffect(() => {
-        mouseTrackingExitedRef.current = mouseTrackingExited;
-    }, [mouseTrackingExited]);
 
     useEffect(() => {
         // Ensure canvas reference is available
@@ -194,7 +175,7 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
             cancelAnimationFrame(animationFrameId);
             context.clearRect(0, 0, canvas.width, canvas.height);
         };
-    }, [starsRef, isOnLandingPage, mouseX, mouseY, isMobile]);
+    }, [starsRef, isOnLandingPage, isMobile, mouseXRef, mouseYRef, mouseHasMovedRef, mouseTrackingExitedRef]);
 
     return (
         <canvas

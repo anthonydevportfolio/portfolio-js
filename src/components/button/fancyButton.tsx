@@ -52,14 +52,18 @@ const backgroundAnimation = keyframes`
   }
 `;
 
-const fadeIn = keyframes`
-    0% {
+const focusReveal = keyframes`
+    from {
         opacity: 0;
+        filter: blur(4px);
+        transform: scale(0.99);
     }
-    100% {
+    to {
         opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
     }
-    `;
+`;
 
 const FancyButtonBase = styled('button')<{ active: boolean }>(({ active }) => ({
     overflow: 'visible',
@@ -72,12 +76,21 @@ const FancyButtonBase = styled('button')<{ active: boolean }>(({ active }) => ({
     cursor: 'pointer',
     zIndex: 2,
     position: 'relative',
-    opacity: 0,
-    animation: `${active ? backgroundAnimation : null} 2s forwards, ${fadeIn} 1s cubic-bezier(.15,.63,0,.99) forwards .75s`,
-    transition: 'all 0.3s ease',
+    animation: active
+        ? `${backgroundAnimation} 1s forwards`
+        : `${focusReveal} 550ms cubic-bezier(0.16, 1, 0.3, 1) 300ms both`,
+    transition: 'background-color 200ms ease',
 
     '&:hover': {
         background: 'rgba(255, 255, 255, 0.4)'
+    },
+
+    '&:disabled': {
+        cursor: 'default'
+    },
+
+    '@media (prefers-reduced-motion: reduce)': {
+        animation: 'none'
     }
 }));
 
