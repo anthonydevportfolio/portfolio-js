@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import { ExperienceData } from '../experience/data';
@@ -13,25 +13,33 @@ const experienceEntries = [...ExperienceData].reverse();
 const currentExperience = experienceEntries[0];
 
 type Theme = 'dark' | 'light';
+type ThemePreference = Theme | 'system';
 
-const readSavedTheme = (): Theme | null => {
+const readSavedThemePreference = (): ThemePreference | null => {
     try {
-        const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-        return savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : null;
+        const savedPreference = window.localStorage.getItem(THEME_STORAGE_KEY);
+        return savedPreference === 'system' || savedPreference === 'dark' || savedPreference === 'light'
+            ? savedPreference
+            : null;
     } catch {
         return null;
     }
 };
 
-const getInitialTheme = (): Theme => {
+const getSystemTheme = (): Theme => {
     if (typeof window === 'undefined') return 'dark';
-
-    return readSavedTheme() ?? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 };
 
-const saveTheme = (theme: Theme) => {
+const getInitialThemePreference = (): ThemePreference => {
+    if (typeof window === 'undefined') return 'system';
+
+    return readSavedThemePreference() ?? 'system';
+};
+
+const saveThemePreference = (themePreference: ThemePreference) => {
     try {
-        window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+        window.localStorage.setItem(THEME_STORAGE_KEY, themePreference);
     } catch {
         // The theme still applies for this visit when storage is unavailable.
     }
@@ -63,17 +71,11 @@ const ExternalLinkIcon = () => (
     </svg>
 );
 
-const ThemeIcon: FC<{ theme: Theme }> = ({ theme }) =>
-    theme === 'dark' ? (
-        <svg aria-hidden='true' className='portfolio-theme-toggle__icon' viewBox='0 0 20 20'>
-            <circle cx='10' cy='10' r='3.25' />
-            <path d='M10 2.25v1.5M10 16.25v1.5M2.25 10h1.5M16.25 10h1.5M4.52 4.52l1.06 1.06M14.42 14.42l1.06 1.06M15.48 4.52l-1.06 1.06M5.58 14.42l-1.06 1.06' />
-        </svg>
-    ) : (
-        <svg aria-hidden='true' className='portfolio-theme-toggle__icon' viewBox='0 0 20 20'>
-            <path d='M16.35 12.52A7 7 0 0 1 7.48 3.65a7 7 0 1 0 8.87 8.87Z' />
-        </svg>
-    );
+const ThemeSelectChevron = () => (
+    <svg aria-hidden='true' className='portfolio-theme-select__icon' viewBox='0 0 16 16'>
+        <path d='m5 6.5 3 3 3-3' />
+    </svg>
+);
 
 interface CompanyLogoProps {
     src: string;
@@ -108,13 +110,14 @@ export const View: FC = () => {
 
     const isExited = useSelectorw(state => state.landing.isExited);
     const portfolioRef = useRef<HTMLElement | null>(null);
-    const [theme, setTheme] = useState<Theme>(getInitialTheme);
+    const [themePreference, setThemePreference] = useState<ThemePreference>(getInitialThemePreference);
+    const [systemTheme, setSystemTheme] = useState<Theme>(getSystemTheme);
+    const theme = themePreference === 'system' ? systemTheme : themePreference;
 
     useEffect(() => {
         const systemTheme = window.matchMedia('(prefers-color-scheme: light)');
         const syncWithSystem = (event: MediaQueryListEvent) => {
-            if (readSavedTheme()) return;
-            setTheme(event.matches ? 'light' : 'dark');
+            setSystemTheme(event.matches ? 'light' : 'dark');
         };
 
         systemTheme.addEventListener('change', syncWithSystem);
@@ -176,10 +179,10 @@ export const View: FC = () => {
 
     if (!isExited) return null;
 
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-    const toggleTheme = () => {
-        saveTheme(nextTheme);
-        setTheme(nextTheme);
+    const changeThemePreference = (event: ChangeEvent<HTMLSelectElement>) => {
+        const nextPreference = event.target.value as ThemePreference;
+        saveThemePreference(nextPreference);
+        setThemePreference(nextPreference);
     };
 
     return (
@@ -207,14 +210,17 @@ export const View: FC = () => {
                                 <ExternalLinkIcon />
                             </a>
                         </nav>
-                        <button
-                            aria-label={`Switch to ${nextTheme} theme`}
-                            className='portfolio-theme-toggle'
-                            onClick={toggleTheme}
-                            title={`Switch to ${nextTheme} theme`}
-                            type='button'>
-                            <ThemeIcon theme={theme} />
-                        </button>
+                        <div className='portfolio-theme-select'>
+                            <select
+                                aria-label='Theme preference'
+                                onChange={changeThemePreference}
+                                value={themePreference}>
+                                <option value='system'>System</option>
+                                <option value='light'>Light</option>
+                                <option value='dark'>Dark</option>
+                            </select>
+                            <ThemeSelectChevron />
+                        </div>
                     </div>
                 </div>
             </header>
@@ -236,10 +242,12 @@ export const View: FC = () => {
                     </div>
 
                     <aside aria-label='Current role' className='portfolio-current-role'>
-                        <div className='portfolio-company-heading'>
+                        <h2
+                            aria-label={`Currently at ${currentExperience.company}`}
+                            className='portfolio-company-heading'>
+                            <span>Currently at</span>
                             <CompanyLogo src={currentExperience.img} />
-                            <h2>Currently at {currentExperience.company}</h2>
-                        </div>
+                        </h2>
                         <p className='portfolio-current-role__title'>{currentExperience.title}</p>
                         <div className='portfolio-meta'>
                             <span>{currentExperience.location}</span>
@@ -262,15 +270,17 @@ export const View: FC = () => {
                     <ol className='experience-ledger'>
                         {experienceEntries.map(experience => (
                             <li className='experience-entry' key={experience.company}>
-                                <div className='experience-entry__period'>
-                                    <time>{formatPeriod(experience.startDate, experience.endDate)}</time>
-                                    <span>{experience.location}</span>
-                                </div>
-                                <div className='experience-entry__heading'>
-                                    <CompanyLogo src={experience.img} />
-                                    <div>
-                                        <h3>{experience.company}</h3>
-                                        <p>{experience.title}</p>
+                                <div className='experience-entry__summary'>
+                                    <div className='experience-entry__heading'>
+                                        <CompanyLogo src={experience.img} />
+                                        <div>
+                                            <h3>{experience.company}</h3>
+                                            <p>{experience.title}</p>
+                                        </div>
+                                    </div>
+                                    <div className='experience-entry__period'>
+                                        <time>{formatPeriod(experience.startDate, experience.endDate)}</time>
+                                        <span>{experience.location}</span>
                                     </div>
                                 </div>
                                 <ul className='experience-entry__details'>

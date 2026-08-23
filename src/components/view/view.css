@@ -11,7 +11,6 @@
     --portfolio-accent-soft: rgba(139, 145, 255, 0.12);
     --portfolio-accent-border: rgba(139, 145, 255, 0.42);
     --portfolio-nav-bg: rgba(9, 11, 15, 0.82);
-    --portfolio-logo-bg: #f3f4f7;
     --portfolio-constellation-node: rgba(218, 221, 255, 0.78);
     --portfolio-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -29,7 +28,6 @@
     --portfolio-accent-soft: rgba(85, 87, 204, 0.09);
     --portfolio-accent-border: rgba(85, 87, 204, 0.36);
     --portfolio-nav-bg: rgba(246, 247, 251, 0.86);
-    --portfolio-logo-bg: #ffffff;
     --portfolio-constellation-node: rgba(74, 78, 157, 0.56);
     color-scheme: light;
 }
@@ -121,8 +119,7 @@
 }
 
 .portfolio-nav__brand,
-.portfolio-nav__links a,
-.portfolio-theme-toggle {
+.portfolio-nav__links a {
     align-items: center;
     color: var(--portfolio-text-muted);
     display: inline-flex;
@@ -150,6 +147,7 @@
     align-items: center;
     display: flex;
     gap: clamp(0.75rem, 2vw, 1.5rem);
+    min-width: 0;
 }
 
 .portfolio-nav__links a {
@@ -159,15 +157,12 @@
 .portfolio-nav__brand:hover,
 .portfolio-nav__links a:hover,
 .portfolio-nav__brand:focus-visible,
-.portfolio-nav__links a:focus-visible,
-.portfolio-theme-toggle:hover,
-.portfolio-theme-toggle:focus-visible {
+.portfolio-nav__links a:focus-visible {
     color: var(--portfolio-text);
 }
 
 .portfolio-nav__brand:focus-visible,
 .portfolio-nav__links a:focus-visible,
-.portfolio-theme-toggle:focus-visible,
 .portfolio-link:focus-visible,
 .portfolio-close__action:focus-visible {
     border-radius: 4px;
@@ -175,36 +170,60 @@
     outline-offset: 4px;
 }
 
-.portfolio-theme-toggle {
+.portfolio-theme-select {
+    color: var(--portfolio-text-muted);
+    flex: 0 0 auto;
+    position: relative;
+}
+
+.portfolio-theme-select select {
     appearance: none;
     background: transparent;
     border: 1px solid var(--portfolio-line);
     border-radius: 12px;
+    color: inherit;
     cursor: pointer;
-    flex: 0 0 44px;
+    font: inherit;
+    font-size: 0.8125rem;
     height: 44px;
-    justify-content: center;
-    padding: 0;
+    min-width: 100px;
+    padding: 0 2rem 0 0.75rem;
     transition:
         background-color 180ms var(--portfolio-ease),
         border-color 180ms var(--portfolio-ease),
         color 180ms var(--portfolio-ease);
-    width: 44px;
 }
 
-.portfolio-theme-toggle:hover {
+.portfolio-theme-select select:hover {
     background: var(--portfolio-surface-raised);
     border-color: var(--portfolio-line-strong);
+    color: var(--portfolio-text);
 }
 
-.portfolio-theme-toggle__icon {
+.portfolio-theme-select select:focus-visible {
+    color: var(--portfolio-text);
+    outline: 2px solid var(--portfolio-accent);
+    outline-offset: 4px;
+}
+
+.portfolio-theme-select option {
+    background: var(--portfolio-surface);
+    color: var(--portfolio-text);
+}
+
+.portfolio-theme-select__icon {
     fill: none;
-    height: 18px;
+    height: 16px;
+    pointer-events: none;
+    position: absolute;
+    right: 0.65rem;
     stroke: currentColor;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1.5;
-    width: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
 }
 
 .portfolio-shell {
@@ -305,12 +324,11 @@
 }
 
 .portfolio-company-logo {
-    background: var(--portfolio-logo-bg);
-    border-radius: 12px;
+    border-radius: 10px;
+    display: block;
     flex: 0 0 44px;
     height: 44px;
     object-fit: contain;
-    padding: 6px;
     width: 44px;
 }
 
@@ -382,17 +400,24 @@
 }
 
 .experience-entry {
+    align-items: start;
     border-top: 1px solid var(--portfolio-line);
     display: grid;
-    gap: clamp(1.5rem, 3vw, 3rem);
-    grid-template-columns: minmax(140px, 0.55fr) minmax(180px, 0.75fr) minmax(0, 1.7fr);
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(250px, 0.7fr) minmax(0, 1.3fr);
     padding: clamp(2rem, 4vw, 3rem) 0;
+}
+
+.experience-entry__summary {
+    display: grid;
+    gap: 1.25rem;
 }
 
 .experience-entry__period {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.375rem;
+    padding-left: 60px;
 }
 
 .experience-entry__period time {
@@ -696,11 +721,8 @@
     }
 
     .experience-entry {
-        grid-template-columns: minmax(130px, 0.55fr) minmax(0, 1.45fr);
-    }
-
-    .experience-entry__details {
-        grid-column: 2;
+        gap: 2.5rem;
+        grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1.25fr);
     }
 
     .project-entry {
@@ -827,9 +849,15 @@
 
     .portfolio-constellation {
         opacity: 0.14;
-        right: -4rem;
+        right: 0;
         top: 86px;
         width: 78vw;
+    }
+}
+
+@media (max-width: 380px) {
+    .portfolio-nav__links a:nth-child(3) {
+        display: none;
     }
 }
 
@@ -845,7 +873,7 @@
     .portfolio-nav,
     .portfolio-nav__brand,
     .portfolio-nav__links a,
-    .portfolio-theme-toggle {
+    .portfolio-theme-select select {
         transition: none;
     }
 
