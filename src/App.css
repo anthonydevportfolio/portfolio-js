@@ -18,6 +18,7 @@ html {
 
 body {
     background: #090b0f;
+    min-width: 320px;
 }
 
 button,
