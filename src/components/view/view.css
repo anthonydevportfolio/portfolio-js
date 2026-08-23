@@ -9,15 +9,41 @@
     --portfolio-text-subtle: #747b8c;
     --portfolio-accent: #8b91ff;
     --portfolio-accent-soft: rgba(139, 145, 255, 0.12);
+    --portfolio-accent-border: rgba(139, 145, 255, 0.42);
+    --portfolio-nav-bg: rgba(9, 11, 15, 0.82);
+    --portfolio-logo-bg: #f3f4f7;
+    --portfolio-constellation-node: rgba(218, 221, 255, 0.78);
     --portfolio-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portfolio[data-theme='light'] {
+    --portfolio-bg: #f6f7fb;
+    --portfolio-surface: #ffffff;
+    --portfolio-surface-raised: #eceef5;
+    --portfolio-line: rgba(31, 35, 48, 0.12);
+    --portfolio-line-strong: rgba(31, 35, 48, 0.22);
+    --portfolio-text: #171922;
+    --portfolio-text-muted: #555d6e;
+    --portfolio-text-subtle: #687184;
+    --portfolio-accent: #5557cc;
+    --portfolio-accent-soft: rgba(85, 87, 204, 0.09);
+    --portfolio-accent-border: rgba(85, 87, 204, 0.36);
+    --portfolio-nav-bg: rgba(246, 247, 251, 0.86);
+    --portfolio-logo-bg: #ffffff;
+    --portfolio-constellation-node: rgba(74, 78, 157, 0.56);
+    color-scheme: light;
 }
 
 .portfolio {
     background: var(--portfolio-bg);
     color: var(--portfolio-text);
+    color-scheme: dark;
     min-height: 100vh;
     overflow: clip;
     position: relative;
+    transition:
+        background-color 220ms var(--portfolio-ease),
+        color 220ms var(--portfolio-ease);
 }
 
 [data-reveal-section] {
@@ -75,10 +101,13 @@
 
 .portfolio-nav {
     backdrop-filter: blur(18px);
-    background: rgba(9, 11, 15, 0.82);
+    background: var(--portfolio-nav-bg);
     border-bottom: 1px solid var(--portfolio-line);
     position: sticky;
     top: 0;
+    transition:
+        background-color 220ms var(--portfolio-ease),
+        border-color 220ms var(--portfolio-ease);
     z-index: 20;
 }
 
@@ -92,7 +121,8 @@
 }
 
 .portfolio-nav__brand,
-.portfolio-nav__links a {
+.portfolio-nav__links a,
+.portfolio-theme-toggle {
     align-items: center;
     color: var(--portfolio-text-muted);
     display: inline-flex;
@@ -116,6 +146,12 @@
     gap: clamp(1.25rem, 3vw, 2.5rem);
 }
 
+.portfolio-nav__actions {
+    align-items: center;
+    display: flex;
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+
 .portfolio-nav__links a {
     min-height: 44px;
 }
@@ -123,17 +159,52 @@
 .portfolio-nav__brand:hover,
 .portfolio-nav__links a:hover,
 .portfolio-nav__brand:focus-visible,
-.portfolio-nav__links a:focus-visible {
+.portfolio-nav__links a:focus-visible,
+.portfolio-theme-toggle:hover,
+.portfolio-theme-toggle:focus-visible {
     color: var(--portfolio-text);
 }
 
 .portfolio-nav__brand:focus-visible,
 .portfolio-nav__links a:focus-visible,
+.portfolio-theme-toggle:focus-visible,
 .portfolio-link:focus-visible,
 .portfolio-close__action:focus-visible {
     border-radius: 4px;
     outline: 2px solid var(--portfolio-accent);
     outline-offset: 4px;
+}
+
+.portfolio-theme-toggle {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--portfolio-line);
+    border-radius: 12px;
+    cursor: pointer;
+    flex: 0 0 44px;
+    height: 44px;
+    justify-content: center;
+    padding: 0;
+    transition:
+        background-color 180ms var(--portfolio-ease),
+        border-color 180ms var(--portfolio-ease),
+        color 180ms var(--portfolio-ease);
+    width: 44px;
+}
+
+.portfolio-theme-toggle:hover {
+    background: var(--portfolio-surface-raised);
+    border-color: var(--portfolio-line-strong);
+}
+
+.portfolio-theme-toggle__icon {
+    fill: none;
+    height: 18px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+    width: 18px;
 }
 
 .portfolio-shell {
@@ -234,7 +305,7 @@
 }
 
 .portfolio-company-logo {
-    background: var(--portfolio-text);
+    background: var(--portfolio-logo-bg);
     border-radius: 12px;
     flex: 0 0 44px;
     height: 44px;
@@ -519,7 +590,7 @@
 
 .portfolio-close__action:hover {
     background: var(--portfolio-accent-soft);
-    border-color: rgba(139, 145, 255, 0.42);
+    border-color: var(--portfolio-accent-border);
 }
 
 .portfolio-footer {
@@ -543,7 +614,7 @@
 }
 
 .portfolio-constellation__node {
-    background: rgba(218, 221, 255, 0.78);
+    background: var(--portfolio-constellation-node);
     border-radius: 50%;
     height: 3px;
     position: absolute;
@@ -770,8 +841,11 @@
     .project-entry__media img,
     .portfolio-link__icon,
     .portfolio-close__action,
+    .portfolio,
+    .portfolio-nav,
     .portfolio-nav__brand,
-    .portfolio-nav__links a {
+    .portfolio-nav__links a,
+    .portfolio-theme-toggle {
         transition: none;
     }
 

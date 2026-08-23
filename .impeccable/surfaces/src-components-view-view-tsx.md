@@ -35,7 +35,7 @@ resume links, or project claims.
 
 An editorial split ledger inside a quiet engineering release notebook. The interface uses compact evidence rows,
 version-style metadata, hairline structure, and a faint constellation layer. Project artifacts lead without overlapping
-white cards.
+white cards. Dark is the original ink-black canvas; light is a cool paper companion that preserves the violet accent.
 
 Approved comp: `.impeccable/mocks/post-landing-ledger.png`
 
@@ -55,12 +55,13 @@ point.
 | Visible ingredient             | Commitment                                                                                       | Medium                                    |
 | ------------------------------ | ------------------------------------------------------------------------------------------------ | ----------------------------------------- |
 | Slim sticky navigation         | Anthony Griffin plus About, Experience, Work, and GitHub; collapses cleanly on mobile            | Semantic HTML and CSS                     |
+| Theme control                  | Compact sun/moon control; saved choice wins, otherwise follows the operating system              | React state, matchMedia, and CSS tokens   |
 | Constellation connective layer | Sparse points and faint joining lines; atmospheric, never interactive                            | CSS nodes and pseudo-elements             |
 | Opening split                  | Concise About statement paired with current-role and technology evidence                         | Semantic HTML and responsive CSS grid     |
 | Experience ledger              | Workday and Hexaware as complete chronological rows with role, location, dates, and achievements | Semantic HTML lists                       |
 | Selected-work bands            | Screenshot-dominant rows with project name, concise factual description, stack, and live action  | Existing raster assets plus semantic HTML |
 | Closing GitHub action          | Visible full-width close with one primary action                                                 | Semantic anchor and CSS                   |
-| Motion                         | One short entry reveal, then quiet one-shot section continuations that keep content mounted       | IntersectionObserver and CSS transforms   |
+| Motion                         | One short entry reveal, then quiet one-shot section continuations that keep content mounted      | IntersectionObserver and CSS transforms   |
 
 ## Unresolved decisions
 

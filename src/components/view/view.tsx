@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import { ExperienceData } from '../experience/data';
@@ -7,10 +7,35 @@ import './view.css';
 
 const GITHUB_URL = 'https://github.com/anthonydevportfolio';
 const CORE_TECHNOLOGIES = ['TypeScript', 'Java', 'React', 'Node.js', 'AWS', 'SQL'];
-const CURRENT_ROLE_SUMMARY =
-    'Developing tools used by engineers and customers for the Workday Developer Platform.';
+const CURRENT_ROLE_SUMMARY = 'Developing tools used by engineers and customers for the Workday Developer Platform.';
+const THEME_STORAGE_KEY = 'portfolio-theme';
 const experienceEntries = [...ExperienceData].reverse();
 const currentExperience = experienceEntries[0];
+
+type Theme = 'dark' | 'light';
+
+const readSavedTheme = (): Theme | null => {
+    try {
+        const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+        return savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : null;
+    } catch {
+        return null;
+    }
+};
+
+const getInitialTheme = (): Theme => {
+    if (typeof window === 'undefined') return 'dark';
+
+    return readSavedTheme() ?? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+};
+
+const saveTheme = (theme: Theme) => {
+    try {
+        window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+        // The theme still applies for this visit when storage is unavailable.
+    }
+};
 
 const projectImageDimensions: Record<string, { width: number; height: number }> = {
     Pokedle: { width: 3808, height: 2264 },
@@ -37,6 +62,18 @@ const ExternalLinkIcon = () => (
         <path d='M6.75 13.25 13.25 6.75M8 6.75h5.25V12' />
     </svg>
 );
+
+const ThemeIcon: FC<{ theme: Theme }> = ({ theme }) =>
+    theme === 'dark' ? (
+        <svg aria-hidden='true' className='portfolio-theme-toggle__icon' viewBox='0 0 20 20'>
+            <circle cx='10' cy='10' r='3.25' />
+            <path d='M10 2.25v1.5M10 16.25v1.5M2.25 10h1.5M16.25 10h1.5M4.52 4.52l1.06 1.06M14.42 14.42l1.06 1.06M15.48 4.52l-1.06 1.06M5.58 14.42l-1.06 1.06' />
+        </svg>
+    ) : (
+        <svg aria-hidden='true' className='portfolio-theme-toggle__icon' viewBox='0 0 20 20'>
+            <path d='M16.35 12.52A7 7 0 0 1 7.48 3.65a7 7 0 1 0 8.87 8.87Z' />
+        </svg>
+    );
 
 interface CompanyLogoProps {
     src: string;
@@ -71,6 +108,23 @@ export const View: FC = () => {
 
     const isExited = useSelectorw(state => state.landing.isExited);
     const portfolioRef = useRef<HTMLElement | null>(null);
+    const [theme, setTheme] = useState<Theme>(getInitialTheme);
+
+    useEffect(() => {
+        const systemTheme = window.matchMedia('(prefers-color-scheme: light)');
+        const syncWithSystem = (event: MediaQueryListEvent) => {
+            if (readSavedTheme()) return;
+            setTheme(event.matches ? 'light' : 'dark');
+        };
+
+        systemTheme.addEventListener('change', syncWithSystem);
+        return () => systemTheme.removeEventListener('change', syncWithSystem);
+    }, []);
+
+    useEffect(() => {
+        if (!isExited) return;
+        document.documentElement.dataset.portfolioTheme = theme;
+    }, [isExited, theme]);
 
     useEffect(() => {
         const portfolio = portfolioRef.current;
@@ -122,8 +176,14 @@ export const View: FC = () => {
 
     if (!isExited) return null;
 
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    const toggleTheme = () => {
+        saveTheme(nextTheme);
+        setTheme(nextTheme);
+    };
+
     return (
-        <main className='portfolio' id='main-content' ref={portfolioRef}>
+        <main className='portfolio' data-theme={theme} id='main-content' ref={portfolioRef}>
             <a className='portfolio-skip-link' href='#about'>
                 Skip to content
             </a>
@@ -137,15 +197,25 @@ export const View: FC = () => {
                         href='#about'>
                         Anthony Griffin
                     </a>
-                    <nav aria-label='Portfolio sections' className='portfolio-nav__links'>
-                        <a href='#about'>About</a>
-                        <a href='#experience'>Experience</a>
-                        <a href='#work'>Work</a>
-                        <a href={GITHUB_URL} rel='noreferrer' target='_blank'>
-                            GitHub
-                            <ExternalLinkIcon />
-                        </a>
-                    </nav>
+                    <div className='portfolio-nav__actions'>
+                        <nav aria-label='Portfolio sections' className='portfolio-nav__links'>
+                            <a href='#about'>About</a>
+                            <a href='#experience'>Experience</a>
+                            <a href='#work'>Work</a>
+                            <a href={GITHUB_URL} rel='noreferrer' target='_blank'>
+                                GitHub
+                                <ExternalLinkIcon />
+                            </a>
+                        </nav>
+                        <button
+                            aria-label={`Switch to ${nextTheme} theme`}
+                            className='portfolio-theme-toggle'
+                            onClick={toggleTheme}
+                            title={`Switch to ${nextTheme} theme`}
+                            type='button'>
+                            <ThemeIcon theme={theme} />
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -213,11 +283,7 @@ export const View: FC = () => {
                     </ol>
                 </section>
 
-                <section
-                    aria-labelledby='work-title'
-                    className='portfolio-section'
-                    data-reveal-section
-                    id='work'>
+                <section aria-labelledby='work-title' className='portfolio-section' data-reveal-section id='work'>
                     <header className='portfolio-section__header portfolio-section__header--work'>
                         <h2 id='work-title'>Selected work</h2>
                         <p>Small products built to explore useful ideas and ship them in public.</p>
