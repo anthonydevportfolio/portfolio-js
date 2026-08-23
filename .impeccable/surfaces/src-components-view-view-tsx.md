@@ -55,12 +55,12 @@ point.
 | Visible ingredient             | Commitment                                                                                       | Medium                                    |
 | ------------------------------ | ------------------------------------------------------------------------------------------------ | ----------------------------------------- |
 | Slim sticky navigation         | Anthony Griffin plus About, Experience, Work, and GitHub; collapses cleanly on mobile            | Semantic HTML and CSS                     |
-| Constellation connective layer | Sparse points, faint joining lines, and coordinate-style labels; atmospheric, never interactive  | CSS gradients and pseudo-elements         |
+| Constellation connective layer | Sparse points and faint joining lines; atmospheric, never interactive                            | CSS nodes and pseudo-elements             |
 | Opening split                  | Concise About statement paired with current-role and technology evidence                         | Semantic HTML and responsive CSS grid     |
 | Experience ledger              | Workday and Hexaware as complete chronological rows with role, location, dates, and achievements | Semantic HTML lists                       |
 | Selected-work bands            | Screenshot-dominant rows with project name, concise factual description, stack, and live action  | Existing raster assets plus semantic HTML |
 | Closing GitHub action          | Visible full-width close with one primary action                                                 | Semantic anchor and CSS                   |
-| Motion                         | One short opacity/translate reveal after landing and restrained hover/focus feedback             | CSS with reduced-motion fallback          |
+| Motion                         | One short entry reveal, then quiet one-shot section continuations that keep content mounted       | IntersectionObserver and CSS transforms   |
 
 ## Unresolved decisions
 

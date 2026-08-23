@@ -13,22 +13,28 @@
 }
 
 .portfolio {
-    background: radial-gradient(circle at 78% 8%, rgba(70, 76, 127, 0.12), transparent 31rem), var(--portfolio-bg);
+    background: var(--portfolio-bg);
     color: var(--portfolio-text);
     min-height: 100vh;
     overflow: clip;
     position: relative;
 }
 
-.portfolio::before {
-    background-image: radial-gradient(circle, rgba(210, 214, 255, 0.2) 0.75px, transparent 0.9px);
-    background-size: 92px 92px;
-    content: '';
-    inset: 0;
-    mask-image: linear-gradient(to bottom, black, transparent 62%);
-    opacity: 0.22;
-    pointer-events: none;
-    position: absolute;
+[data-reveal-section] {
+    transition:
+        opacity 480ms var(--portfolio-ease),
+        transform 480ms var(--portfolio-ease);
+}
+
+[data-reveal-state='pending'] {
+    opacity: 0.42;
+    transform: translate3d(0, 14px, 0);
+    will-change: opacity, transform;
+}
+
+[data-reveal-state='visible'] {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
 }
 
 .portfolio-skip-link,
@@ -221,6 +227,22 @@
     padding-top: 1.5rem;
 }
 
+.portfolio-company-heading {
+    align-items: center;
+    display: flex;
+    gap: 0.875rem;
+}
+
+.portfolio-company-logo {
+    background: var(--portfolio-text);
+    border-radius: 12px;
+    flex: 0 0 44px;
+    height: 44px;
+    object-fit: contain;
+    padding: 6px;
+    width: 44px;
+}
+
 .portfolio-current-role h2 {
     color: var(--portfolio-text);
     font-size: clamp(1.25rem, 2vw, 1.5rem);
@@ -318,6 +340,13 @@
     font-size: 1.125rem;
     font-weight: 600;
     letter-spacing: -0.015em;
+}
+
+.experience-entry__heading {
+    align-items: center;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 44px minmax(0, 1fr);
 }
 
 .experience-entry__heading p {
@@ -748,5 +777,14 @@
 
     .project-entry:hover .project-entry__media img {
         transform: none;
+    }
+
+    [data-reveal-section],
+    [data-reveal-state='pending'],
+    [data-reveal-state='visible'] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
     }
 }

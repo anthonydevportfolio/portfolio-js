@@ -22,7 +22,7 @@ export const ExperienceData: ExperienceDataItem[] = [
             'Supported external teams developing and testing microservices that process high-volume data.',
             'Designed automated API tests driven by XML spreadsheet input data.'
         ],
-        img: 'https://api.getkoala.com/web/companies/hexaware.com/logo',
+        img: 'https://cdn.hexaware.com/wp-content/uploads/2026/07/cropped-hexaware-favicon-192x192.png',
         borderColor: '#2d73d3'
     },
     {

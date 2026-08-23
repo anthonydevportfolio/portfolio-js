@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import { ExperienceData } from '../experience/data';
@@ -7,6 +7,8 @@ import './view.css';
 
 const GITHUB_URL = 'https://github.com/anthonydevportfolio';
 const CORE_TECHNOLOGIES = ['TypeScript', 'Java', 'React', 'Node.js', 'AWS', 'SQL'];
+const CURRENT_ROLE_SUMMARY =
+    'Developing tools used by engineers and customers for the Workday Developer Platform.';
 const experienceEntries = [...ExperienceData].reverse();
 const currentExperience = experienceEntries[0];
 
@@ -36,6 +38,24 @@ const ExternalLinkIcon = () => (
     </svg>
 );
 
+interface CompanyLogoProps {
+    src: string;
+}
+
+const CompanyLogo: FC<CompanyLogoProps> = ({ src }) => (
+    <img
+        alt=''
+        aria-hidden='true'
+        className='portfolio-company-logo'
+        decoding='async'
+        height='44'
+        loading='lazy'
+        onError={handleImageError}
+        src={src}
+        width='44'
+    />
+);
+
 const Constellation = () => (
     <div aria-hidden='true' className='portfolio-constellation'>
         <span className='portfolio-constellation__node portfolio-constellation__node--one' />
@@ -50,11 +70,60 @@ export const View: FC = () => {
     useLogger('View');
 
     const isExited = useSelectorw(state => state.landing.isExited);
+    const portfolioRef = useRef<HTMLElement | null>(null);
+
+    useEffect(() => {
+        const portfolio = portfolioRef.current;
+
+        if (!isExited || !portfolio) return;
+
+        const sections = Array.from(portfolio.querySelectorAll<HTMLElement>('[data-reveal-section]'));
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+            sections.forEach(section => {
+                section.dataset.revealState = 'visible';
+            });
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+
+                    const section = entry.target as HTMLElement;
+                    section.dataset.revealState = 'visible';
+                    observer.unobserve(section);
+                });
+            },
+            {
+                rootMargin: '0px 0px -12% 0px',
+                threshold: 0.08
+            }
+        );
+
+        const activationLine = window.innerHeight * 0.88;
+
+        sections.forEach(section => {
+            const bounds = section.getBoundingClientRect();
+
+            if (bounds.top < activationLine && bounds.bottom > 0) {
+                section.dataset.revealState = 'visible';
+                return;
+            }
+
+            section.dataset.revealState = 'pending';
+            observer.observe(section);
+        });
+
+        return () => observer.disconnect();
+    }, [isExited]);
 
     if (!isExited) return null;
 
     return (
-        <main className='portfolio' id='main-content'>
+        <main className='portfolio' id='main-content' ref={portfolioRef}>
             <a className='portfolio-skip-link' href='#about'>
                 Skip to content
             </a>
@@ -81,7 +150,7 @@ export const View: FC = () => {
             </header>
 
             <div className='portfolio-shell'>
-                <section aria-labelledby='about-title' className='portfolio-intro' id='about'>
+                <section aria-labelledby='about-title' className='portfolio-intro' data-reveal-section id='about'>
                     <div className='portfolio-intro__copy'>
                         <h1 id='about-title'>Software engineer building thoughtful, reliable products.</h1>
                         <p>
@@ -97,17 +166,24 @@ export const View: FC = () => {
                     </div>
 
                     <aside aria-label='Current role' className='portfolio-current-role'>
-                        <h2>Currently at {currentExperience.company}</h2>
+                        <div className='portfolio-company-heading'>
+                            <CompanyLogo src={currentExperience.img} />
+                            <h2>Currently at {currentExperience.company}</h2>
+                        </div>
                         <p className='portfolio-current-role__title'>{currentExperience.title}</p>
                         <div className='portfolio-meta'>
                             <span>{currentExperience.location}</span>
                             <span>{formatPeriod(currentExperience.startDate, currentExperience.endDate)}</span>
                         </div>
-                        <p>{currentExperience.description[0]}</p>
+                        <p>{CURRENT_ROLE_SUMMARY}</p>
                     </aside>
                 </section>
 
-                <section aria-labelledby='experience-title' className='portfolio-section' id='experience'>
+                <section
+                    aria-labelledby='experience-title'
+                    className='portfolio-section'
+                    data-reveal-section
+                    id='experience'>
                     <header className='portfolio-section__header'>
                         <h2 id='experience-title'>Experience</h2>
                         <p>Selected roles and the work I contributed along the way.</p>
@@ -121,8 +197,11 @@ export const View: FC = () => {
                                     <span>{experience.location}</span>
                                 </div>
                                 <div className='experience-entry__heading'>
-                                    <h3>{experience.company}</h3>
-                                    <p>{experience.title}</p>
+                                    <CompanyLogo src={experience.img} />
+                                    <div>
+                                        <h3>{experience.company}</h3>
+                                        <p>{experience.title}</p>
+                                    </div>
                                 </div>
                                 <ul className='experience-entry__details'>
                                     {experience.description.map(description => (
@@ -134,7 +213,11 @@ export const View: FC = () => {
                     </ol>
                 </section>
 
-                <section aria-labelledby='work-title' className='portfolio-section' id='work'>
+                <section
+                    aria-labelledby='work-title'
+                    className='portfolio-section'
+                    data-reveal-section
+                    id='work'>
                     <header className='portfolio-section__header portfolio-section__header--work'>
                         <h2 id='work-title'>Selected work</h2>
                         <p>Small products built to explore useful ideas and ship them in public.</p>
@@ -192,7 +275,7 @@ export const View: FC = () => {
                     </div>
                 </section>
 
-                <section aria-labelledby='github-title' className='portfolio-close'>
+                <section aria-labelledby='github-title' className='portfolio-close' data-reveal-section>
                     <div>
                         <h2 id='github-title'>More work lives on GitHub.</h2>
                         <p>Explore the projects, experiments, and implementation details behind the portfolio.</p>
