@@ -4,27 +4,27 @@ export const portfolioDesigns = [
     {
         id: 'proof-index',
         name: 'Proof Index',
-        description: 'Dark evidence ledger with precise hierarchy and a quiet constellation layer.'
+        description: 'A dark ledger groups roles, project screenshots, and implementation details.'
     },
     {
-        id: 'editorial-dossier',
-        name: 'Editorial Dossier',
-        description: 'Warm, reading-led portfolio with assertive serif type and printed-profile restraint.'
+        id: 'artifact-first',
+        name: 'Artifact First',
+        description: 'A project opens at full scale before biography or employment history.'
     },
     {
-        id: 'signal-rail',
-        name: 'Signal Rail',
-        description: 'Asymmetric night layout organized by one constellation-like progress rail.'
+        id: 'constellation-map',
+        name: 'Constellation Map',
+        description: 'The constellation links directly to roles, projects, and profile sections.'
     },
     {
-        id: 'work-first',
-        name: 'Work First',
-        description: 'Projects take the first viewport; biography and employment become supporting proof.'
+        id: 'hiring-dossier',
+        name: 'Hiring Dossier',
+        description: 'A compact record groups role details and project links for a fast scan.'
     },
     {
-        id: 'profile-brief',
-        name: 'Profile Brief',
-        description: 'Persistent identity rail and a compact white canvas built for fast portfolio scans.'
+        id: 'career-narrative',
+        name: 'Career Narrative',
+        description: 'Roles and independent projects interleave as a chronological story.'
     }
 ] as const;
 
@@ -110,34 +110,37 @@ export const DesignPicker: FC<DesignPickerProps> = ({ activeIndex, onSelect }) =
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerEnd}>
-                <div className='design-picker__context'>Portfolio direction</div>
-                <div aria-live='polite' className='design-picker__title'>
-                    {activeDesign.name}
-                </div>
-                <p className='design-picker__description'>{activeDesign.description}</p>
+                <div className='design-picker__context'>Portfolio designs</div>
+                <span className='design-picker__count'>
+                    {activeIndex + 1} / {portfolioDesigns.length}
+                </span>
             </div>
 
             <div className='design-picker__controls'>
                 <button aria-label='Previous design' onClick={() => onSelect(activeIndex - 1)} type='button'>
                     <ArrowIcon direction='left' />
                 </button>
-                <div aria-label='Choose a design' className='design-picker__options' role='group'>
+                <label className='portfolio-visually-hidden' htmlFor='portfolio-design'>
+                    Choose a portfolio design
+                </label>
+                <select
+                    aria-describedby='portfolio-design-description'
+                    id='portfolio-design'
+                    onChange={event => onSelect(Number(event.currentTarget.value))}
+                    value={activeIndex}>
                     {portfolioDesigns.map((design, index) => (
-                        <button
-                            aria-label={design.name}
-                            aria-pressed={index === activeIndex}
-                            key={design.id}
-                            onClick={() => onSelect(index)}
-                            type='button'>
-                            {index + 1}
-                        </button>
+                        <option key={design.id} value={index}>
+                            {design.name}
+                        </option>
                     ))}
-                </div>
+                </select>
                 <button aria-label='Next design' onClick={() => onSelect(activeIndex + 1)} type='button'>
                     <ArrowIcon direction='right' />
                 </button>
             </div>
-            <p className='design-picker__hint'>Use the left and right arrow keys · drag this panel</p>
+            <p aria-live='polite' className='portfolio-visually-hidden' id='portfolio-design-description'>
+                <span className='design-picker__title'>{activeDesign.name}</span>. {activeDesign.description}
+            </p>
         </aside>
     );
 };

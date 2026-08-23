@@ -1,241 +1,107 @@
 ---
 name: Anthony Griffin Portfolio
-description: A quiet, evidence-led engineering portfolio shaped like a release notebook.
+description: Five deliberately different portfolio structures built from the same verified work history.
 colors:
-    violet-status: '#8b91ff'
-    graphite-void: '#090b0f'
-    graphite-surface: '#0e1117'
-    graphite-raised: '#12161e'
-    warm-white: '#f3f4f7'
-    cool-steel: '#a9afbd'
-    slate-metadata: '#747b8c'
-    hairline: 'rgba(199, 207, 255, 0.13)'
-    hairline-strong: 'rgba(199, 207, 255, 0.22)'
-    editorial-paper: '#f0eee8'
-    editorial-ink: '#171815'
-    editorial-signal: '#ad3f2b'
-    signal-night: '#07111c'
-    signal-surface: '#0c1a29'
-    signal-mint: '#62d6c7'
-    work-ink: '#10100f'
-    work-paper: '#f6f2e9'
-    work-signal: '#e0ff65'
-    brief-paper: '#f5f7fa'
-    brief-ink: '#17202b'
-    brief-signal: '#3157d5'
+    proof-violet: '#8b91ff'
+    proof-graphite: '#090b0f'
+    proof-ambient: 'rgba(70, 76, 127, 0.12)'
+    proof-line: 'rgba(210, 214, 255, 0.2)'
+    artifact-acid: '#d7ff45'
+    artifact-black: '#11120f'
+    map-mint: '#7ef2c7'
+    map-navy: '#06141f'
+    map-navy-middle: '#081a26'
+    map-navy-light: '#0d202a'
+    map-paper: '#e8f1ed'
+    map-paper-ink: '#10211b'
+    map-paper-muted: '#52635d'
+    map-card: '#f9fcfa'
+    map-media: '#c8d8d1'
+    map-footer: '#050f17'
+    dossier-blue: '#1748d4'
+    dossier-paper: '#f4f2ed'
+    story-amber: '#e07a2c'
+    story-cream: '#f2e9da'
+    story-rule: 'rgba(33, 28, 24, 0.28)'
+    story-media: '#d8c9b5'
+    story-footer-muted: '#afa292'
+    selector-rule: 'rgba(255, 255, 255, 0.12)'
+    selector-shadow: 'rgba(0, 0, 0, 0.3)'
+    selector-muted: '#9aa0af'
+    white: '#fff'
 typography:
-    display:
+    sans:
         fontFamily: 'Manrope, Segoe UI, sans-serif'
-        fontSize: 'clamp(2.25rem, 3.6vw, 3.25rem)'
-        fontWeight: 560
-        lineHeight: 1.04
-        letterSpacing: '-0.04em'
-    headline:
-        fontFamily: 'Manrope, Segoe UI, sans-serif'
-        fontSize: 'clamp(2rem, 4vw, 3rem)'
-        fontWeight: 560
-        lineHeight: 1.1
-        letterSpacing: '-0.035em'
-    title:
-        fontFamily: 'Manrope, Segoe UI, sans-serif'
-        fontSize: '1.125rem'
-        fontWeight: 600
-        lineHeight: 1.25
-        letterSpacing: '-0.015em'
-    body:
-        fontFamily: 'Manrope, Segoe UI, sans-serif'
-        fontSize: '1rem'
-        fontWeight: 400
-        lineHeight: 1.7
-    label:
-        fontFamily: 'Manrope, Segoe UI, sans-serif'
-        fontSize: '0.75rem'
-        fontWeight: 500
-        lineHeight: 1.4
-        letterSpacing: '0.05em'
-    editorial-display:
+        bodyLineHeight: 1.65
+        displayLetterSpacing: '-0.04em'
+    editorial:
         fontFamily: 'Newsreader, Georgia, serif'
-        fontSize: 'clamp(3.7rem, 7.2vw, 6rem)'
-        fontWeight: 500
-        lineHeight: 0.88
-        letterSpacing: '-0.03em'
+        bodyLineHeight: 1.55
+        displayLetterSpacing: '-0.035em'
 rounded:
     focus: '4px'
-    control: '12px'
-    media: '14px'
-spacing:
-    xs: '0.5rem'
-    sm: '0.75rem'
-    md: '1.5rem'
-    lg: '3rem'
-components:
-    external-action:
-        backgroundColor: 'transparent'
-        textColor: '{colors.warm-white}'
-        rounded: '{rounded.control}'
-        padding: '0 1.25rem'
-        height: '52px'
-    nav-link:
-        backgroundColor: 'transparent'
-        textColor: '{colors.cool-steel}'
-        typography: '{typography.label}'
-        height: '44px'
-    project-media:
-        backgroundColor: '{colors.graphite-surface}'
-        rounded: '{rounded.media}'
+    control: '10px'
+    media: '12px'
+    panel: '14px'
 ---
 
 # Design System: Anthony Griffin Portfolio
 
-## Overview
+## Global UI rule
 
-**Creative North Star: "The Engineering Release Notebook"**
+**Structure before skin.** A selectable design must change the order, hierarchy, and interaction model of the portfolio.
+Changing only colors, type, or card treatments does not qualify as a new direction.
 
-The portfolio treats Anthony's work as a precise, evolving record rather than a promotional spectacle. Graphite surfaces
-recede, evidence stays in the foreground, and small pieces of release-style metadata give the page an engineering
-character without turning code aesthetics into a costume.
+Every direction uses the same verified roles, projects, technology list, and links. No direction invents metrics,
+testimonials, clients, or outcomes. Each direction keeps semantic landmarks, visible keyboard focus, readable measures,
+responsive flow, and reduced-motion support.
 
-The system is calm, exact, and technically credible. A sparse constellation layer connects it to the landing experience,
-while the post-landing interface refuses oversized portfolio typography, decorative logo clouds, overlapping white
-showcase cards, and theatrical scroll motion.
+## Direction selector
 
-**Key Characteristics:**
+The fixed selector is the only shared design control. It supports direct selection, previous and next controls, left and
+right arrow keys, and drag repositioning. The active design is the only design mounted in the document.
 
--   Evidence-led ledgers instead of résumé cards.
--   Warm-white hierarchy on layered graphite surfaces.
--   One rare violet-blue status signal.
--   Faint constellation geometry used only as connective atmosphere.
--   Short, accessible state transitions with reduced-motion fallbacks.
+## Directions
 
-The post-landing surface also ships a direction selector for the active design grill. It exposes Proof Index, Editorial
-Dossier, Signal Rail, Work First, and Profile Brief against the same factual content. Proof Index remains the default;
-the alternate palettes and Newsreader display face are scoped to their named directions.
+### Proof Index
 
-## Colors
+The control direction is a dark evidence ledger. It leads with Anthony's current role, then presents employment and
+projects as a quiet engineering record. Graphite, warm white, and a rare violet signal support the release-notebook
+metaphor.
 
-The palette is a restrained cool-dark system in which the accent behaves like a status light, not a decorative fill.
+### Artifact First
 
-### Primary
+The first viewport is a project case study, not a biography. Pokedle occupies most of the screen, followed by pol.ai,
+profile context, and work history. Acid green, black, clipped image framing, and high contrast make the artifact the
+primary proof.
 
--   **Violet Status:** The single active signal for constellation nodes, metadata emphasis, focus rings, and restrained
-    state feedback.
+### Constellation Map
 
-### Neutral
+The constellation is functional navigation. Its nodes link to About, Workday, Pokedle, Hexaware, pol.ai, and GitHub. The
+map resolves into a mint profile band, role signals, and an asymmetric project mosaic.
 
--   **Graphite Void:** The page ground and darkest ambient field.
--   **Graphite Surface:** The base for framed project artifacts.
--   **Graphite Raised:** A reserved tonal step for future interactive or elevated states.
--   **Warm White:** Primary headings, active navigation, and decisive actions.
--   **Cool Steel:** Body copy and secondary explanations.
--   **Slate Metadata:** Dates, locations, stacks, and other subordinate evidence.
--   **Hairline / Hairline Strong:** Structure sections, ledgers, media frames, and controls without creating boxes
-    around every element.
+### Hiring Dossier
 
-**The One Signal Rule.** Violet Status is rare enough that every use communicates navigation, focus, or identity.
+This is the fastest hiring-manager scan. A compact masthead and sticky profile rail sit beside dense role and project
+records. Paper, black rules, and blue links make it read like a factual personnel dossier rather than a landing page.
 
-## Typography
+### Career Narrative
 
-**Display Font:** Manrope (with Segoe UI and sans-serif fallbacks) **Body Font:** Manrope (with Segoe UI and sans-serif
-fallbacks)
+Roles and projects are interleaved as chapters. Workday leads to Pokedle; Hexaware leads to pol.ai. Editorial
+typography, chronology markers, warm paper, and restrained amber create a readable career story.
 
-**Character:** Manrope keeps the interface contemporary and human without leaning on a monospace developer costume.
-Weight and measure create hierarchy; decoration does not.
+## Shared craft floor
 
-### Hierarchy
+-   Use real screenshots as evidence, with descriptive alternative text and stable dimensions.
+-   Keep body text left aligned and within a readable measure.
+-   Use authored SVG icons instead of Unicode interface symbols.
+-   Avoid decorative card grids, fabricated statistics, pill-shaped metadata, and ornamental gradients.
+-   Preserve natural document flow at every breakpoint. Do not use fixed content heights on mobile.
+-   Give interactive targets a clear hover state and a visible `:focus-visible` outline.
+-   Use motion only when it explains entry, state, or navigation. Respect `prefers-reduced-motion`.
 
--   **Display** (560, responsive 36–52px, 1.04): The single introductory statement; keep it balanced and below
-    conventional hero scale.
--   **Headline** (560, responsive 32–48px, 1.1): Major section and closing headings.
--   **Title** (600, 18px, 1.25): Company and ledger-entry titles.
--   **Body** (400, 16–18px, 1.7–1.8): Explanations and project evidence, normally capped near 64 characters per line.
--   **Label** (500, 12–13px, moderate tracking): Dates, locations, versions, and technology metadata.
+## Responsive behavior
 
-**The Quiet Hierarchy Rule.** No text grows merely to create excitement; the work artifact is allowed to become the
-focal point.
-
-## Layout
-
-The desktop system uses an 1180px maximum shell with 24px side gutters. The opening is a 1.35-to-0.65 split between
-Anthony's introduction and current role. Section headers and experience rows use ledger columns; project rows give the
-existing screenshot the larger share of a two-column band.
-
-At 900px, complex rows simplify and project bands stack. At 640px, all ledgers become one column, side gutters reduce to
-16px, project copy precedes its screenshot, and the navigation keeps only the most useful section links. Heights remain
-content-driven at every breakpoint.
-
-Spacing follows related-content grouping: 8–24px within a group, roughly 48px between neighboring ideas, and responsive
-72–120px section breathing room. Sections always have more space above a heading than immediately below it.
-
-**The Natural Flow Rule.** Do not use translated layouts, desktop minimum widths, fixed mobile content heights, or
-overflow as a compositional technique.
-
-## Elevation & Depth
-
-The system uses no shadows. Depth comes from tonal surfaces, ambient constellation points, one purposeful navigation
-blur, and hairline separation. Project screenshots are framed with a border only; controls use either a border or a
-tonal state, never both a border and a shadow.
-
-**The Flat Evidence Rule.** Content earns prominence through scale, placement, and contrast—not simulated elevation.
-
-## Shapes
-
-Most structure is square and grid-led. Focus targets may use a subtle 4px radius, external actions use a restrained 12px
-radius, and project media uses a 14px radius to distinguish artifacts from document structure. Dots remain circular
-because they represent constellation and status points.
-
-Hairlines are always 1px. There are no pills, clipped technology badges, overlapping card silhouettes, or decorative
-containers around ordinary text.
-
-## Components
-
-### External Actions
-
--   **Shape:** Gently curved control (12px radius), 52px high.
--   **Default:** Transparent graphite with a one-pixel strong hairline and Warm White text.
--   **Hover / Focus:** A faint Violet Status surface appears on hover; keyboard focus receives a two-pixel Violet Status
-    outline with a four-pixel offset.
--   **Motion:** The authored external-link arrow moves two pixels up and right over 180ms.
-
-### Navigation
-
--   **Style:** A 64px sticky document index on a translucent Graphite Void surface with an 18px functional backdrop
-    blur.
--   **Targets:** Every link, including the brand, is at least 44px high.
--   **Typography:** Compact Cool Steel labels; the brand and hover/focus states move to Warm White.
--   **Mobile:** The bar becomes 58px, preserves horizontal flow, and hides only redundant About and GitHub links.
-
-### Experience Ledger
-
-Employment entries are separated by hairlines and use three desktop columns: period/location, company/title, and
-evidence. At tablet width, evidence moves under the role; at mobile width every field becomes a natural single-column
-sequence.
-
-### Project Artifact
-
-The screenshot is the dominant proof surface, framed by a single hairline and a 14px radius. Its paired copy carries
-version metadata, a factual description, an unboxed technology list, and one live-project action. Hover may scale the
-image by no more than 1.012.
-
-### Constellation Layer
-
-Sparse three-pixel nodes and one-pixel joining lines sit behind content with low opacity. The layer never captures
-input, never competes with reading, and becomes quieter at smaller breakpoints.
-
-## Do's and Don'ts
-
-### Do:
-
--   **Do** lead sections with factual work, roles, screenshots, or decisions.
--   **Do** keep body copy left-aligned and within a readable measure.
--   **Do** preserve the single Warm White → Cool Steel → Slate Metadata hierarchy.
--   **Do** use Violet Status only for identity, focus, navigation, or state.
--   **Do** keep content mounted and useful before below-fold images finish loading.
--   **Do** preserve semantic headings, landmarks, lists, image alternatives, and reduced-motion behavior.
-
-### Don't:
-
--   **Don't** bring back centered oversized headings, justified paragraphs, logo clouds, or floating white cards.
--   **Don't** use fixed content heights, translated layout offsets, or minimum widths that can overflow the viewport.
--   **Don't** add gradients, glass, glow, or monospace styling as shorthand for technology.
--   **Don't** animate every section; the post-landing entrance is the single authored reveal.
--   **Don't** fabricate metrics, testimonials, contact details, or project outcomes.
+Each direction changes composition instead of shrinking a desktop canvas. The constellation becomes a link grid, dossier
+columns stack, narrative markers stop sticking, project layouts become single-column, and the selector converts to a
+bottom control. No direction may create horizontal page overflow at 320 CSS pixels.
