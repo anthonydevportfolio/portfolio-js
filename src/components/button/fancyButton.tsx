@@ -73,6 +73,7 @@ const FancyButtonBase = styled('button')<{ active: boolean }>(({ active }) => ({
     borderColor: 'white',
     color: 'white',
     fontSize: '1rem',
+    userSelect: 'none',
     cursor: 'pointer',
     zIndex: 2,
     position: 'relative',

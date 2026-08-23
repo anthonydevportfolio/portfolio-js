@@ -95,6 +95,7 @@ const GreetingHeader = styled('h1')({
     animation: `${focusReveal} 550ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both`,
     fontSize: '3rem',
     color: 'white',
+    userSelect: 'none',
 
     '@media (prefers-reduced-motion: reduce)': {
         animation: 'none'
@@ -117,6 +118,7 @@ const GreetingText = styled('p')({
     animation: `${focusReveal} 550ms cubic-bezier(0.16, 1, 0.3, 1) 250ms both`,
     fontSize: '1.7rem',
     color: 'white',
+    userSelect: 'none',
 
     '@media (prefers-reduced-motion: reduce)': {
         animation: 'none'

@@ -31,6 +31,23 @@
     position: absolute;
 }
 
+.portfolio-skip-link,
+.portfolio-nav,
+.portfolio h1,
+.portfolio h2,
+.portfolio h3,
+.portfolio-tech-list,
+.portfolio-meta,
+.experience-entry__period,
+.project-entry__version,
+.project-entry__stack,
+.portfolio-link,
+.portfolio-close__action,
+.portfolio-footer,
+.portfolio-constellation {
+    user-select: none;
+}
+
 .portfolio-skip-link {
     background: var(--portfolio-text);
     border-radius: 8px;
@@ -85,14 +102,6 @@
     letter-spacing: -0.01em;
     min-height: 44px;
     white-space: nowrap;
-}
-
-.portfolio-nav__signal {
-    background: var(--portfolio-accent);
-    border-radius: 50%;
-    box-shadow: 0 0 0 4px var(--portfolio-accent-soft);
-    height: 6px;
-    width: 6px;
 }
 
 .portfolio-nav__links {

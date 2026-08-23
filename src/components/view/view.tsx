@@ -66,7 +66,6 @@ export const View: FC = () => {
                         aria-label='Anthony Griffin, back to introduction'
                         className='portfolio-nav__brand'
                         href='#about'>
-                        <span aria-hidden='true' className='portfolio-nav__signal' />
                         Anthony Griffin
                     </a>
                     <nav aria-label='Portfolio sections' className='portfolio-nav__links'>
