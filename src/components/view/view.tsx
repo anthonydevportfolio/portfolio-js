@@ -179,6 +179,12 @@ const ThemeMenuChevron = () => (
     </svg>
 );
 
+const ThemeMenuBackIcon = () => (
+    <svg aria-hidden='true' className='portfolio-mobile-theme-submenu__back-icon' viewBox='0 0 16 16'>
+        <path d='m9.5 3.5-4.5 4.5 4.5 4.5' />
+    </svg>
+);
+
 const ThemePreferenceIcon: FC<{ preference: ThemePreference }> = ({ preference }) => {
     if (preference === 'system') {
         return (
@@ -248,10 +254,13 @@ export const View: FC = () => {
     const mobileMenuToggleRef = useRef<HTMLButtonElement | null>(null);
     const themeMenuRef = useRef<HTMLDivElement | null>(null);
     const themeMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
+    const mobileThemeTriggerRef = useRef<HTMLButtonElement | null>(null);
+    const mobileThemeSubmenuRef = useRef<HTMLDivElement | null>(null);
     const [themePreference, setThemePreference] = useState<ThemePreference>(getInitialThemePreference);
     const [systemTheme, setSystemTheme] = useState<Theme>(getSystemTheme);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+    const [isMobileThemeSubmenuOpen, setIsMobileThemeSubmenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState<PortfolioSection>('about');
     const theme = themePreference === 'system' ? systemTheme : themePreference;
 
@@ -272,6 +281,7 @@ export const View: FC = () => {
 
             setIsMobileMenuOpen(false);
             setIsThemeMenuOpen(false);
+            setIsMobileThemeSubmenuOpen(false);
 
             if (restoreFocus) {
                 window.requestAnimationFrame(() => mobileMenuToggleRef.current?.focus());
@@ -382,7 +392,7 @@ export const View: FC = () => {
         };
         const closeOnEscape = (event: KeyboardEvent) => {
             if (event.key !== 'Escape') return;
-            if (isThemeMenuOpen) return;
+            if (isThemeMenuOpen || isMobileThemeSubmenuOpen) return;
             closeMobileMenu(true, true);
         };
         const closeAtDesktopWidth = (event: MediaQueryListEvent) => {
@@ -398,7 +408,28 @@ export const View: FC = () => {
             document.removeEventListener('keydown', closeOnEscape);
             mobileNavigation.removeEventListener('change', closeAtDesktopWidth);
         };
-    }, [closeMobileMenu, isMobileMenuOpen, isThemeMenuOpen]);
+    }, [closeMobileMenu, isMobileMenuOpen, isMobileThemeSubmenuOpen, isThemeMenuOpen]);
+
+    useEffect(() => {
+        if (!isMobileThemeSubmenuOpen) return;
+
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key !== 'Escape') return;
+            suppressMobileMenuMotion();
+            setIsMobileThemeSubmenuOpen(false);
+            window.requestAnimationFrame(() => mobileThemeTriggerRef.current?.focus());
+        };
+        const focusFrame = window.requestAnimationFrame(() => {
+            mobileThemeSubmenuRef.current?.querySelector<HTMLButtonElement>('[aria-checked="true"]')?.focus();
+        });
+
+        document.addEventListener('keydown', closeOnEscape);
+
+        return () => {
+            window.cancelAnimationFrame(focusFrame);
+            document.removeEventListener('keydown', closeOnEscape);
+        };
+    }, [isMobileThemeSubmenuOpen, suppressMobileMenuMotion]);
 
     useEffect(() => {
         const portfolio = portfolioRef.current;
@@ -457,6 +488,11 @@ export const View: FC = () => {
         window.requestAnimationFrame(() => themeMenuTriggerRef.current?.focus());
     };
 
+    const chooseMobileThemePreference = (nextPreference: ThemePreference) => {
+        saveThemePreference(nextPreference);
+        setThemePreference(nextPreference);
+    };
+
     const navigateThemeMenu = (event: ReactKeyboardEvent<HTMLDivElement>) => {
         if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
 
@@ -508,7 +544,10 @@ export const View: FC = () => {
                             const skipMotion = event.detail === 0;
 
                             if (skipMotion) suppressMobileMenuMotion();
-                            if (isMobileMenuOpen) setIsThemeMenuOpen(false);
+                            if (isMobileMenuOpen) {
+                                setIsThemeMenuOpen(false);
+                                setIsMobileThemeSubmenuOpen(false);
+                            }
                             setIsMobileMenuOpen(isOpen => !isOpen);
                         }}
                         ref={mobileMenuToggleRef}
@@ -521,69 +560,143 @@ export const View: FC = () => {
                     <div
                         className='portfolio-nav__actions'
                         data-mobile-open={isMobileMenuOpen}
+                        data-mobile-submenu-open={isMobileThemeSubmenuOpen}
                         id='portfolio-mobile-menu'>
-                        <nav aria-label='Portfolio sections' className='portfolio-nav__links'>
-                            {PORTFOLIO_SECTIONS.map(({ id, label }) => (
-                                <a
-                                    aria-current={activeSection === id ? 'location' : undefined}
-                                    href={`#${id}`}
-                                    key={id}
-                                    onClick={event => {
-                                        if (!window.matchMedia('(max-width: 640px)').matches) return;
-                                        closeMobileMenu(true, event.detail === 0);
-                                    }}>
-                                    {label}
-                                </a>
-                            ))}
-                        </nav>
-                        <div className='portfolio-theme-menu' onBlur={closeThemeMenuOnBlur} ref={themeMenuRef}>
+                        <div
+                            aria-hidden={isMobileThemeSubmenuOpen || undefined}
+                            className='portfolio-mobile-menu__primary'>
+                            <nav aria-label='Portfolio sections' className='portfolio-nav__links'>
+                                {PORTFOLIO_SECTIONS.map(({ id, label }) => (
+                                    <a
+                                        aria-current={activeSection === id ? 'location' : undefined}
+                                        href={`#${id}`}
+                                        key={id}
+                                        onClick={event => {
+                                            if (!window.matchMedia('(max-width: 640px)').matches) return;
+                                            closeMobileMenu(true, event.detail === 0);
+                                        }}>
+                                        {label}
+                                    </a>
+                                ))}
+                            </nav>
+                            <div className='portfolio-theme-menu' onBlur={closeThemeMenuOnBlur} ref={themeMenuRef}>
+                                <button
+                                    aria-controls='portfolio-theme-options'
+                                    aria-expanded={isThemeMenuOpen}
+                                    aria-haspopup='menu'
+                                    aria-label={`Theme preference: ${THEME_PREFERENCE_LABELS[themePreference]}`}
+                                    className='portfolio-theme-menu__trigger'
+                                    onClick={() => setIsThemeMenuOpen(isOpen => !isOpen)}
+                                    ref={themeMenuTriggerRef}
+                                    type='button'>
+                                    <ThemePreferenceIcon preference={themePreference} />
+                                    <span className='portfolio-theme-menu__label'>
+                                        {THEME_PREFERENCE_LABELS[themePreference]}
+                                    </span>
+                                    <ThemeMenuChevron />
+                                </button>
+                                {isThemeMenuOpen ? (
+                                    <div
+                                        aria-label='Theme preference'
+                                        className='portfolio-theme-menu__options'
+                                        id='portfolio-theme-options'
+                                        onKeyDown={navigateThemeMenu}
+                                        role='menu'>
+                                        {THEME_PREFERENCES.map(preference => {
+                                            const isSelected = preference === themePreference;
+
+                                            return (
+                                                <button
+                                                    aria-label={`${THEME_PREFERENCE_LABELS[preference]} theme`}
+                                                    aria-checked={isSelected}
+                                                    className='portfolio-theme-menu__option'
+                                                    data-selected={isSelected}
+                                                    key={preference}
+                                                    onClick={() => chooseThemePreference(preference)}
+                                                    role='menuitemradio'
+                                                    type='button'>
+                                                    <ThemePreferenceIcon preference={preference} />
+                                                    <span className='portfolio-theme-menu__label'>
+                                                        {THEME_PREFERENCE_LABELS[preference]}
+                                                    </span>
+                                                    <span aria-hidden='true' className='portfolio-theme-menu__check'>
+                                                        {isSelected ? <ThemeCheckIcon /> : null}
+                                                    </span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                ) : null}
+                            </div>
                             <button
-                                aria-controls='portfolio-theme-options'
-                                aria-expanded={isThemeMenuOpen}
-                                aria-haspopup='menu'
-                                aria-label={`Theme preference: ${THEME_PREFERENCE_LABELS[themePreference]}`}
-                                className='portfolio-theme-menu__trigger'
-                                onClick={() => setIsThemeMenuOpen(isOpen => !isOpen)}
-                                ref={themeMenuTriggerRef}
+                                aria-controls='portfolio-mobile-theme-submenu'
+                                aria-expanded={isMobileThemeSubmenuOpen}
+                                aria-label={`Theme, ${THEME_PREFERENCE_LABELS[themePreference]} selected`}
+                                className='portfolio-mobile-theme-trigger'
+                                onClick={event => {
+                                    if (event.detail === 0) suppressMobileMenuMotion();
+                                    setIsMobileThemeSubmenuOpen(true);
+                                }}
+                                ref={mobileThemeTriggerRef}
                                 type='button'>
                                 <ThemePreferenceIcon preference={themePreference} />
-                                <span className='portfolio-theme-menu__label'>
+                                <span>Theme</span>
+                                <span className='portfolio-mobile-theme-trigger__preference'>
                                     {THEME_PREFERENCE_LABELS[themePreference]}
                                 </span>
                                 <ThemeMenuChevron />
                             </button>
-                            {isThemeMenuOpen ? (
-                                <div
-                                    aria-label='Theme preference'
-                                    className='portfolio-theme-menu__options'
-                                    id='portfolio-theme-options'
-                                    onKeyDown={navigateThemeMenu}
-                                    role='menu'>
-                                    {THEME_PREFERENCES.map(preference => {
-                                        const isSelected = preference === themePreference;
+                        </div>
+                        <div
+                            aria-hidden={!isMobileThemeSubmenuOpen}
+                            className='portfolio-mobile-theme-submenu'
+                            id='portfolio-mobile-theme-submenu'
+                            ref={mobileThemeSubmenuRef}>
+                            <header className='portfolio-mobile-theme-submenu__header'>
+                                <button
+                                    aria-label='Back to navigation'
+                                    className='portfolio-mobile-theme-submenu__back'
+                                    onClick={event => {
+                                        if (event.detail === 0) suppressMobileMenuMotion();
+                                        setIsMobileThemeSubmenuOpen(false);
+                                        window.requestAnimationFrame(() => mobileThemeTriggerRef.current?.focus());
+                                    }}
+                                    type='button'>
+                                    <ThemeMenuBackIcon />
+                                    <span>Back</span>
+                                </button>
+                                <span className='portfolio-mobile-theme-submenu__title'>Theme</span>
+                                <span aria-hidden='true' />
+                            </header>
+                            <div
+                                aria-label='Theme preference'
+                                className='portfolio-mobile-theme-submenu__options'
+                                onKeyDown={navigateThemeMenu}
+                                role='menu'>
+                                {THEME_PREFERENCES.map(preference => {
+                                    const isSelected = preference === themePreference;
 
-                                        return (
-                                            <button
-                                                aria-label={`${THEME_PREFERENCE_LABELS[preference]} theme`}
-                                                aria-checked={isSelected}
-                                                className='portfolio-theme-menu__option'
-                                                data-selected={isSelected}
-                                                key={preference}
-                                                onClick={() => chooseThemePreference(preference)}
-                                                role='menuitemradio'
-                                                type='button'>
-                                                <ThemePreferenceIcon preference={preference} />
-                                                <span className='portfolio-theme-menu__label'>
-                                                    {THEME_PREFERENCE_LABELS[preference]}
-                                                </span>
-                                                <span aria-hidden='true' className='portfolio-theme-menu__check'>
-                                                    {isSelected ? <ThemeCheckIcon /> : null}
-                                                </span>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            ) : null}
+                                    return (
+                                        <button
+                                            aria-label={`${THEME_PREFERENCE_LABELS[preference]} theme`}
+                                            aria-checked={isSelected}
+                                            className='portfolio-theme-menu__option'
+                                            data-selected={isSelected}
+                                            key={preference}
+                                            onClick={() => chooseMobileThemePreference(preference)}
+                                            role='menuitemradio'
+                                            type='button'>
+                                            <ThemePreferenceIcon preference={preference} />
+                                            <span className='portfolio-theme-menu__label'>
+                                                {THEME_PREFERENCE_LABELS[preference]}
+                                            </span>
+                                            <span aria-hidden='true' className='portfolio-theme-menu__check'>
+                                                {isSelected ? <ThemeCheckIcon /> : null}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
                 </div>
