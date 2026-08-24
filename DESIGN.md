@@ -181,7 +181,8 @@ containers around ordinary text.
 -   **Targets:** Every link, including the brand, is at least 44px high.
 -   **Typography:** Compact Cool Steel labels; the brand and hover/focus states move to Warm White.
 -   **Mobile:** The name remains visible beside a compact disclosure button. Opening it reveals About, Projects,
-    Experience, Contact, and the labeled theme control in one quiet full-width panel.
+    Experience, Contact, and the labeled theme control in one quiet full-width panel. The panel moves only four pixels
+    and resolves from a tightly bounded soft blur; keyboard and reduced-motion paths update immediately.
 
 ### Scroll Rail
 

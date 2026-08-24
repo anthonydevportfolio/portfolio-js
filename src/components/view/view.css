@@ -1035,6 +1035,7 @@
         background: var(--portfolio-surface);
         border-bottom: 1px solid var(--portfolio-line);
         display: grid;
+        filter: blur(1.5px);
         gap: 0;
         left: 50%;
         opacity: 0;
@@ -1042,9 +1043,10 @@
         pointer-events: none;
         position: absolute;
         top: 100%;
-        transform: translate(-50%, -8px);
+        transform: translate(-50%, -4px);
         transition:
-            opacity 140ms var(--portfolio-ease),
+            filter 160ms var(--portfolio-ease),
+            opacity 130ms var(--portfolio-ease),
             transform 180ms var(--portfolio-ease),
             visibility 0s linear 180ms;
         visibility: hidden;
@@ -1052,6 +1054,7 @@
     }
 
     .portfolio-nav__actions[data-mobile-open='true'] {
+        filter: blur(0);
         opacity: 1;
         pointer-events: auto;
         transform: translate(-50%, 0);
@@ -1075,6 +1078,11 @@
         line-height: 1;
         min-height: 48px;
         width: 100%;
+    }
+
+    .portfolio-nav__links a:focus-visible {
+        background: var(--portfolio-accent-soft);
+        outline-offset: -2px;
     }
 
     .portfolio-nav__links a[aria-current='location']::after {
