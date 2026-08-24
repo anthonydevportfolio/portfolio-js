@@ -1,6 +1,7 @@
 import { keyframes } from '@emotion/css';
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
+import { portfolio } from '../../data/portfolio';
 import { useDispatchw, useSelectorw } from '../../redux/hooks';
 import { setIsOnLandingPage } from '../../redux/slices/global';
 import { setIsExited, setIsExiting, setIsHoveringButton } from '../../redux/slices/landing';
@@ -52,9 +53,9 @@ export const Greeting = () => {
     return (
         <GreetingBase data-landing-reading-zone exited={isExited} resolvedTheme={theme}>
             <GreetingCopy isTransitioning={isTransitioning}>
-                <GreetingHeader>Hello, World!</GreetingHeader>
+                <GreetingHeader>{portfolio.landing.greeting}</GreetingHeader>
                 <GreetingTextContainer>
-                    <GreetingText>I'm Anthony</GreetingText>
+                    <GreetingText>{portfolio.landing.introduction}</GreetingText>
                 </GreetingTextContainer>
             </GreetingCopy>
             <FancyButton
@@ -62,7 +63,7 @@ export const Greeting = () => {
                 disabled={isTransitioning}
                 onMouseEnter={() => dispatch(setIsHoveringButton(true))}
                 onMouseLeave={() => dispatch(setIsHoveringButton(false))}>
-                Get to know me
+                {portfolio.landing.action}
             </FancyButton>
         </GreetingBase>
     );

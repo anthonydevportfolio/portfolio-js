@@ -4,7 +4,11 @@ Full-stack software engineer building thoughtful, reliable products.
 
 I’m Anthony, a full-stack software engineer based in Portland, Oregon. I build things for the web that just work.
 
-## Current focus
+## Current role
+
+Software Development Engineer at Workday
+
+May 2023 — Present · Beaverton, OR
 
 Building developer-platform experiences, shared frontend architecture, and testing infrastructure across Workday.
 
@@ -62,7 +66,7 @@ Technologies: React, TypeScript, Canvas, Vite
 
 ### Workday — Software Development Engineer
 
-05/2023–present · Beaverton, OR
+May 2023 — Present · Beaverton, OR
 
 - Shipped production features for Workday's Developer Site ahead of its largest developer event, supporting the platform's expansion beyond enterprise customers.
 - Made JavaScript-rendered documentation usable by AI coding agents through build-time Markdown and content negotiation, avoiding a higher-risk SSR migration.
@@ -72,7 +76,7 @@ Technologies: React, TypeScript, Canvas, Vite
 
 ### Freddie Mac — Associate Software Engineer · SDET, via Hexaware Technologies
 
-02/2022–05/2023 · McLean, VA
+Feb 2022 — May 2023 · McLean, VA
 
 - Built a Java and Spring Boot end-to-end testing platform with Selenium and Cucumber, automating every contracted application flow ahead of project completion.
 - Validated multi-system data integrity by tracing identifiers across large relational datasets and partnering across teams to diagnose failures and document edge cases.

@@ -35,10 +35,10 @@ const currentExperience = experienceEntries[0];
 const TECH_STACK_GROUPS = portfolio.techStack;
 
 const PORTFOLIO_SECTIONS = [
-    { id: 'about', label: 'About' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'contact', label: 'Contact' }
+    { id: 'about', label: portfolio.sections.about.title },
+    { id: 'projects', label: portfolio.sections.projects.title },
+    { id: 'experience', label: portfolio.sections.experience.title },
+    { id: 'contact', label: portfolio.sections.contact.title }
 ] as const;
 
 type PortfolioSection = (typeof PORTFOLIO_SECTIONS)[number]['id'];
@@ -715,7 +715,7 @@ export const View: FC = () => {
                         <h2
                             aria-label={`Currently at ${currentExperience.company}`}
                             className='portfolio-company-heading'>
-                            <span>Currently at</span>
+                            <span>{portfolio.labels.currentRole}</span>
                             <CompanyLogo src={currentExperience.img} />
                         </h2>
                         <p className='portfolio-current-role__title'>{currentExperience.title}</p>
@@ -733,8 +733,8 @@ export const View: FC = () => {
                     data-reveal-section
                     id='projects'>
                     <header className='portfolio-section__header portfolio-section__header--work'>
-                        <h2 id='projects-title'>Projects</h2>
-                        <p>Small products built to explore useful ideas and ship them in public.</p>
+                        <h2 id='projects-title'>{portfolio.sections.projects.title}</h2>
+                        <p>{portfolio.sections.projects.description}</p>
                     </header>
 
                     <div className='project-ledger'>
@@ -768,7 +768,7 @@ export const View: FC = () => {
                                                 href={project.url}
                                                 rel='noreferrer'
                                                 target='_blank'>
-                                                View live project
+                                                {portfolio.labels.projectLink}
                                                 <ExternalLinkIcon />
                                             </a>
                                         ) : null}
@@ -785,8 +785,8 @@ export const View: FC = () => {
                     data-reveal-section
                     id='experience'>
                     <header className='portfolio-section__header'>
-                        <h2 id='experience-title'>Experience</h2>
-                        <p>A timeline of roles, responsibilities, and outcomes.</p>
+                        <h2 id='experience-title'>{portfolio.sections.experience.title}</h2>
+                        <p>{portfolio.sections.experience.description}</p>
                     </header>
 
                     <ol className='experience-ledger'>
@@ -821,8 +821,8 @@ export const View: FC = () => {
                     data-reveal-section
                     id='stack'>
                     <header className='portfolio-section__header'>
-                        <h2 id='stack-title'>Tech stack</h2>
-                        <p>The languages, platforms, and tools I use to take software from idea to production.</p>
+                        <h2 id='stack-title'>{portfolio.sections.techStack.title}</h2>
+                        <p>{portfolio.sections.techStack.description}</p>
                     </header>
 
                     <dl className='tech-stack'>
@@ -847,8 +847,8 @@ export const View: FC = () => {
                     data-reveal-section
                     id='contact'>
                     <header className='portfolio-section__header portfolio-contact__intro'>
-                        <h2 id='contact-title'>Contact</h2>
-                        <p>Let’s connect</p>
+                        <h2 id='contact-title'>{portfolio.sections.contact.title}</h2>
+                        <p>{portfolio.sections.contact.description}</p>
                     </header>
 
                     <address className='portfolio-contact__methods'>
@@ -856,7 +856,7 @@ export const View: FC = () => {
                             <div className='portfolio-contact__method-main'>
                                 <EmailIcon />
                                 <span className='portfolio-contact__details'>
-                                    <small>Email</small>
+                                    <small>{portfolio.labels.email}</small>
                                     <strong>{EMAIL_ADDRESS}</strong>
                                 </span>
                             </div>
@@ -866,7 +866,7 @@ export const View: FC = () => {
                             <div className='portfolio-contact__method-main portfolio-contact__phone-static'>
                                 <PhoneIcon />
                                 <span className='portfolio-contact__details'>
-                                    <small>Phone</small>
+                                    <small>{portfolio.labels.phone}</small>
                                     <strong>{PHONE_DISPLAY}</strong>
                                 </span>
                             </div>
@@ -875,7 +875,7 @@ export const View: FC = () => {
                                 href={PHONE_URL}>
                                 <PhoneIcon />
                                 <span className='portfolio-contact__details'>
-                                    <small>Phone</small>
+                                    <small>{portfolio.labels.phone}</small>
                                     <strong>{PHONE_DISPLAY}</strong>
                                 </span>
                             </a>
@@ -888,7 +888,7 @@ export const View: FC = () => {
                             target='_blank'>
                             <LinkedInIcon />
                             <span className='portfolio-contact__details'>
-                                <small>LinkedIn</small>
+                                <small>{portfolio.labels.linkedin}</small>
                                 <strong>{portfolio.name}</strong>
                             </span>
                             <ExternalLinkIcon />
@@ -897,7 +897,7 @@ export const View: FC = () => {
                 </section>
 
                 <footer className='portfolio-footer'>
-                    <span>I have nothing to put here but keeping the footer for easier scrolling :)</span>
+                    <span>{portfolio.footer}</span>
                 </footer>
             </div>
         </main>

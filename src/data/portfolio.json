@@ -7,6 +7,40 @@
     "summary": "Full-stack software engineer focused on dependable web products, developer platforms, shared frontend architecture, and testing infrastructure.",
     "location": "Portland, Oregon",
     "currentFocus": "Building developer-platform experiences, shared frontend architecture, and testing infrastructure across Workday.",
+    "landing": {
+        "greeting": "Hello, World!",
+        "introduction": "I'm Anthony",
+        "action": "Get to know me"
+    },
+    "sections": {
+        "about": {
+            "title": "About"
+        },
+        "projects": {
+            "title": "Projects",
+            "description": "Small products built to explore useful ideas and ship them in public."
+        },
+        "experience": {
+            "title": "Experience",
+            "description": "A timeline of roles, responsibilities, and outcomes."
+        },
+        "techStack": {
+            "title": "Tech stack",
+            "description": "The languages, platforms, and tools I use to take software from idea to production."
+        },
+        "contact": {
+            "title": "Contact",
+            "description": "Let’s connect"
+        }
+    },
+    "labels": {
+        "currentRole": "Currently at",
+        "projectLink": "View live project",
+        "email": "Email",
+        "phone": "Phone",
+        "linkedin": "LinkedIn"
+    },
+    "footer": "I have nothing to put here but keeping the footer for easier scrolling :)",
     "contact": {
         "email": "anthony.js.griffin@gmail.com",
         "phoneDisplay": "971-488-6554",

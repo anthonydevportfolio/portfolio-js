@@ -25,6 +25,40 @@ export interface PortfolioData {
     summary: string;
     location: string;
     currentFocus: string;
+    landing: {
+        greeting: string;
+        introduction: string;
+        action: string;
+    };
+    sections: {
+        about: {
+            title: string;
+        };
+        projects: {
+            title: string;
+            description: string;
+        };
+        experience: {
+            title: string;
+            description: string;
+        };
+        techStack: {
+            title: string;
+            description: string;
+        };
+        contact: {
+            title: string;
+            description: string;
+        };
+    };
+    labels: {
+        currentRole: string;
+        projectLink: string;
+        email: string;
+        phone: string;
+        linkedin: string;
+    };
+    footer: string;
     contact: {
         email: string;
         phoneDisplay: string;

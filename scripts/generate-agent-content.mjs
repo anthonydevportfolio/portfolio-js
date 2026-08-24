@@ -21,6 +21,18 @@ const escapeHtml = value =>
 const escapeXml = value => escapeHtml(value);
 const markdownLink = (label, url) => `[${label.replaceAll('[', '\\[').replaceAll(']', '\\]')}](${url})`;
 const sentence = value => (/[.!?]$/.test(value) ? value : `${value}.`);
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC'
+});
+const formatDate = value => {
+    if (value.toLowerCase() === 'present') return 'Present';
+
+    const [month, year] = value.split('/').map(Number);
+    return dateFormatter.format(new Date(Date.UTC(year, month - 1, 1)));
+};
+const formatPeriod = (startDate, endDate) => `${formatDate(startDate)} — ${formatDate(endDate)}`;
 
 const projectDescription = project => project.description.map(sentence).join(' ');
 const experienceNewestFirst = [...portfolio.experience].reverse();
@@ -89,7 +101,7 @@ const staticProjects = portfolio.projects
                         <h3>${escapeHtml(project.name)}</h3>
                         ${project.description.map(item => `<p>${escapeHtml(sentence(item))}</p>`).join('\n                        ')}
                         <p><strong>Technologies:</strong> ${escapeHtml(project.stack.join(', '))}</p>
-                        <p><a href="${escapeHtml(project.url)}">View ${escapeHtml(project.name)}</a></p>
+                        <p><a href="${escapeHtml(project.url)}">${escapeHtml(portfolio.labels.projectLink)}</a></p>
                     </article>`
     )
     .join('');
@@ -98,8 +110,9 @@ const staticExperience = experienceNewestFirst
     .map(
         experience => `
                     <article>
-                        <h3>${escapeHtml(experience.company)} — ${escapeHtml(experience.title)}</h3>
-                        <p>${escapeHtml(experience.startDate)}–${escapeHtml(experience.endDate)} · ${escapeHtml(experience.location)}</p>
+                        <h3>${escapeHtml(experience.company)}</h3>
+                        <p>${escapeHtml(experience.title)}</p>
+                        <p><time>${escapeHtml(formatPeriod(experience.startDate, experience.endDate))}</time> · ${escapeHtml(experience.location)}</p>
                         <ul>
                             ${experience.description.map(item => `<li>${escapeHtml(item)}</li>`).join('\n                            ')}
                         </ul>
@@ -112,7 +125,9 @@ const staticTechStack = portfolio.techStack
         group => `
                     <div>
                         <h3>${escapeHtml(group.label)}</h3>
-                        <p>${escapeHtml(group.items.join(', '))}</p>
+                        <ul>
+                            ${group.items.map(item => `<li>${escapeHtml(item)}</li>`).join('\n                            ')}
+                        </ul>
                     </div>`
     )
     .join('');
@@ -146,33 +161,90 @@ ${JSON.stringify(structuredData, null, 4).replaceAll('<', '\\u003c')}
 const staticShell = `<!-- agent-content:start -->
             <main class="static-portfolio">
                 <header>
+                    <p>${escapeHtml(portfolio.landing.greeting)}</p>
+                    <p>${escapeHtml(portfolio.landing.introduction)}</p>
                     <h1>${escapeHtml(portfolio.name)}</h1>
                     <p><strong>${escapeHtml(portfolio.headline)}</strong></p>
+                    <p>${escapeHtml(portfolio.summary)}</p>
+                    <p><a href="#static-about">${escapeHtml(portfolio.landing.action)}</a></p>
+                    <nav aria-label="Portfolio sections">
+                        <a href="#static-about">${escapeHtml(portfolio.sections.about.title)}</a> ·
+                        <a href="#static-projects">${escapeHtml(portfolio.sections.projects.title)}</a> ·
+                        <a href="#static-experience">${escapeHtml(portfolio.sections.experience.title)}</a> ·
+                        <a href="#static-stack">${escapeHtml(portfolio.sections.techStack.title)}</a> ·
+                        <a href="#static-contact">${escapeHtml(portfolio.sections.contact.title)}</a>
+                    </nav>
+                </header>
+                <section aria-labelledby="static-about-title" id="static-about">
+                    <h2 id="static-about-title">${escapeHtml(portfolio.introductionHeading)}</h2>
                     <p>${escapeHtml(portfolio.introduction)}</p>
-                    <p>${escapeHtml(portfolio.currentFocus)}</p>
                     <nav aria-label="Professional profiles">
                         <a href="${escapeHtml(portfolio.profiles.github)}">GitHub</a> ·
                         <a href="${escapeHtml(portfolio.profiles.linkedin)}">LinkedIn</a>
                     </nav>
-                </header>
-                <section aria-labelledby="static-projects-title">
-                    <h2 id="static-projects-title">Selected projects</h2>${staticProjects}
+                    <aside aria-labelledby="static-current-role-title">
+                        <h3 id="static-current-role-title">${escapeHtml(portfolio.labels.currentRole)} ${escapeHtml(currentExperience.company)}</h3>
+                        <p>${escapeHtml(currentExperience.title)}</p>
+                        <p>${escapeHtml(currentExperience.location)} · <time>${escapeHtml(formatPeriod(currentExperience.startDate, currentExperience.endDate))}</time></p>
+                        <p>${escapeHtml(portfolio.currentFocus)}</p>
+                    </aside>
                 </section>
-                <section aria-labelledby="static-experience-title">
-                    <h2 id="static-experience-title">Experience</h2>${staticExperience}
+                <section aria-labelledby="static-projects-title" id="static-projects">
+                    <h2 id="static-projects-title">${escapeHtml(portfolio.sections.projects.title)}</h2>
+                    <p>${escapeHtml(portfolio.sections.projects.description)}</p>${staticProjects}
                 </section>
-                <section aria-labelledby="static-skills-title">
-                    <h2 id="static-skills-title">Skills</h2>${staticTechStack}
+                <section aria-labelledby="static-experience-title" id="static-experience">
+                    <h2 id="static-experience-title">${escapeHtml(portfolio.sections.experience.title)}</h2>
+                    <p>${escapeHtml(portfolio.sections.experience.description)}</p>${staticExperience}
                 </section>
-                <section aria-labelledby="static-contact-title">
-                    <h2 id="static-contact-title">Contact</h2>
+                <section aria-labelledby="static-stack-title" id="static-stack">
+                    <h2 id="static-stack-title">${escapeHtml(portfolio.sections.techStack.title)}</h2>
+                    <p>${escapeHtml(portfolio.sections.techStack.description)}</p>${staticTechStack}
+                </section>
+                <section aria-labelledby="static-contact-title" id="static-contact">
+                    <h2 id="static-contact-title">${escapeHtml(portfolio.sections.contact.title)}</h2>
+                    <p>${escapeHtml(portfolio.sections.contact.description)}</p>
                     <address>
-                        <a href="mailto:${escapeHtml(portfolio.contact.email)}">${escapeHtml(portfolio.contact.email)}</a><br />
-                        <a href="${escapeHtml(portfolio.contact.phoneUrl)}">${escapeHtml(portfolio.contact.phoneDisplay)}</a>
+                        <p>${escapeHtml(portfolio.labels.email)}: <a href="mailto:${escapeHtml(portfolio.contact.email)}">${escapeHtml(portfolio.contact.email)}</a></p>
+                        <p>${escapeHtml(portfolio.labels.phone)}: <a href="${escapeHtml(portfolio.contact.phoneUrl)}">${escapeHtml(portfolio.contact.phoneDisplay)}</a></p>
+                        <p>${escapeHtml(portfolio.labels.linkedin)}: <a href="${escapeHtml(portfolio.profiles.linkedin)}">${escapeHtml(portfolio.name)}</a></p>
                     </address>
                 </section>
+                <footer><p>${escapeHtml(portfolio.footer)}</p></footer>
             </main>
             <!-- agent-content:end -->`;
+
+const requiredShellContent = [
+    portfolio.name,
+    portfolio.headline,
+    portfolio.summary,
+    portfolio.introductionHeading,
+    portfolio.introduction,
+    portfolio.location,
+    portfolio.currentFocus,
+    ...Object.values(portfolio.landing),
+    ...Object.values(portfolio.sections).flatMap(section => Object.values(section)),
+    ...Object.values(portfolio.labels),
+    portfolio.footer,
+    portfolio.contact.email,
+    portfolio.contact.phoneDisplay,
+    portfolio.contact.phoneUrl,
+    ...Object.values(portfolio.profiles),
+    ...portfolio.projects.flatMap(project => [project.name, ...project.description, ...project.stack, project.url]),
+    ...experienceNewestFirst.flatMap(experience => [
+        experience.title,
+        experience.company,
+        experience.location,
+        formatPeriod(experience.startDate, experience.endDate),
+        ...experience.description
+    ]),
+    ...portfolio.techStack.flatMap(group => [group.label, ...group.items])
+];
+const missingShellContent = requiredShellContent.filter(value => !staticShell.includes(escapeHtml(value)));
+
+if (missingShellContent.length > 0) {
+    throw new Error(`Static shell is missing portfolio content: ${missingShellContent.join(', ')}`);
+}
 
 const indexTemplate = await readFile(indexPath, 'utf8');
 
@@ -190,7 +262,11 @@ ${portfolio.headline}
 
 ${portfolio.introduction}
 
-## Current focus
+## Current role
+
+${currentExperience.title} at ${currentExperience.company}
+
+${formatPeriod(currentExperience.startDate, currentExperience.endDate)} · ${currentExperience.location}
 
 ${portfolio.currentFocus}
 
@@ -214,7 +290,7 @@ ${experienceNewestFirst
         experience => `
 ### ${experience.company} — ${experience.title}
 
-${experience.startDate}–${experience.endDate} · ${experience.location}
+${formatPeriod(experience.startDate, experience.endDate)} · ${experience.location}
 
 ${experience.description.map(item => `- ${item}`).join('\n')}
 `
