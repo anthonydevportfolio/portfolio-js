@@ -180,7 +180,7 @@ containers around ordinary text.
     blur.
 -   **Targets:** Every link, including the brand, is at least 44px high.
 -   **Typography:** Compact Cool Steel labels; the brand and hover/focus states move to Warm White.
--   **Mobile:** The index becomes two compact rows so About, Projects, Experience, and Contact all remain directly
+-   **Mobile:** The name yields to a single compact row so About, Projects, Experience, and Contact all remain directly
     available beside an icon-only theme control.
 
 ### Scroll Rail
