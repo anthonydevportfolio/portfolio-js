@@ -266,16 +266,6 @@ const CompanyLogo: FC<CompanyLogoProps> = ({ src }) => (
     />
 );
 
-const Constellation = () => (
-    <div aria-hidden='true' className='portfolio-constellation'>
-        <span className='portfolio-constellation__node portfolio-constellation__node--one' />
-        <span className='portfolio-constellation__node portfolio-constellation__node--two' />
-        <span className='portfolio-constellation__node portfolio-constellation__node--three' />
-        <span className='portfolio-constellation__node portfolio-constellation__node--four' />
-        <span className='portfolio-constellation__node portfolio-constellation__node--five' />
-    </div>
-);
-
 export const View: FC = () => {
     useLogger('View');
 
@@ -532,7 +522,6 @@ export const View: FC = () => {
                 Skip to content
             </a>
             <ScrollRail />
-            <Constellation />
 
             <header className='portfolio-nav'>
                 <div className='portfolio-nav__inner' ref={mobileNavRef}>
