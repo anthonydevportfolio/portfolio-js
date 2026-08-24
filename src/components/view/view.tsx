@@ -628,34 +628,32 @@ export const View: FC = () => {
                             </div>
                         </div>
                         <div className='portfolio-mobile-theme-slot'>
-                            <div
-                                aria-hidden={isMobileThemeSubmenuOpen || undefined}
-                                className='portfolio-mobile-theme-slot__trigger-pane'>
-                                <button
-                                    aria-controls='portfolio-mobile-theme-submenu'
-                                    aria-expanded={isMobileThemeSubmenuOpen}
-                                    aria-label={`Theme, ${THEME_PREFERENCE_LABELS[themePreference]} selected`}
-                                    className='portfolio-mobile-theme-trigger'
-                                    onClick={event => {
-                                        if (event.detail === 0) suppressMobileMenuMotion();
-                                        setIsMobileThemeSubmenuOpen(true);
-                                    }}
-                                    ref={mobileThemeTriggerRef}
-                                    type='button'>
-                                    <ThemePreferenceIcon preference={themePreference} />
-                                    <span>Theme</span>
-                                    <span className='portfolio-mobile-theme-trigger__preference'>
-                                        {THEME_PREFERENCE_LABELS[themePreference]}
-                                    </span>
-                                    <ThemeMenuChevron />
-                                </button>
-                            </div>
-                            <div
-                                aria-hidden={!isMobileThemeSubmenuOpen}
-                                className='portfolio-mobile-theme-submenu'
-                                id='portfolio-mobile-theme-submenu'
-                                ref={mobileThemeSubmenuRef}>
-                                <header className='portfolio-mobile-theme-submenu__header'>
+                            <div className='portfolio-mobile-theme-slot__row'>
+                                <div
+                                    aria-hidden={isMobileThemeSubmenuOpen || undefined}
+                                    className='portfolio-mobile-theme-slot__trigger-pane'>
+                                    <button
+                                        aria-controls='portfolio-mobile-theme-submenu'
+                                        aria-expanded={isMobileThemeSubmenuOpen}
+                                        aria-label={`Theme, ${THEME_PREFERENCE_LABELS[themePreference]} selected`}
+                                        className='portfolio-mobile-theme-trigger'
+                                        onClick={event => {
+                                            if (event.detail === 0) suppressMobileMenuMotion();
+                                            setIsMobileThemeSubmenuOpen(true);
+                                        }}
+                                        ref={mobileThemeTriggerRef}
+                                        type='button'>
+                                        <ThemePreferenceIcon preference={themePreference} />
+                                        <span>Theme</span>
+                                        <span className='portfolio-mobile-theme-trigger__preference'>
+                                            {THEME_PREFERENCE_LABELS[themePreference]}
+                                        </span>
+                                        <ThemeMenuChevron />
+                                    </button>
+                                </div>
+                                <header
+                                    aria-hidden={!isMobileThemeSubmenuOpen}
+                                    className='portfolio-mobile-theme-submenu__header'>
                                     <button
                                         aria-label='Back to navigation'
                                         className='portfolio-mobile-theme-submenu__back'
@@ -671,6 +669,12 @@ export const View: FC = () => {
                                     <span className='portfolio-mobile-theme-submenu__title'>Theme</span>
                                     <span aria-hidden='true' />
                                 </header>
+                            </div>
+                            <div
+                                aria-hidden={!isMobileThemeSubmenuOpen}
+                                className='portfolio-mobile-theme-submenu'
+                                id='portfolio-mobile-theme-submenu'
+                                ref={mobileThemeSubmenuRef}>
                                 <div
                                     aria-label='Theme preference'
                                     className='portfolio-mobile-theme-submenu__options'
