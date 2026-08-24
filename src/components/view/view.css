@@ -901,8 +901,7 @@
     transition:
         background-color 180ms var(--portfolio-ease),
         border-color 180ms var(--portfolio-ease),
-        color 180ms var(--portfolio-ease),
-        transform 140ms var(--portfolio-ease);
+        color 180ms var(--portfolio-ease);
     width: 44px;
 }
 
@@ -910,10 +909,6 @@
     background: var(--portfolio-accent-soft);
     border-color: var(--portfolio-accent-border);
     color: var(--portfolio-text);
-}
-
-.portfolio-copy-button:active {
-    transform: scale(0.94);
 }
 
 .portfolio-copy-button[data-copied='true'] {
