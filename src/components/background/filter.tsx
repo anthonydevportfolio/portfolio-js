@@ -10,7 +10,9 @@ const FilterBase = styled('div')<{ shouldRender: boolean }>(({ shouldRender }) =
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: `rgba(20, 0, 20, ${shouldRender ? 0.8 : 0})`,
+    background: 'linear-gradient(180deg, #15171a 0%, #000000 100%)',
+    opacity: shouldRender ? 0.82 : 0,
     zIndex: 2,
-    transition: 'background-color 0.5s'
+    pointerEvents: 'none',
+    transition: 'opacity 0.5s'
 }));

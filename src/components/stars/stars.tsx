@@ -58,11 +58,12 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
             const maxX = canvas.width;
             const maxY = canvas.height;
 
-            // Clear and setup canvas background gradient
+            // Clear and set up the neutral landing-page gradient.
             context.clearRect(0, 0, maxX, maxY);
             const gradient = context.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, '#0D0D0D');
-            gradient.addColorStop(1, '#1e003c');
+            gradient.addColorStop(0, '#15171a');
+            gradient.addColorStop(0.55, '#090a0c');
+            gradient.addColorStop(1, '#000000');
             context.fillStyle = gradient;
             context.fillRect(0, 0, maxX, maxY);
 
