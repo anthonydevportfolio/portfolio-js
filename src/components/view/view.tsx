@@ -15,7 +15,7 @@ import { projectsData } from '../projects/projectsData';
 import { ScrollRail } from './scrollRail';
 import './view.css';
 
-const GITHUB_URL = 'https://github.com/anthonydevportfolio';
+const GITHUB_URL = 'https://github.com/anthony4834';
 const LINKEDIN_URL = 'https://www.linkedin.com/in/anthony-griffin-0513271aa/';
 const EMAIL_ADDRESS = 'anthony.js.griffin@gmail.com';
 const PHONE_DISPLAY = '971-488-6554';

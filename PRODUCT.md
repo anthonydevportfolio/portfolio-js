@@ -52,8 +52,7 @@ reach him directly.
     `src/components/experience/data.ts`, sourced from `Anthony-Griffin-Resume-0826.pdf`.
 -   Project screenshots, descriptions, technology stacks, and live URLs for fmr.fyi, Pokedle, BlockLens, Chrona, pol.ai,
     and Solas in `src/components/projects/projectsData.ts`.
--   Anthony's public GitHub organization/profile path is supported by the repository remote:
-    `https://github.com/anthonydevportfolio`.
+-   Anthony's public GitHub profile is `https://github.com/anthony4834`.
 -   Anthony's email address, phone number, LinkedIn profile, and current technology inventory are approved by
     `Anthony-Griffin-Resume-0826.pdf`.
 -   The resume approves the quantitative impact metrics used in the experience ledger. The repository still contains no
