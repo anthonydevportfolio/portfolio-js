@@ -98,11 +98,10 @@
 }
 
 .portfolio-scroll-rail {
-    --scroll-progress-y: 0%;
     cursor: ns-resize;
     display: flex;
     flex-direction: column;
-    height: min(68vh, 560px);
+    height: min(72vh, 620px);
     justify-content: space-between;
     outline: none;
     padding: 2px 0;
@@ -111,39 +110,29 @@
     top: 50%;
     touch-action: none;
     transform: translateY(-50%);
-    width: 30px;
+    width: 34px;
     z-index: 19;
 }
 
-.portfolio-scroll-rail__bar,
-.portfolio-scroll-rail__position {
+.portfolio-scroll-rail__bar {
     border-radius: 4px;
     display: block;
     margin-left: auto;
     transform-origin: right center;
-    width: 24px;
+    width: 30px;
 }
 
 .portfolio-scroll-rail__bar {
-    --scroll-rail-opacity: 0.26;
-    --scroll-rail-scale: 0.24;
+    --scroll-rail-opacity: 0.18;
+    --scroll-rail-scale: 0.14;
     background: var(--portfolio-text-muted);
     height: 2px;
     opacity: var(--scroll-rail-opacity);
     transform: scaleX(var(--scroll-rail-scale));
+    transition: background-color 120ms var(--portfolio-ease);
 }
 
-.portfolio-scroll-rail__position {
-    background: var(--portfolio-accent);
-    height: 3px;
-    position: absolute;
-    right: 0;
-    top: clamp(1.5px, var(--scroll-progress-y), calc(100% - 1.5px));
-    transform: translateY(-50%);
-}
-
-.portfolio-scroll-rail:hover .portfolio-scroll-rail__bar,
-.portfolio-scroll-rail:focus-visible .portfolio-scroll-rail__bar {
+.portfolio-scroll-rail__bar[data-active='true'] {
     background: var(--portfolio-text);
 }
 
@@ -151,9 +140,9 @@
     outline: none;
 }
 
-.portfolio-scroll-rail:focus-visible .portfolio-scroll-rail__position {
-    outline: 2px solid var(--portfolio-accent);
-    outline-offset: 3px;
+.portfolio-scroll-rail:focus-visible .portfolio-scroll-rail__bar[data-active='true'] {
+    outline: 1px solid var(--portfolio-text);
+    outline-offset: 2px;
 }
 
 .portfolio-nav {
@@ -944,38 +933,40 @@
     }
 
     .portfolio-nav__inner {
-        align-items: center;
-        min-height: 58px;
+        display: grid;
+        grid-template-areas:
+            'brand theme'
+            'links links';
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 0;
+        padding: 0.375rem 0 0.25rem;
     }
 
     .portfolio-scroll-rail {
         height: min(60vh, 420px);
         right: 3px;
-        width: 18px;
+        width: 20px;
     }
 
-    .portfolio-scroll-rail__bar,
-    .portfolio-scroll-rail__position {
-        width: 13px;
+    .portfolio-scroll-rail__bar {
+        width: 16px;
     }
 
     .portfolio-nav__brand {
         font-size: 0.8125rem;
+        grid-area: brand;
     }
 
     .portfolio-nav__links {
-        gap: 0.875rem;
-        margin-left: 0.75rem;
-        overflow-x: auto;
-        scrollbar-width: none;
+        gap: clamp(0.75rem, 5vw, 1.5rem);
+        grid-area: links;
+        justify-content: space-between;
+        margin-left: 0;
+        width: 100%;
     }
 
     .portfolio-nav__actions {
-        gap: 0.5rem;
-    }
-
-    .portfolio-nav__links::-webkit-scrollbar {
-        display: none;
+        display: contents;
     }
 
     .portfolio-nav__links a {
@@ -983,8 +974,9 @@
         font-size: 0.75rem;
     }
 
-    .portfolio-nav__links .portfolio-nav__link--mobile-hidden {
-        display: none;
+    .portfolio-theme-menu {
+        grid-area: theme;
+        justify-self: end;
     }
 
     .portfolio-theme-menu__trigger {
@@ -1020,6 +1012,7 @@
 
     .portfolio-intro {
         padding: 5rem 0;
+        scroll-margin-top: 108px;
     }
 
     .portfolio-intro h1 {
@@ -1034,6 +1027,7 @@
 
     .portfolio-section {
         padding: 4.5rem 0;
+        scroll-margin-top: 96px;
     }
 
     .portfolio-section__header {
@@ -1116,7 +1110,6 @@
 
     .portfolio-nav__links {
         gap: 0.75rem;
-        margin-left: 0.5rem;
     }
 
     .portfolio-nav__links a {
@@ -1139,7 +1132,8 @@
     .portfolio-nav__links a,
     .portfolio-theme-menu__trigger,
     .portfolio-theme-menu__option,
-    .portfolio-theme-menu__chevron {
+    .portfolio-theme-menu__chevron,
+    .portfolio-scroll-rail__bar {
         transition: none;
     }
 

@@ -1,7 +1,8 @@
 import { FC, KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent, useEffect, useRef } from 'react';
 
-const BAR_COUNT = 33;
+const BAR_COUNT = 65;
 const KEY_SCROLL_STEP = 72;
+const RAIL_FALLOFF = 1.6;
 
 const clamp = (value: number, minimum: number, maximum: number) => Math.min(Math.max(value, minimum), maximum);
 
@@ -27,26 +28,32 @@ export const ScrollRail: FC = () => {
         const displayedProgress = { current: 0 };
         let animationFrame: number | null = null;
         let previousTime = 0;
+        let activeBar: HTMLSpanElement | null = null;
 
         prefersReducedMotionRef.current = motionPreference.matches;
         document.documentElement.classList.add('portfolio-scrollbar-replaced');
 
         const renderProgress = (progress: number) => {
-            const activePosition = progress * (BAR_COUNT - 1);
+            const activeIndex = Math.round(progress * (BAR_COUNT - 1));
+            const nextActiveBar = barRefs.current[activeIndex] ?? null;
 
-            rail.style.setProperty('--scroll-progress-y', `${progress * 100}%`);
             rail.setAttribute('aria-valuenow', `${Math.round(progress * 100)}`);
             rail.setAttribute('aria-valuetext', `${Math.round(progress * 100)}% through the page`);
+
+            if (activeBar !== nextActiveBar) {
+                activeBar?.removeAttribute('data-active');
+                nextActiveBar?.setAttribute('data-active', 'true');
+                activeBar = nextActiveBar;
+            }
 
             barRefs.current.forEach((bar, index) => {
                 if (!bar) return;
 
-                const distance = Math.abs(index - activePosition);
-                const proximity = clamp(1 - distance / 5, 0, 1);
-                const easedProximity = proximity * proximity * (3 - 2 * proximity);
+                const distance = Math.abs(index - activeIndex);
+                const emphasis = Math.exp(-Math.pow(distance / RAIL_FALLOFF, 2));
 
-                bar.style.setProperty('--scroll-rail-scale', `${0.24 + easedProximity * 0.52}`);
-                bar.style.setProperty('--scroll-rail-opacity', `${0.26 + easedProximity * 0.58}`);
+                bar.style.setProperty('--scroll-rail-scale', `${0.14 + emphasis * 0.86}`);
+                bar.style.setProperty('--scroll-rail-opacity', `${0.18 + emphasis * 0.8}`);
             });
         };
 
@@ -177,7 +184,6 @@ export const ScrollRail: FC = () => {
                     }}
                 />
             ))}
-            <span aria-hidden='true' className='portfolio-scroll-rail__position' />
         </div>
     );
 };

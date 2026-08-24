@@ -53,17 +53,18 @@ point.
 
 ## Implementation fidelity inventory
 
-| Visible ingredient             | Commitment                                                                                      | Medium                                    |
-| ------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| Slim sticky navigation         | Anthony Griffin plus About, Projects, Experience, and Contact; keeps Projects on mobile         | Semantic HTML and CSS                     |
-| Theme control                  | Icon-led System, Light, and Dark menu; stored preference stays distinct from the resolved theme | Custom accessible menu and localStorage   |
-| Constellation connective layer | Sparse points and faint joining lines; atmospheric, never interactive                           | CSS nodes and pseudo-elements             |
-| Opening split                  | Concise About statement and profile links paired with current-role evidence                     | Semantic HTML and responsive CSS grid     |
-| Experience ledger              | Compact company metadata paired with top-aligned achievement details                            | Semantic HTML lists and responsive grid   |
-| Project bands                  | Screenshot-dominant rows with project name, concise factual description, and live action        | Existing raster assets plus semantic HTML |
-| Tech stack ledger              | Complete resume stack grouped into compact, wrapping categories                                 | Semantic definition list and CSS          |
-| Contact methods                | Email, phone, and LinkedIn actions grouped into one quiet panel                                 | Semantic address and anchors              |
-| Motion                         | One short entry reveal, then quiet one-shot section continuations that keep content mounted     | IntersectionObserver and CSS transforms   |
+| Visible ingredient             | Commitment                                                                                       | Medium                                    |
+| ------------------------------ | ------------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| Slim sticky navigation         | Anthony Griffin plus About, Projects, Experience, and Contact across a compact mobile second row | Semantic HTML and CSS                     |
+| Interactive scroll rail        | Dense neutral bars with one dramatic longest bar as the sole page-position signal                | React, CSS transforms, and ARIA scrollbar |
+| Theme control                  | Icon-led System, Light, and Dark menu; stored preference stays distinct from the resolved theme  | Custom accessible menu and localStorage   |
+| Constellation connective layer | Sparse points and faint joining lines; atmospheric, never interactive                            | CSS nodes and pseudo-elements             |
+| Opening split                  | Concise About statement and profile links paired with current-role evidence                      | Semantic HTML and responsive CSS grid     |
+| Experience ledger              | Compact company metadata paired with top-aligned achievement details                             | Semantic HTML lists and responsive grid   |
+| Project bands                  | Screenshot-dominant rows with project name, concise factual description, and live action         | Existing raster assets plus semantic HTML |
+| Tech stack ledger              | Complete resume stack grouped into compact, wrapping categories                                  | Semantic definition list and CSS          |
+| Contact methods                | Email, phone, and LinkedIn actions grouped into one quiet panel                                  | Semantic address and anchors              |
+| Motion                         | One short entry reveal, then quiet one-shot section continuations that keep content mounted      | IntersectionObserver and CSS transforms   |
 
 ## Unresolved decisions
 

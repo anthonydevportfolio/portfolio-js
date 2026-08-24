@@ -180,8 +180,14 @@ containers around ordinary text.
     blur.
 -   **Targets:** Every link, including the brand, is at least 44px high.
 -   **Typography:** Compact Cool Steel labels; the brand and hover/focus states move to Warm White.
--   **Mobile:** The bar becomes 58px, keeps Projects and Contact visible, and hides only redundant About and Experience
-    links.
+-   **Mobile:** The index becomes two compact rows so About, Projects, Experience, and Contact all remain directly
+    available beside an icon-only theme control.
+
+### Scroll Rail
+
+The native scrollbar is replaced by a dense interactive rail of neutral hairlines. Page position is communicated by the
+single longest bar, with a steep exponential falloff through its neighbors; there is no separate colored position
+cursor.
 
 ### Profile Actions
 

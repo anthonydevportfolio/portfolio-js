@@ -375,13 +375,9 @@ export const View: FC = () => {
                     </a>
                     <div className='portfolio-nav__actions'>
                         <nav aria-label='Portfolio sections' className='portfolio-nav__links'>
-                            <a className='portfolio-nav__link--mobile-hidden' href='#about'>
-                                About
-                            </a>
+                            <a href='#about'>About</a>
                             <a href='#projects'>Projects</a>
-                            <a className='portfolio-nav__link--mobile-hidden' href='#experience'>
-                                Experience
-                            </a>
+                            <a href='#experience'>Experience</a>
                             <a href='#contact'>Contact</a>
                         </nav>
                         <div className='portfolio-theme-menu' onBlur={closeThemeMenuOnBlur} ref={themeMenuRef}>
