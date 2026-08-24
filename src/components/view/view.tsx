@@ -65,7 +65,8 @@ const projectImageDimensions: Record<string, { width: number; height: number }> 
     Pokedle: { width: 3808, height: 2264 },
     BlockLens: { width: 1920, height: 1040 },
     Chrona: { width: 1920, height: 1040 },
-    'pol.ai': { width: 1920, height: 1040 }
+    'pol.ai': { width: 1920, height: 1040 },
+    Solas: { width: 1920, height: 1040 }
 };
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {

@@ -3,6 +3,7 @@ import pokedle from '../../assets/pokedle.png';
 import blocklens from '../../assets/blocklens.png';
 import chrona from '../../assets/chrona.png';
 import polai from '../../assets/polai.png';
+import solas from '../../assets/solas.png';
 
 export interface ProjectData {
     name: string;
@@ -60,5 +61,15 @@ export const projectsData: ProjectData[] = [
         ],
         stack: ['TypeScript', 'Node', 'MongoDB', 'Express.js', 'ChatGPT'],
         url: 'https://anthony4834.github.io/polai/'
+    },
+    {
+        name: 'Solas',
+        img: solas,
+        description: [
+            'Interactive generative-art experiment built from chords drawn across a circle',
+            'Adjust line count, speed, color, and timing as it moves through geometric patterns'
+        ],
+        stack: ['React', 'TypeScript', 'Canvas', 'Vite'],
+        url: 'https://anthony4834.github.io/solas/'
     }
 ];

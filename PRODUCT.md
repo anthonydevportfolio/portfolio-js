@@ -50,8 +50,8 @@ They may compare employment entries, inspect screenshots, and open deployed proj
 
 -   Employment history and descriptions for Workday and Freddie Mac via Hexaware Technologies in
     `src/components/experience/data.ts`, sourced from `Anthony-Griffin-Resume-0826.pdf`.
--   Project screenshots, descriptions, technology stacks, and live URLs for Pokedle, BlockLens, Chrona, and pol.ai in
-    `src/components/projects/projectsData.ts`.
+-   Project screenshots, descriptions, technology stacks, and live URLs for fmr.fyi, Pokedle, BlockLens, Chrona,
+    pol.ai, and Solas in `src/components/projects/projectsData.ts`.
 -   Anthony's public GitHub organization/profile path is supported by the repository remote:
     `https://github.com/anthonydevportfolio`.
 -   Technology references are available in `src/components/me/data.ts`.
