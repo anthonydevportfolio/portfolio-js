@@ -42,6 +42,7 @@ export const ScrollRail: FC = () => {
     const dragAnimationFrameRef = useRef<number | null>(null);
     const dragMetricsRef = useRef<DragMetrics | null>(null);
     const isDraggingRef = useRef(false);
+    const activeTouchIdentifierRef = useRef<number | null>(null);
     const pendingPointerYRef = useRef<number | null>(null);
     const prefersReducedMotionRef = useRef(false);
 
@@ -198,28 +199,135 @@ export const ScrollRail: FC = () => {
         });
     };
 
-    const beginDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
-        if (!event.isPrimary || event.button !== 0) return;
+    const startDrag = (clientY: number, pointerType: string) => {
+        const rail = railRef.current;
 
-        event.preventDefault();
+        if (!rail) return false;
+
         revealSectionsForDirectNavigation();
-        const bounds = event.currentTarget.getBoundingClientRect();
+        const bounds = rail.getBoundingClientRect();
 
         dragMetricsRef.current = {
             height: bounds.height,
             maximumScroll: getScrollMetrics().maximumScroll,
-            pointerType: event.pointerType,
-            startClientY: event.clientY,
+            pointerType,
+            startClientY: clientY,
             startScrollPosition: window.scrollY,
             top: bounds.top
         };
         isDraggingRef.current = true;
         document.documentElement.classList.add('portfolio-scrollbar-dragging');
+        if (pointerType === 'mouse') scrollToPointer(clientY);
+
+        return true;
+    };
+
+    const finishDrag = (cancelled: boolean) => {
+        if (dragAnimationFrameRef.current !== null) {
+            window.cancelAnimationFrame(dragAnimationFrameRef.current);
+            dragAnimationFrameRef.current = null;
+        }
+
+        const pendingPointerY = pendingPointerYRef.current;
+
+        pendingPointerYRef.current = null;
+        if (pendingPointerY !== null && !cancelled) scrollToPointer(pendingPointerY);
+
+        dragMetricsRef.current = null;
+        isDraggingRef.current = false;
+        document.documentElement.classList.remove('portfolio-scrollbar-dragging');
+    };
+
+    useEffect(() => {
+        const rail = railRef.current;
+
+        if (!rail) return;
+
+        const listenerOptions = { passive: false } as const;
+        const findTouch = (touches: TouchList, identifier: number) => {
+            for (let index = 0; index < touches.length; index += 1) {
+                const touch = touches.item(index);
+
+                if (touch?.identifier === identifier) return touch;
+            }
+
+            return null;
+        };
+
+        const beginTouchDrag = (event: TouchEvent) => {
+            if (activeTouchIdentifierRef.current !== null || event.touches.length !== 1) return;
+
+            const touch = event.changedTouches.item(0) ?? event.touches.item(0);
+
+            if (!touch) return;
+
+            event.preventDefault();
+            activeTouchIdentifierRef.current = touch.identifier;
+
+            if (!startDrag(touch.clientY, 'touch')) activeTouchIdentifierRef.current = null;
+        };
+
+        const continueTouchDrag = (event: TouchEvent) => {
+            const identifier = activeTouchIdentifierRef.current;
+
+            if (identifier === null) return;
+
+            const touch = findTouch(event.touches, identifier);
+
+            if (!touch) return;
+
+            event.preventDefault();
+            queueTouchScroll(touch.clientY);
+        };
+
+        const endTouchDrag = (event: TouchEvent) => {
+            const identifier = activeTouchIdentifierRef.current;
+
+            if (identifier === null) return;
+
+            const touch = findTouch(event.changedTouches, identifier);
+
+            if (!touch) return;
+
+            event.preventDefault();
+            pendingPointerYRef.current = touch.clientY;
+            activeTouchIdentifierRef.current = null;
+            finishDrag(false);
+        };
+
+        const cancelTouchDrag = (event: TouchEvent) => {
+            if (activeTouchIdentifierRef.current === null) return;
+
+            event.preventDefault();
+            activeTouchIdentifierRef.current = null;
+            finishDrag(true);
+        };
+
+        rail.addEventListener('touchstart', beginTouchDrag, listenerOptions);
+        rail.addEventListener('touchmove', continueTouchDrag, listenerOptions);
+        rail.addEventListener('touchend', endTouchDrag, listenerOptions);
+        rail.addEventListener('touchcancel', cancelTouchDrag, listenerOptions);
+
+        return () => {
+            rail.removeEventListener('touchstart', beginTouchDrag);
+            rail.removeEventListener('touchmove', continueTouchDrag);
+            rail.removeEventListener('touchend', endTouchDrag);
+            rail.removeEventListener('touchcancel', cancelTouchDrag);
+            activeTouchIdentifierRef.current = null;
+            finishDrag(true);
+        };
+    }, []);
+
+    const beginDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+        if (event.pointerType === 'touch' || !event.isPrimary || event.button !== 0) return;
+
+        event.preventDefault();
+        if (!startDrag(event.clientY, event.pointerType)) return;
         event.currentTarget.setPointerCapture(event.pointerId);
-        if (event.pointerType === 'mouse') scrollToPointer(event.clientY);
     };
 
     const continueDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+        if (event.pointerType === 'touch') return;
         if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
         event.preventDefault();
 
@@ -232,19 +340,9 @@ export const ScrollRail: FC = () => {
     };
 
     const endDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
-        if (dragAnimationFrameRef.current !== null) {
-            window.cancelAnimationFrame(dragAnimationFrameRef.current);
-            dragAnimationFrameRef.current = null;
-        }
+        if (event.pointerType === 'touch') return;
 
-        const pendingPointerY = pendingPointerYRef.current;
-
-        pendingPointerYRef.current = null;
-        if (pendingPointerY !== null && event.type !== 'pointercancel') scrollToPointer(pendingPointerY);
-
-        dragMetricsRef.current = null;
-        isDraggingRef.current = false;
-        document.documentElement.classList.remove('portfolio-scrollbar-dragging');
+        finishDrag(event.type === 'pointercancel');
 
         if (event.currentTarget.hasPointerCapture(event.pointerId)) {
             event.currentTarget.releasePointerCapture(event.pointerId);
