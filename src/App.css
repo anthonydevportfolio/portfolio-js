@@ -25,6 +25,10 @@ html.portfolio-scrollbar-replaced::-webkit-scrollbar {
     display: none;
 }
 
+html.portfolio-scrollbar-dragging {
+    scroll-behavior: auto;
+}
+
 body {
     background: #090b0f;
     min-width: 320px;
