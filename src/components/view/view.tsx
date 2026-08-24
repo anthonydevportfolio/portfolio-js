@@ -10,6 +10,7 @@ import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import { ExperienceData } from '../experience/data';
 import { projectsData } from '../projects/projectsData';
+import { ScrollRail } from './scrollRail';
 import './view.css';
 
 const GITHUB_URL = 'https://github.com/anthonydevportfolio';
@@ -291,6 +292,7 @@ export const View: FC = () => {
             <a className='portfolio-skip-link' href='#about'>
                 Skip to content
             </a>
+            <ScrollRail />
             <Constellation />
 
             <header className='portfolio-nav'>

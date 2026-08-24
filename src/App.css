@@ -17,6 +17,14 @@ html {
     scroll-behavior: smooth;
 }
 
+html.portfolio-scrollbar-replaced {
+    scrollbar-width: none;
+}
+
+html.portfolio-scrollbar-replaced::-webkit-scrollbar {
+    display: none;
+}
+
 body {
     background: #090b0f;
     min-width: 320px;

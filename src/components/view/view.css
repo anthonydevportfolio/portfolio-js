@@ -96,6 +96,65 @@
     transform: translateY(0);
 }
 
+.portfolio-scroll-rail {
+    --scroll-progress-y: 0%;
+    cursor: ns-resize;
+    display: flex;
+    flex-direction: column;
+    height: min(68vh, 560px);
+    justify-content: space-between;
+    outline: none;
+    padding: 2px 0;
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    touch-action: none;
+    transform: translateY(-50%);
+    width: 30px;
+    z-index: 19;
+}
+
+.portfolio-scroll-rail__bar,
+.portfolio-scroll-rail__position {
+    border-radius: 4px;
+    display: block;
+    margin-left: auto;
+    transform-origin: right center;
+    width: 24px;
+}
+
+.portfolio-scroll-rail__bar {
+    --scroll-rail-opacity: 0.26;
+    --scroll-rail-scale: 0.24;
+    background: var(--portfolio-text-muted);
+    height: 2px;
+    opacity: var(--scroll-rail-opacity);
+    transform: scaleX(var(--scroll-rail-scale));
+}
+
+.portfolio-scroll-rail__position {
+    background: var(--portfolio-accent);
+    height: 3px;
+    position: absolute;
+    right: 0;
+    top: clamp(1.5px, var(--scroll-progress-y), calc(100% - 1.5px));
+    transform: translateY(-50%);
+}
+
+.portfolio-scroll-rail:hover .portfolio-scroll-rail__bar,
+.portfolio-scroll-rail:focus-visible .portfolio-scroll-rail__bar {
+    background: var(--portfolio-text);
+}
+
+.portfolio-scroll-rail:focus-visible {
+    outline: none;
+}
+
+.portfolio-scroll-rail:focus-visible .portfolio-scroll-rail__position {
+    outline: 2px solid var(--portfolio-accent);
+    outline-offset: 3px;
+}
+
 .portfolio-nav {
     backdrop-filter: blur(18px);
     background: var(--portfolio-nav-bg);
@@ -764,6 +823,17 @@
     .portfolio-nav__inner {
         align-items: center;
         min-height: 58px;
+    }
+
+    .portfolio-scroll-rail {
+        height: min(60vh, 420px);
+        right: 3px;
+        width: 18px;
+    }
+
+    .portfolio-scroll-rail__bar,
+    .portfolio-scroll-rail__position {
+        width: 13px;
     }
 
     .portfolio-nav__brand {
