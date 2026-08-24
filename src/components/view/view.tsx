@@ -1,4 +1,11 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import {
+    FC,
+    FocusEvent as ReactFocusEvent,
+    KeyboardEvent as ReactKeyboardEvent,
+    useEffect,
+    useRef,
+    useState
+} from 'react';
 import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import { ExperienceData } from '../experience/data';
@@ -14,6 +21,13 @@ const currentExperience = experienceEntries[0];
 
 type Theme = 'dark' | 'light';
 type ThemePreference = Theme | 'system';
+
+const THEME_PREFERENCES: ThemePreference[] = ['system', 'light', 'dark'];
+const THEME_PREFERENCE_LABELS: Record<ThemePreference, string> = {
+    system: 'System',
+    light: 'Light',
+    dark: 'Dark'
+};
 
 const readSavedThemePreference = (): ThemePreference | null => {
     try {
@@ -71,9 +85,41 @@ const ExternalLinkIcon = () => (
     </svg>
 );
 
-const ThemeSelectChevron = () => (
-    <svg aria-hidden='true' className='portfolio-theme-select__icon' viewBox='0 0 16 16'>
+const ThemeMenuChevron = () => (
+    <svg aria-hidden='true' className='portfolio-theme-menu__chevron' viewBox='0 0 16 16'>
         <path d='m5 6.5 3 3 3-3' />
+    </svg>
+);
+
+const ThemePreferenceIcon: FC<{ preference: ThemePreference }> = ({ preference }) => {
+    if (preference === 'system') {
+        return (
+            <svg aria-hidden='true' className='portfolio-theme-menu__icon' viewBox='0 0 20 20'>
+                <rect height='9.25' rx='1.75' width='13.5' x='3.25' y='3.75' />
+                <path d='M10 13v3.25M7.25 16.25h5.5' />
+            </svg>
+        );
+    }
+
+    if (preference === 'light') {
+        return (
+            <svg aria-hidden='true' className='portfolio-theme-menu__icon' viewBox='0 0 20 20'>
+                <circle cx='10' cy='10' r='3.25' />
+                <path d='M10 2.25v1.5M10 16.25v1.5M2.25 10h1.5M16.25 10h1.5M4.52 4.52l1.06 1.06M14.42 14.42l1.06 1.06M15.48 4.52l-1.06 1.06M5.58 14.42l-1.06 1.06' />
+            </svg>
+        );
+    }
+
+    return (
+        <svg aria-hidden='true' className='portfolio-theme-menu__icon' viewBox='0 0 20 20'>
+            <path d='M16.35 12.52A7 7 0 0 1 7.48 3.65a7 7 0 1 0 8.87 8.87Z' />
+        </svg>
+    );
+};
+
+const ThemeCheckIcon = () => (
+    <svg aria-hidden='true' className='portfolio-theme-menu__check-icon' viewBox='0 0 16 16'>
+        <path d='m3.75 8.25 2.5 2.5 6-6' />
     </svg>
 );
 
@@ -110,8 +156,11 @@ export const View: FC = () => {
 
     const isExited = useSelectorw(state => state.landing.isExited);
     const portfolioRef = useRef<HTMLElement | null>(null);
+    const themeMenuRef = useRef<HTMLDivElement | null>(null);
+    const themeMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
     const [themePreference, setThemePreference] = useState<ThemePreference>(getInitialThemePreference);
     const [systemTheme, setSystemTheme] = useState<Theme>(getSystemTheme);
+    const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
     const theme = themePreference === 'system' ? systemTheme : themePreference;
 
     useEffect(() => {
@@ -128,6 +177,31 @@ export const View: FC = () => {
         if (!isExited) return;
         document.documentElement.dataset.portfolioTheme = theme;
     }, [isExited, theme]);
+
+    useEffect(() => {
+        if (!isThemeMenuOpen) return;
+
+        const closeOnOutsidePointer = (event: PointerEvent) => {
+            if (!themeMenuRef.current?.contains(event.target as Node)) setIsThemeMenuOpen(false);
+        };
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key !== 'Escape') return;
+            setIsThemeMenuOpen(false);
+            themeMenuTriggerRef.current?.focus();
+        };
+        const focusFrame = window.requestAnimationFrame(() => {
+            themeMenuRef.current?.querySelector<HTMLButtonElement>('[aria-checked="true"]')?.focus();
+        });
+
+        document.addEventListener('pointerdown', closeOnOutsidePointer);
+        document.addEventListener('keydown', closeOnEscape);
+
+        return () => {
+            window.cancelAnimationFrame(focusFrame);
+            document.removeEventListener('pointerdown', closeOnOutsidePointer);
+            document.removeEventListener('keydown', closeOnEscape);
+        };
+    }, [isThemeMenuOpen]);
 
     useEffect(() => {
         const portfolio = portfolioRef.current;
@@ -179,10 +253,31 @@ export const View: FC = () => {
 
     if (!isExited) return null;
 
-    const changeThemePreference = (event: ChangeEvent<HTMLSelectElement>) => {
-        const nextPreference = event.target.value as ThemePreference;
+    const chooseThemePreference = (nextPreference: ThemePreference) => {
         saveThemePreference(nextPreference);
         setThemePreference(nextPreference);
+        setIsThemeMenuOpen(false);
+        window.requestAnimationFrame(() => themeMenuTriggerRef.current?.focus());
+    };
+
+    const navigateThemeMenu = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+        if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+
+        const options = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="menuitemradio"]'));
+        const currentIndex = options.indexOf(document.activeElement as HTMLButtonElement);
+        let nextIndex = currentIndex;
+
+        if (event.key === 'ArrowDown') nextIndex = (currentIndex + 1) % options.length;
+        if (event.key === 'ArrowUp') nextIndex = (currentIndex - 1 + options.length) % options.length;
+        if (event.key === 'Home') nextIndex = 0;
+        if (event.key === 'End') nextIndex = options.length - 1;
+
+        event.preventDefault();
+        options[nextIndex]?.focus();
+    };
+
+    const closeThemeMenuOnBlur = (event: ReactFocusEvent<HTMLDivElement>) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node)) setIsThemeMenuOpen(false);
     };
 
     return (
@@ -210,16 +305,49 @@ export const View: FC = () => {
                                 <ExternalLinkIcon />
                             </a>
                         </nav>
-                        <div className='portfolio-theme-select'>
-                            <select
-                                aria-label='Theme preference'
-                                onChange={changeThemePreference}
-                                value={themePreference}>
-                                <option value='system'>System</option>
-                                <option value='light'>Light</option>
-                                <option value='dark'>Dark</option>
-                            </select>
-                            <ThemeSelectChevron />
+                        <div className='portfolio-theme-menu' onBlur={closeThemeMenuOnBlur} ref={themeMenuRef}>
+                            <button
+                                aria-controls='portfolio-theme-options'
+                                aria-expanded={isThemeMenuOpen}
+                                aria-haspopup='menu'
+                                aria-label={`Theme preference: ${THEME_PREFERENCE_LABELS[themePreference]}`}
+                                className='portfolio-theme-menu__trigger'
+                                onClick={() => setIsThemeMenuOpen(isOpen => !isOpen)}
+                                ref={themeMenuTriggerRef}
+                                type='button'>
+                                <ThemePreferenceIcon preference={themePreference} />
+                                <span>{THEME_PREFERENCE_LABELS[themePreference]}</span>
+                                <ThemeMenuChevron />
+                            </button>
+                            {isThemeMenuOpen ? (
+                                <div
+                                    aria-label='Theme preference'
+                                    className='portfolio-theme-menu__options'
+                                    id='portfolio-theme-options'
+                                    onKeyDown={navigateThemeMenu}
+                                    role='menu'>
+                                    {THEME_PREFERENCES.map(preference => {
+                                        const isSelected = preference === themePreference;
+
+                                        return (
+                                            <button
+                                                aria-checked={isSelected}
+                                                className='portfolio-theme-menu__option'
+                                                data-selected={isSelected}
+                                                key={preference}
+                                                onClick={() => chooseThemePreference(preference)}
+                                                role='menuitemradio'
+                                                type='button'>
+                                                <ThemePreferenceIcon preference={preference} />
+                                                <span>{THEME_PREFERENCE_LABELS[preference]}</span>
+                                                <span aria-hidden='true' className='portfolio-theme-menu__check'>
+                                                    {isSelected ? <ThemeCheckIcon /> : null}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            ) : null}
                         </div>
                     </div>
                 </div>

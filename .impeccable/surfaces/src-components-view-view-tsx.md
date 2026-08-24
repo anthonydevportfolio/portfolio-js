@@ -52,16 +52,16 @@ point.
 
 ## Implementation fidelity inventory
 
-| Visible ingredient             | Commitment                                                                                      | Medium                                      |
-| ------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| Slim sticky navigation         | Anthony Griffin plus About, Experience, Work, and GitHub; collapses cleanly on mobile           | Semantic HTML and CSS                       |
-| Theme control                  | System, Light, and Dark menu; stored preference stays distinct from the resolved theme          | Native select, localStorage, and CSS tokens |
-| Constellation connective layer | Sparse points and faint joining lines; atmospheric, never interactive                           | CSS nodes and pseudo-elements               |
-| Opening split                  | Concise About statement paired with current-role and technology evidence                        | Semantic HTML and responsive CSS grid       |
-| Experience ledger              | Compact company metadata paired with top-aligned achievement details                            | Semantic HTML lists and responsive grid     |
-| Selected-work bands            | Screenshot-dominant rows with project name, concise factual description, stack, and live action | Existing raster assets plus semantic HTML   |
-| Closing GitHub action          | Visible full-width close with one primary action                                                | Semantic anchor and CSS                     |
-| Motion                         | One short entry reveal, then quiet one-shot section continuations that keep content mounted     | IntersectionObserver and CSS transforms     |
+| Visible ingredient             | Commitment                                                                                      | Medium                                    |
+| ------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| Slim sticky navigation         | Anthony Griffin plus About, Experience, Work, and GitHub; collapses cleanly on mobile           | Semantic HTML and CSS                     |
+| Theme control                  | Icon-led System, Light, and Dark menu; stored preference stays distinct from the resolved theme | Custom accessible menu and localStorage   |
+| Constellation connective layer | Sparse points and faint joining lines; atmospheric, never interactive                           | CSS nodes and pseudo-elements             |
+| Opening split                  | Concise About statement paired with current-role and technology evidence                        | Semantic HTML and responsive CSS grid     |
+| Experience ledger              | Compact company metadata paired with top-aligned achievement details                            | Semantic HTML lists and responsive grid   |
+| Selected-work bands            | Screenshot-dominant rows with project name, concise factual description, stack, and live action | Existing raster assets plus semantic HTML |
+| Closing GitHub action          | Visible full-width close with one primary action                                                | Semantic anchor and CSS                   |
+| Motion                         | One short entry reveal, then quiet one-shot section continuations that keep content mounted     | IntersectionObserver and CSS transforms   |
 
 ## Unresolved decisions
 
