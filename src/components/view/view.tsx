@@ -442,21 +442,19 @@ export const View: FC = () => {
                             the web that just work.
                         </p>
                         <div aria-label='Professional profiles' className='portfolio-intro__profiles'>
-                            <a href={LINKEDIN_URL} rel='noreferrer' target='_blank'>
+                            <a
+                                aria-label='LinkedIn profile (opens in a new tab)'
+                                href={LINKEDIN_URL}
+                                rel='noreferrer'
+                                target='_blank'>
                                 <LinkedInIcon />
-                                <span>
-                                    <strong>LinkedIn</strong>
-                                    <small>Work and background</small>
-                                </span>
-                                <ExternalLinkIcon />
                             </a>
-                            <a href={GITHUB_URL} rel='noreferrer' target='_blank'>
+                            <a
+                                aria-label='GitHub profile (opens in a new tab)'
+                                href={GITHUB_URL}
+                                rel='noreferrer'
+                                target='_blank'>
                                 <GitHubIcon />
-                                <span>
-                                    <strong>GitHub</strong>
-                                    <small>Code and experiments</small>
-                                </span>
-                                <ExternalLinkIcon />
                             </a>
                         </div>
                     </div>

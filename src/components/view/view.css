@@ -401,9 +401,8 @@
 .portfolio-intro__profiles {
     display: grid;
     gap: 0.75rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, 52px);
     margin-top: 2rem;
-    max-width: 620px;
 }
 
 .portfolio-intro__profiles a {
@@ -412,10 +411,8 @@
     border-radius: 12px;
     color: var(--portfolio-text);
     display: grid;
-    gap: 0.75rem;
-    grid-template-columns: 22px minmax(0, 1fr) 18px;
-    min-height: 72px;
-    padding: 0.75rem 0.875rem;
+    min-height: 52px;
+    place-items: center;
     text-decoration: none;
     transition:
         background-color 180ms var(--portfolio-ease),
@@ -427,14 +424,12 @@
     border-color: var(--portfolio-accent-border);
 }
 
-.portfolio-intro__profiles span,
 .portfolio-contact__method span {
     display: grid;
     gap: 0.25rem;
     min-width: 0;
 }
 
-.portfolio-intro__profiles strong,
 .portfolio-contact__method strong {
     font-size: 0.875rem;
     font-weight: 620;
@@ -442,7 +437,6 @@
     overflow-wrap: anywhere;
 }
 
-.portfolio-intro__profiles small,
 .portfolio-contact__method small {
     color: var(--portfolio-text-subtle);
     font-size: 0.75rem;
@@ -450,7 +444,6 @@
     line-height: 1.35;
 }
 
-.portfolio-intro__profiles .portfolio-link__icon,
 .portfolio-contact__method .portfolio-link__icon {
     color: var(--portfolio-text-subtle);
 }
@@ -710,7 +703,6 @@
 }
 
 .portfolio-link:hover .portfolio-link__icon,
-.portfolio-intro__profiles a:hover .portfolio-link__icon,
 .portfolio-contact__method:hover .portfolio-link__icon {
     transform: translate(2px, -2px);
 }

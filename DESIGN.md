@@ -191,8 +191,8 @@ cursor.
 
 ### Profile Actions
 
-LinkedIn and GitHub sit directly below the introduction as two compact, equal tiles. Each uses an authored service icon,
-a short description, and a visible external-link cue without competing with the current-role panel.
+LinkedIn and GitHub sit directly below the introduction as two compact, equal logo-only tiles. Each keeps an accessible
+link name and visible focus treatment without repeating the service name or adding an external-link cue.
 
 ### Experience Ledger
 
