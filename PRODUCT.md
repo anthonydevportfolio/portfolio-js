@@ -35,7 +35,8 @@ They may compare employment entries, inspect screenshots, and open deployed proj
 -   The constellation landing experience and its completed button transition remain part of the product.
 -   The post-landing surface must work across desktop and mobile layouts.
 -   Existing employment history, project names, project URLs, and technology information are factual source material and
-    must remain accurate.
+    must remain accurate. `Anthony-Griffin-Resume-0826.pdf` is the approved source for current employment dates,
+    responsibilities, and quantified impact.
 -   A public email address, resume URL, and LinkedIn URL are not present in the repository. Future work must not invent
     them.
 
@@ -47,14 +48,15 @@ They may compare employment entries, inspect screenshots, and open deployed proj
 
 ## Evidence on Hand
 
--   Employment history and descriptions for Workday and Hexaware in `src/components/experience/data.ts`.
+-   Employment history and descriptions for Workday and Freddie Mac via Hexaware Technologies in
+    `src/components/experience/data.ts`, sourced from `Anthony-Griffin-Resume-0826.pdf`.
 -   Project screenshots, descriptions, technology stacks, and live URLs for Pokedle and pol.ai in
     `src/components/projects/projectsData.ts`.
 -   Anthony's public GitHub organization/profile path is supported by the repository remote:
     `https://github.com/anthonydevportfolio`.
 -   Technology references are available in `src/components/me/data.ts`.
--   The repository contains no approved quantitative impact metrics, testimonials, resume asset, direct contact address,
-    or LinkedIn URL. These must not be fabricated.
+-   The resume approves the quantitative impact metrics used in the experience ledger. The repository still contains no
+    approved testimonials, public resume asset, direct contact address, or LinkedIn URL. These must not be fabricated.
 
 ## Product Principles
 

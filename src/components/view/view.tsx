@@ -14,7 +14,8 @@ import './view.css';
 
 const GITHUB_URL = 'https://github.com/anthonydevportfolio';
 const CORE_TECHNOLOGIES = ['TypeScript', 'Java', 'React', 'Node.js', 'AWS', 'SQL'];
-const CURRENT_ROLE_SUMMARY = 'Developing tools used by engineers and customers for the Workday Developer Platform.';
+const CURRENT_ROLE_SUMMARY =
+    'Building developer-platform experiences, shared frontend architecture, and testing infrastructure across Workday.';
 const THEME_STORAGE_KEY = 'portfolio-theme';
 const experienceEntries = [...ExperienceData].reverse();
 const currentExperience = experienceEntries[0];
@@ -61,7 +62,7 @@ const saveThemePreference = (themePreference: ThemePreference) => {
 
 const projectImageDimensions: Record<string, { width: number; height: number }> = {
     Pokedle: { width: 3808, height: 2264 },
-    'pol.ai': { width: 4320, height: 2584 }
+    'pol.ai': { width: 1920, height: 1040 }
 };
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
