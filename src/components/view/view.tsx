@@ -63,6 +63,7 @@ const saveThemePreference = (themePreference: ThemePreference) => {
 const projectImageDimensions: Record<string, { width: number; height: number }> = {
     'fmr.fyi': { width: 1920, height: 961 },
     Pokedle: { width: 3808, height: 2264 },
+    BlockLens: { width: 1920, height: 1040 },
     Chrona: { width: 1920, height: 1040 },
     'pol.ai': { width: 1920, height: 1040 }
 };

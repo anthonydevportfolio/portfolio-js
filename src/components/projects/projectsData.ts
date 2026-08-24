@@ -1,5 +1,6 @@
 import fmr from '../../assets/fmr.png';
 import pokedle from '../../assets/pokedle.png';
+import blocklens from '../../assets/blocklens.png';
 import chrona from '../../assets/chrona.png';
 import polai from '../../assets/polai.png';
 
@@ -29,6 +30,16 @@ export const projectsData: ProjectData[] = [
         description: ['Daily Pokémon guessing game inspired by Wordle', 'A new Pokémon to identify every day'],
         stack: ['JavaScript', 'Node', 'MongoDB', 'Express.js'],
         url: 'https://pokedle.co'
+    },
+    {
+        name: 'BlockLens',
+        img: blocklens,
+        description: [
+            'Minecraft-inspired voxel modeling for designing unit-block structures as code',
+            'Pairs a full web builder with documentation, a CLI, and MCP tools so people and agents can inspect and revise projects from any view'
+        ],
+        stack: ['TypeScript', 'React', 'Three.js', 'Node', 'MCP'],
+        url: 'https://blocklens-khaki.vercel.app'
     },
     {
         name: 'Chrona',

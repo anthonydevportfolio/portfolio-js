@@ -28,7 +28,7 @@ employment and project evidence, and continue to a live project or public GitHub
 ## Proof and content
 
 Use the approved resume for Workday and Freddie Mac via Hexaware Technologies history and impact metrics. Use the
-existing Pokedle, Chrona, and pol.ai screenshots and links, the established technology list, and the verified GitHub
+existing Pokedle, BlockLens, Chrona, and pol.ai screenshots and links, the established technology list, and the verified GitHub
 profile path. Do not fabricate testimonials, contact details, resume links, or project claims.
 
 ## Chosen direction
