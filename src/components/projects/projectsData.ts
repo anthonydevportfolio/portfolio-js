@@ -1,3 +1,4 @@
+import fmr from '../../assets/fmr.png';
 import pokedle from '../../assets/pokedle.png';
 import chrona from '../../assets/chrona.png';
 import polai from '../../assets/polai.png';
@@ -11,6 +12,17 @@ export interface ProjectData {
 }
 
 export const projectsData: ProjectData[] = [
+    {
+        name: 'fmr.fyi',
+        img: fmr,
+        description: [
+            'Free Section 8 market-research platform built for a dedicated investor community',
+            'Connects HUD FMR and SAFMR lookup, market screening, cash-flow modeling, and saved comparisons',
+            'Adds FMR and cash-flow context to Zillow, Redfin, and Realtor.com through a Chrome extension'
+        ],
+        stack: ['Next.js', 'TypeScript', 'PostgreSQL', 'Redis'],
+        url: 'https://fmr.fyi'
+    },
     {
         name: 'Pokedle',
         img: pokedle,
