@@ -969,13 +969,13 @@ export const View: FC = () => {
 
                     <address className='portfolio-contact__methods'>
                         <div className='portfolio-contact__method portfolio-contact__method--copyable'>
-                            <a className='portfolio-contact__method-main' href={`mailto:${EMAIL_ADDRESS}`}>
+                            <div className='portfolio-contact__method-main'>
                                 <EmailIcon />
                                 <span className='portfolio-contact__details'>
                                     <small>Email</small>
                                     <strong>{EMAIL_ADDRESS}</strong>
                                 </span>
-                            </a>
+                            </div>
                             <ContactCopyButton label='email address' value={EMAIL_ADDRESS} />
                         </div>
                         <div className='portfolio-contact__method portfolio-contact__method--copyable'>

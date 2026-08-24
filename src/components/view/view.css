@@ -260,7 +260,7 @@
 .portfolio-nav__toggle:focus-visible,
 .portfolio-link:focus-visible,
 .portfolio-intro__profiles a:focus-visible,
-.portfolio-contact__method-main:focus-visible,
+.portfolio-contact__phone-link:focus-visible,
 .portfolio-contact__method--linkedin:focus-visible,
 .portfolio-copy-button:focus-visible {
     border-radius: 4px;
@@ -769,7 +769,7 @@
 }
 
 .portfolio-link:hover .portfolio-link__icon,
-.portfolio-contact__method:hover .portfolio-link__icon {
+.portfolio-contact__method--linkedin:hover .portfolio-link__icon {
     transform: translate(2px, -2px);
 }
 
@@ -845,7 +845,6 @@
     display: grid;
     min-height: 116px;
     padding: 1.25rem;
-    transition: background-color 180ms var(--portfolio-ease);
 }
 
 .portfolio-contact__method--copyable {
@@ -871,6 +870,7 @@
     gap: 1rem;
     grid-template-columns: 22px minmax(0, 1fr) 18px;
     text-decoration: none;
+    transition: background-color 180ms var(--portfolio-ease);
 }
 
 .portfolio-contact__phone-link {
@@ -881,7 +881,7 @@
     display: grid;
 }
 
-.portfolio-contact__method:hover {
+.portfolio-contact__method--linkedin:hover {
     background: var(--portfolio-accent-soft);
 }
 
