@@ -642,7 +642,7 @@
 }
 
 .experience-entry__heading {
-    align-items: center;
+    align-items: start;
     display: grid;
     gap: 1rem;
     grid-template-columns: 44px minmax(0, 1fr);
@@ -936,6 +936,34 @@
 
 .portfolio-constellation__node--five::after {
     display: none;
+}
+
+@media (min-width: 901px) {
+    .portfolio-intro {
+        gap: clamp(4rem, 7vw, 6rem);
+        grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+        padding: clamp(4rem, 6vw, 5.5rem) 0;
+    }
+
+    .portfolio-section {
+        padding: clamp(4.5rem, 7vw, 6rem) 0;
+    }
+
+    .portfolio-section__header {
+        margin-bottom: clamp(2.5rem, 4vw, 3rem);
+    }
+
+    .experience-entry {
+        padding: clamp(2rem, 3vw, 2.5rem) 0;
+    }
+
+    .project-entry {
+        padding: clamp(2.5rem, 4.5vw, 4rem) 0;
+    }
+
+    .portfolio-constellation {
+        top: -0.5rem;
+    }
 }
 
 @media (max-width: 900px) {

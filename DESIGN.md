@@ -133,16 +133,17 @@ focal point.
 
 ## Layout
 
-The desktop system uses an 1180px maximum shell with 24px side gutters. The opening is a 1.35-to-0.65 split between
-Anthony's introduction and current role. Section headers and experience rows use ledger columns; project rows give the
-existing screenshot the larger share of a two-column band.
+The desktop system uses an 1180px maximum shell with 24px side gutters. The opening is a 1.2-to-0.8 split between
+Anthony's introduction and current role, with the constellation sitting above the supporting role evidence. Section
+headers and experience rows use ledger columns; project rows give the existing screenshot the larger share of a
+two-column band.
 
 At 900px, complex rows simplify and project bands stack. At 640px, all ledgers become one column, side gutters reduce to
 16px, project copy precedes its screenshot, and the navigation moves into a name-led disclosure panel. Heights remain
 content-driven at every breakpoint.
 
-Spacing follows related-content grouping: 8–24px within a group, roughly 48px between neighboring ideas, and responsive
-72–120px section breathing room. Sections always have more space above a heading than immediately below it.
+Spacing follows related-content grouping: 8–24px within a group, roughly 40–48px between neighboring ideas, and
+responsive 64–96px section breathing room. Sections always have more space above a heading than immediately below it.
 
 **The Natural Flow Rule.** Do not use translated layouts, desktop minimum widths, fixed mobile content heights, or
 overflow as a compositional technique.
