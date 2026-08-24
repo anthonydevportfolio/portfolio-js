@@ -63,6 +63,15 @@ const TECH_STACK_GROUPS = [
 type Theme = 'dark' | 'light';
 type ThemePreference = Theme | 'system';
 
+const PORTFOLIO_SECTIONS = [
+    { id: 'about', label: 'About' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'contact', label: 'Contact' }
+] as const;
+
+type PortfolioSection = (typeof PORTFOLIO_SECTIONS)[number]['id'];
+
 const THEME_PREFERENCES: ThemePreference[] = ['system', 'light', 'dark'];
 const THEME_PREFERENCE_LABELS: Record<ThemePreference, string> = {
     system: 'System',
@@ -239,6 +248,7 @@ export const View: FC = () => {
     const [themePreference, setThemePreference] = useState<ThemePreference>(getInitialThemePreference);
     const [systemTheme, setSystemTheme] = useState<Theme>(getSystemTheme);
     const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState<PortfolioSection>('about');
     const theme = themePreference === 'system' ? systemTheme : themePreference;
 
     useEffect(() => {
@@ -255,6 +265,59 @@ export const View: FC = () => {
         if (!isExited) return;
         document.documentElement.dataset.portfolioTheme = theme;
     }, [isExited, theme]);
+
+    useEffect(() => {
+        const portfolio = portfolioRef.current;
+
+        if (!isExited || !portfolio) return;
+
+        const nav = portfolio.querySelector<HTMLElement>('.portfolio-nav');
+        const mobileNavigation = window.matchMedia('(max-width: 640px)');
+        const sections = PORTFOLIO_SECTIONS.map(({ id }) => document.getElementById(id)).filter(
+            (section): section is HTMLElement => section !== null
+        );
+
+        if (sections.length === 0) return;
+
+        let animationFrame: number | null = null;
+
+        const updateActiveSection = () => {
+            animationFrame = null;
+
+            const activationOffset = (nav?.offsetHeight ?? 0) + (mobileNavigation.matches ? 48 : 24);
+            let nextSection = sections[0].id as PortfolioSection;
+
+            sections.forEach(section => {
+                if (section.getBoundingClientRect().top <= activationOffset) {
+                    nextSection = section.id as PortfolioSection;
+                }
+            });
+
+            const bottomScrollPosition = document.documentElement.scrollHeight - window.innerHeight;
+
+            if (window.scrollY >= bottomScrollPosition - 2) {
+                nextSection = sections[sections.length - 1].id as PortfolioSection;
+            }
+
+            setActiveSection(currentSection => (currentSection === nextSection ? currentSection : nextSection));
+        };
+
+        const queueActiveSectionUpdate = () => {
+            if (animationFrame === null) {
+                animationFrame = window.requestAnimationFrame(updateActiveSection);
+            }
+        };
+
+        updateActiveSection();
+        window.addEventListener('resize', queueActiveSectionUpdate);
+        window.addEventListener('scroll', queueActiveSectionUpdate, { passive: true });
+
+        return () => {
+            if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+            window.removeEventListener('resize', queueActiveSectionUpdate);
+            window.removeEventListener('scroll', queueActiveSectionUpdate);
+        };
+    }, [isExited]);
 
     useEffect(() => {
         if (!isThemeMenuOpen) return;
@@ -378,10 +441,14 @@ export const View: FC = () => {
                     </a>
                     <div className='portfolio-nav__actions'>
                         <nav aria-label='Portfolio sections' className='portfolio-nav__links'>
-                            <a href='#about'>About</a>
-                            <a href='#projects'>Projects</a>
-                            <a href='#experience'>Experience</a>
-                            <a href='#contact'>Contact</a>
+                            {PORTFOLIO_SECTIONS.map(({ id, label }) => (
+                                <a
+                                    aria-current={activeSection === id ? 'location' : undefined}
+                                    href={`#${id}`}
+                                    key={id}>
+                                    {label}
+                                </a>
+                            ))}
                         </nav>
                         <div className='portfolio-theme-menu' onBlur={closeThemeMenuOnBlur} ref={themeMenuRef}>
                             <button
