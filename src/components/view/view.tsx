@@ -20,7 +20,7 @@ const LINKEDIN_URL = 'https://www.linkedin.com/in/anthony-griffin-0513271aa/';
 const EMAIL_ADDRESS = 'anthony.js.griffin@gmail.com';
 const PHONE_DISPLAY = '971-488-6554';
 const PHONE_URL = 'tel:+19714886554';
-const CONTACT_COPY_RESET_MS = 700;
+const CONTACT_COPY_RESET_MS = 1250;
 const CURRENT_ROLE_SUMMARY =
     'Building developer-platform experiences, shared frontend architecture, and testing infrastructure across Workday.';
 const THEME_STORAGE_KEY = 'portfolio-theme';
