@@ -13,7 +13,6 @@ import { projectsData } from '../projects/projectsData';
 import './view.css';
 
 const GITHUB_URL = 'https://github.com/anthonydevportfolio';
-const CORE_TECHNOLOGIES = ['TypeScript', 'Java', 'React', 'Node.js', 'AWS', 'SQL'];
 const CURRENT_ROLE_SUMMARY =
     'Building developer-platform experiences, shared frontend architecture, and testing infrastructure across Workday.';
 const THEME_STORAGE_KEY = 'portfolio-theme';
@@ -282,7 +281,9 @@ export const View: FC = () => {
     };
 
     const closeThemeMenuOnBlur = (event: ReactFocusEvent<HTMLDivElement>) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node)) setIsThemeMenuOpen(false);
+        if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget as Node)) {
+            setIsThemeMenuOpen(false);
+        }
     };
 
     return (
@@ -304,11 +305,8 @@ export const View: FC = () => {
                         <nav aria-label='Portfolio sections' className='portfolio-nav__links'>
                             <a href='#about'>About</a>
                             <a href='#experience'>Experience</a>
-                            <a href='#work'>Work</a>
-                            <a href={GITHUB_URL} rel='noreferrer' target='_blank'>
-                                GitHub
-                                <ExternalLinkIcon />
-                            </a>
+                            <a href='#projects'>Projects</a>
+                            <a href='#contact'>Contact</a>
                         </nav>
                         <div className='portfolio-theme-menu' onBlur={closeThemeMenuOnBlur} ref={themeMenuRef}>
                             <button
@@ -321,7 +319,9 @@ export const View: FC = () => {
                                 ref={themeMenuTriggerRef}
                                 type='button'>
                                 <ThemePreferenceIcon preference={themePreference} />
-                                <span>{THEME_PREFERENCE_LABELS[themePreference]}</span>
+                                <span className='portfolio-theme-menu__label'>
+                                    {THEME_PREFERENCE_LABELS[themePreference]}
+                                </span>
                                 <ThemeMenuChevron />
                             </button>
                             {isThemeMenuOpen ? (
@@ -336,6 +336,7 @@ export const View: FC = () => {
 
                                         return (
                                             <button
+                                                aria-label={`${THEME_PREFERENCE_LABELS[preference]} theme`}
                                                 aria-checked={isSelected}
                                                 className='portfolio-theme-menu__option'
                                                 data-selected={isSelected}
@@ -344,7 +345,9 @@ export const View: FC = () => {
                                                 role='menuitemradio'
                                                 type='button'>
                                                 <ThemePreferenceIcon preference={preference} />
-                                                <span>{THEME_PREFERENCE_LABELS[preference]}</span>
+                                                <span className='portfolio-theme-menu__label'>
+                                                    {THEME_PREFERENCE_LABELS[preference]}
+                                                </span>
                                                 <span aria-hidden='true' className='portfolio-theme-menu__check'>
                                                     {isSelected ? <ThemeCheckIcon /> : null}
                                                 </span>
@@ -361,17 +364,11 @@ export const View: FC = () => {
             <div className='portfolio-shell'>
                 <section aria-labelledby='about-title' className='portfolio-intro' data-reveal-section id='about'>
                     <div className='portfolio-intro__copy'>
-                        <h1 id='about-title'>Software engineer building thoughtful, reliable products.</h1>
+                        <h1 id='about-title'>Building thoughtful, reliable products.</h1>
                         <p>
-                            I’m Anthony, a full-stack engineer based in Portland, Oregon. I work across TypeScript and
-                            Java to build interfaces, services, and developer tooling that make complex work easier to
-                            understand.
+                            I’m Anthony, a full-stack software engineer based in Portland, Oregon. I build things for
+                            the web that just work.
                         </p>
-                        <ul aria-label='Core technologies' className='portfolio-tech-list'>
-                            {CORE_TECHNOLOGIES.map(technology => (
-                                <li key={technology}>{technology}</li>
-                            ))}
-                        </ul>
                     </div>
 
                     <aside aria-label='Current role' className='portfolio-current-role'>
@@ -397,7 +394,7 @@ export const View: FC = () => {
                     id='experience'>
                     <header className='portfolio-section__header'>
                         <h2 id='experience-title'>Experience</h2>
-                        <p>Selected roles and the work I contributed along the way.</p>
+                        <p>A timeline of roles, responsibilities, and outcomes.</p>
                     </header>
 
                     <ol className='experience-ledger'>
@@ -426,14 +423,18 @@ export const View: FC = () => {
                     </ol>
                 </section>
 
-                <section aria-labelledby='work-title' className='portfolio-section' data-reveal-section id='work'>
+                <section
+                    aria-labelledby='projects-title'
+                    className='portfolio-section'
+                    data-reveal-section
+                    id='projects'>
                     <header className='portfolio-section__header portfolio-section__header--work'>
-                        <h2 id='work-title'>Selected work</h2>
+                        <h2 id='projects-title'>Projects</h2>
                         <p>Small products built to explore useful ideas and ship them in public.</p>
                     </header>
 
                     <div className='project-ledger'>
-                        {projectsData.map((project, index) => {
+                        {projectsData.map(project => {
                             const dimensions = projectImageDimensions[project.name];
 
                             return (
@@ -451,22 +452,12 @@ export const View: FC = () => {
                                     </figure>
 
                                     <div className='project-entry__content'>
-                                        <div className='project-entry__version' aria-label={`Project ${index + 1}`}>
-                                            v0{index + 1}
-                                        </div>
                                         <h3>{project.name}</h3>
                                         <div className='project-entry__description'>
                                             {project.description.map(description => (
                                                 <p key={description}>{description}.</p>
                                             ))}
                                         </div>
-                                        <ul
-                                            aria-label={`${project.name} technologies`}
-                                            className='project-entry__stack'>
-                                            {project.stack.map(technology => (
-                                                <li key={technology}>{technology}</li>
-                                            ))}
-                                        </ul>
                                         {project.url ? (
                                             <a
                                                 className='portfolio-link'
@@ -484,13 +475,13 @@ export const View: FC = () => {
                     </div>
                 </section>
 
-                <section aria-labelledby='github-title' className='portfolio-close' data-reveal-section>
+                <section aria-labelledby='contact-title' className='portfolio-close' data-reveal-section id='contact'>
                     <div>
-                        <h2 id='github-title'>More work lives on GitHub.</h2>
-                        <p>Explore the projects, experiments, and implementation details behind the portfolio.</p>
+                        <h2 id='contact-title'>Let’s build something useful.</h2>
+                        <p>Have a project or role in mind? Find me on GitHub and take a look at what I’m building.</p>
                     </div>
                     <a className='portfolio-close__action' href={GITHUB_URL} rel='noreferrer' target='_blank'>
-                        View GitHub
+                        Find me on GitHub
                         <ExternalLinkIcon />
                     </a>
                 </section>
