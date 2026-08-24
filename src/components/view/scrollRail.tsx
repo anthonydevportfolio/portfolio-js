@@ -2,7 +2,8 @@ import { FC, KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEv
 
 const BAR_COUNT = 65;
 const KEY_SCROLL_STEP = 72;
-const RAIL_FALLOFF = 1.6;
+const RAIL_FALLOFF = 3;
+const NEIGHBOR_EMPHASIS = 0.94;
 
 const clamp = (value: number, minimum: number, maximum: number) => Math.min(Math.max(value, minimum), maximum);
 
@@ -34,7 +35,10 @@ export const ScrollRail: FC = () => {
         document.documentElement.classList.add('portfolio-scrollbar-replaced');
 
         const renderProgress = (progress: number) => {
-            const activeIndex = Math.round(progress * (BAR_COUNT - 1));
+            const activePosition = progress * (BAR_COUNT - 1);
+            const activeIndex = Math.round(activePosition);
+            const activeDistance = Math.abs(activeIndex - activePosition);
+            const activeEmphasis = Math.exp(-Math.pow(activeDistance / RAIL_FALLOFF, 2));
             const nextActiveBar = barRefs.current[activeIndex] ?? null;
 
             rail.setAttribute('aria-valuenow', `${Math.round(progress * 100)}`);
@@ -49,8 +53,9 @@ export const ScrollRail: FC = () => {
             barRefs.current.forEach((bar, index) => {
                 if (!bar) return;
 
-                const distance = Math.abs(index - activeIndex);
-                const emphasis = Math.exp(-Math.pow(distance / RAIL_FALLOFF, 2));
+                const distance = Math.abs(index - activePosition);
+                const rawEmphasis = Math.exp(-Math.pow(distance / RAIL_FALLOFF, 2));
+                const emphasis = index === activeIndex ? 1 : (rawEmphasis / activeEmphasis) * NEIGHBOR_EMPHASIS;
 
                 bar.style.setProperty('--scroll-rail-scale', `${0.14 + emphasis * 0.86}`);
                 bar.style.setProperty('--scroll-rail-opacity', `${0.18 + emphasis * 0.8}`);
