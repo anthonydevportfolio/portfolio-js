@@ -51,6 +51,10 @@ const BackgroundBase = styled('div')<{ isExiting: boolean }>(({ isExiting }) => 
     alignItems: 'center',
     animation: isExiting ? `${fadeOut} ${LANDING_EXIT_DURATION_MS}ms cubic-bezier(0.4, 0, 1, 1) forwards` : 'none',
 
+    '@media (prefers-color-scheme: light)': {
+        backgroundColor: '#f6f7fb'
+    },
+
     // Mobile
     '@media (max-width: 768px)': {
         alignItems: 'flex-start',

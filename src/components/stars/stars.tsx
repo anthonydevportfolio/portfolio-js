@@ -4,7 +4,16 @@ import { useMouse } from './hooks/useMouse';
 import { Star, useStars } from './hooks/useStars';
 
 // Constants
-const CONSTELLATION_COLOR = '192, 192, 192';
+const LANDING_PALETTES = {
+    dark: {
+        background: ['#15171a', '#090a0c', '#000000'],
+        constellation: '192, 192, 192'
+    },
+    light: {
+        background: ['#eceef5', '#f6f7fb', '#ffffff'],
+        constellation: '31, 35, 48'
+    }
+} as const;
 const MAX_CONSTELLATION_LINE_LENGTH = 100;
 const CONSTELLATION_MOUSE_RANGE = 400;
 const STAR_MOUSE_RANGE = CONSTELLATION_MOUSE_RANGE * 3;
@@ -53,17 +62,19 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
         initializeCanvas(canvas);
 
         let animationFrameId: number;
+        const lightModePreference = window.matchMedia('(prefers-color-scheme: light)');
 
         const render = () => {
             const maxX = canvas.width;
             const maxY = canvas.height;
+            const palette = lightModePreference.matches ? LANDING_PALETTES.light : LANDING_PALETTES.dark;
 
-            // Clear and set up the neutral landing-page gradient.
+            // Clear and set up the system-aware neutral landing-page gradient.
             context.clearRect(0, 0, maxX, maxY);
             const gradient = context.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, '#15171a');
-            gradient.addColorStop(0.55, '#090a0c');
-            gradient.addColorStop(1, '#000000');
+            gradient.addColorStop(0, palette.background[0]);
+            gradient.addColorStop(0.55, palette.background[1]);
+            gradient.addColorStop(1, palette.background[2]);
             context.fillStyle = gradient;
             context.fillRect(0, 0, maxX, maxY);
 
@@ -126,7 +137,7 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
                                     context.beginPath();
                                     context.moveTo(starA.x, starA.y);
                                     context.lineTo(starB.x, starB.y);
-                                    context.strokeStyle = `rgba(${CONSTELLATION_COLOR}, ${opacity})`;
+                                    context.strokeStyle = `rgba(${palette.constellation}, ${opacity})`;
                                     context.lineWidth = 0.5;
                                     context.stroke();
                                 }
@@ -158,7 +169,7 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     const isPartOfCluster = distance < CONSTELLATION_MOUSE_RANGE;
                     const starOpacity = 1 - distance / (isPartOfCluster ? CONSTELLATION_MOUSE_RANGE : STAR_MOUSE_RANGE);
-                    const starColor = `rgba(${isPartOfCluster && !isMobile ? CONSTELLATION_COLOR : star.color}, ${starOpacity})`;
+                    const starColor = `rgba(${isPartOfCluster && !isMobile ? palette.constellation : star.color}, ${starOpacity})`;
                     context.fillStyle = starColor;
                     context.fill();
                 }

@@ -138,6 +138,10 @@ const GreetingHeader = styled('h1')({
     color: 'white',
     userSelect: 'none',
 
+    '@media (prefers-color-scheme: light)': {
+        color: '#171922'
+    },
+
     '@media (prefers-reduced-motion: reduce)': {
         animation: 'none'
     }
@@ -160,6 +164,10 @@ const GreetingText = styled('p')({
     fontSize: '1.7rem',
     color: 'white',
     userSelect: 'none',
+
+    '@media (prefers-color-scheme: light)': {
+        color: '#171922'
+    },
 
     '@media (prefers-reduced-motion: reduce)': {
         animation: 'none'

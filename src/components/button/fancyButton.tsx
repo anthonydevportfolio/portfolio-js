@@ -44,11 +44,11 @@ const pulseAnimation = keyframes`
 const backgroundAnimation = keyframes`
   0% {
     border-color: transparent;
-    background: rgba(255, 255, 255, 1);
+    background: var(--landing-button-active-bg);
   }
   100% {
-    border-color: white;
-    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--landing-button-foreground);
+    background: var(--landing-button-settled-bg);
   }
 `;
 
@@ -66,12 +66,17 @@ const focusReveal = keyframes`
 `;
 
 const FancyButtonBase = styled('button')<{ active: boolean }>(({ active }) => ({
+    '--landing-button-foreground': '#ffffff',
+    '--landing-button-bg': 'rgba(255, 255, 255, 0.3)',
+    '--landing-button-hover-bg': 'rgba(255, 255, 255, 0.4)',
+    '--landing-button-active-bg': 'rgba(255, 255, 255, 1)',
+    '--landing-button-settled-bg': 'rgba(255, 255, 255, 0.2)',
     overflow: 'visible',
     padding: '1rem',
-    background: 'rgba(255, 255, 255, 0.3)',
+    background: 'var(--landing-button-bg)',
     border: '1px solid',
-    borderColor: 'white',
-    color: 'white',
+    borderColor: 'var(--landing-button-foreground)',
+    color: 'var(--landing-button-foreground)',
     fontSize: '1rem',
     userSelect: 'none',
     cursor: 'pointer',
@@ -83,11 +88,19 @@ const FancyButtonBase = styled('button')<{ active: boolean }>(({ active }) => ({
     transition: 'background-color 200ms ease',
 
     '&:hover': {
-        background: 'rgba(255, 255, 255, 0.4)'
+        background: 'var(--landing-button-hover-bg)'
     },
 
     '&:disabled': {
         cursor: 'default'
+    },
+
+    '@media (prefers-color-scheme: light)': {
+        '--landing-button-foreground': '#171922',
+        '--landing-button-bg': 'rgba(23, 25, 34, 0.12)',
+        '--landing-button-hover-bg': 'rgba(23, 25, 34, 0.18)',
+        '--landing-button-active-bg': 'rgba(23, 25, 34, 1)',
+        '--landing-button-settled-bg': 'rgba(23, 25, 34, 0.14)'
     },
 
     '@media (prefers-reduced-motion: reduce)': {
@@ -99,7 +112,7 @@ const FancyButtonPulse = styled('div')<{ active: boolean }>(({ active }) => ({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    border: '2px solid white',
+    border: '2px solid var(--landing-button-foreground)',
     transform: 'translate(-50%, -50%)',
     top: '50%',
     left: '50%',
@@ -148,7 +161,7 @@ const Rectangle = styled.div<{ direction: 'left' | 'right'; active: boolean }>`
     opacity: 0;
     position: absolute;
     height: 3.05rem;
-    background-color: white;
+    background-color: var(--landing-button-foreground);
     z-index: 2;
     transform: translateY(-31.7%);
     pointer-events: none;
