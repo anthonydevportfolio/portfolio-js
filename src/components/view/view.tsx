@@ -62,6 +62,7 @@ const saveThemePreference = (themePreference: ThemePreference) => {
 
 const projectImageDimensions: Record<string, { width: number; height: number }> = {
     Pokedle: { width: 3808, height: 2264 },
+    Chrona: { width: 1920, height: 1040 },
     'pol.ai': { width: 1920, height: 1040 }
 };
 
