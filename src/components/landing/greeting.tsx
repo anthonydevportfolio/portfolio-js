@@ -48,7 +48,7 @@ export const Greeting = () => {
     };
 
     return (
-        <GreetingBase exited={isExited}>
+        <GreetingBase exited={isExited} data-landing-reading-zone>
             <GreetingCopy isTransitioning={isTransitioning}>
                 <GreetingHeader>Hello, World!</GreetingHeader>
                 <GreetingTextContainer>

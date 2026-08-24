@@ -17,15 +17,31 @@ const LANDING_PALETTES = {
 const MAX_CONSTELLATION_LINE_LENGTH = 100;
 const CONSTELLATION_MOUSE_RANGE = 400;
 const STAR_MOUSE_RANGE = CONSTELLATION_MOUSE_RANGE * 3;
+const READING_ZONE_SELECTOR = '[data-landing-reading-zone]';
+const READING_ZONE_PADDING = 24;
+const READING_ZONE_FEATHER = 72;
 
-// Helper function to initialize and resize canvas
-const initializeCanvas = (canvas: HTMLCanvasElement) => {
+interface ReadingZoneBounds {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+}
+
+const resizeCanvas = (canvas: HTMLCanvasElement) => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
+};
+
+const getReadingZoneOpacity = (x: number, y: number, readingZone: ReadingZoneBounds | null) => {
+    if (!readingZone) return 1;
+
+    const deltaX = Math.max(readingZone.left - x, 0, x - readingZone.right);
+    const deltaY = Math.max(readingZone.top - y, 0, y - readingZone.bottom);
+    const distance = Math.hypot(deltaX, deltaY);
+    const progress = Math.min(distance / READING_ZONE_FEATHER, 1);
+
+    return progress * progress * (3 - 2 * progress);
 };
 
 // Helper function to determine if two stars can connect
@@ -59,10 +75,34 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
         const context = canvas.getContext('2d');
         if (!context) return;
 
-        initializeCanvas(canvas);
-
         let animationFrameId: number;
+        let readingZone: ReadingZoneBounds | null = null;
         const lightModePreference = window.matchMedia('(prefers-color-scheme: light)');
+        const readingZoneElement = document.querySelector<HTMLElement>(READING_ZONE_SELECTOR);
+
+        const updateReadingZone = () => {
+            if (!readingZoneElement) return;
+
+            const canvasBounds = canvas.getBoundingClientRect();
+            const greetingBounds = readingZoneElement.getBoundingClientRect();
+            readingZone = {
+                top: greetingBounds.top - canvasBounds.top - READING_ZONE_PADDING,
+                right: greetingBounds.right - canvasBounds.left + READING_ZONE_PADDING,
+                bottom: greetingBounds.bottom - canvasBounds.top + READING_ZONE_PADDING,
+                left: greetingBounds.left - canvasBounds.left - READING_ZONE_PADDING
+            };
+        };
+
+        const handleResize = () => {
+            resizeCanvas(canvas);
+            updateReadingZone();
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        const readingZoneObserver = readingZoneElement ? new ResizeObserver(updateReadingZone) : null;
+        if (readingZoneElement) readingZoneObserver?.observe(readingZoneElement);
 
         const render = () => {
             const maxX = canvas.width;
@@ -128,10 +168,11 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
                                 const mouseDx = midX - refX;
                                 const mouseDy = midY - refY;
                                 const mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
-                                const opacity =
+                                const mouseOpacity =
                                     mouseDistance < CONSTELLATION_MOUSE_RANGE
                                         ? 1 - mouseDistance / CONSTELLATION_MOUSE_RANGE
                                         : 0;
+                                const opacity = mouseOpacity * getReadingZoneOpacity(midX, midY, readingZone);
 
                                 if (opacity > 0) {
                                     context.beginPath();
@@ -168,7 +209,9 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
                     const dy = star.y - refY;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     const isPartOfCluster = distance < CONSTELLATION_MOUSE_RANGE;
-                    const starOpacity = 1 - distance / (isPartOfCluster ? CONSTELLATION_MOUSE_RANGE : STAR_MOUSE_RANGE);
+                    const starOpacity =
+                        (1 - distance / (isPartOfCluster ? CONSTELLATION_MOUSE_RANGE : STAR_MOUSE_RANGE)) *
+                        getReadingZoneOpacity(star.x, star.y, readingZone);
                     const starColor = `rgba(${isPartOfCluster && !isMobile ? palette.constellation : star.color}, ${starOpacity})`;
                     context.fillStyle = starColor;
                     context.fill();
@@ -185,6 +228,8 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
         // Clean up on component unmount or when canvas is disabled
         return () => {
             cancelAnimationFrame(animationFrameId);
+            window.removeEventListener('resize', handleResize);
+            readingZoneObserver?.disconnect();
             context.clearRect(0, 0, canvas.width, canvas.height);
         };
     }, [starsRef, isOnLandingPage, isMobile, mouseXRef, mouseYRef, mouseHasMovedRef, mouseTrackingExitedRef]);
