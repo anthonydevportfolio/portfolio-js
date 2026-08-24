@@ -457,12 +457,12 @@ export const View: FC = () => {
                 });
             },
             {
-                rootMargin: '0px 0px -12% 0px',
-                threshold: 0.08
+                rootMargin: '0px 0px -18% 0px',
+                threshold: 0
             }
         );
 
-        const activationLine = window.innerHeight * 0.88;
+        const activationLine = window.innerHeight * 0.82;
 
         sections.forEach(section => {
             const bounds = section.getBoundingClientRect();
@@ -873,7 +873,7 @@ export const View: FC = () => {
                     id='contact'>
                     <header className='portfolio-section__header portfolio-contact__intro'>
                         <h2 id='contact-title'>Contact</h2>
-                        <p>Have a project, role, or collaboration in mind? Here are the fastest ways to reach me.</p>
+                        <p>Let’s connect</p>
                     </header>
 
                     <address className='portfolio-contact__methods'>
@@ -903,8 +903,7 @@ export const View: FC = () => {
                 </section>
 
                 <footer className='portfolio-footer'>
-                    <span>Anthony Griffin</span>
-                    <span>Portland, Oregon</span>
+                    <span>I have nothing to put here but keeping the footer for easier scrolling :)</span>
                 </footer>
             </div>
         </main>

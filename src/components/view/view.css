@@ -48,13 +48,13 @@
 
 [data-reveal-section] {
     transition:
-        opacity 480ms var(--portfolio-ease),
-        transform 480ms var(--portfolio-ease);
+        opacity 620ms var(--portfolio-ease),
+        transform 620ms var(--portfolio-ease);
 }
 
 [data-reveal-state='pending'] {
-    opacity: 0.42;
-    transform: translate3d(0, 14px, 0);
+    opacity: 0.12;
+    transform: translate3d(0, 28px, 0);
     will-change: opacity, transform;
 }
 
@@ -839,8 +839,9 @@
     color: var(--portfolio-text-subtle);
     display: flex;
     font-size: 0.75rem;
-    justify-content: space-between;
+    justify-content: flex-start;
     letter-spacing: 0.02em;
+    line-height: 1.6;
     padding: 1.75rem 0 2.5rem;
 }
 
@@ -1396,7 +1397,11 @@
     }
 
     .portfolio-footer {
-        gap: 0.75rem;
+        max-width: 62ch;
+    }
+
+    [data-reveal-state='pending'] {
+        transform: translate3d(0, 20px, 0);
     }
 
     .portfolio-constellation {
