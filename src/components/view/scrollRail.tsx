@@ -30,6 +30,12 @@ const getScrollMetrics = () => {
     return { maximumScroll, progress };
 };
 
+const revealSectionsForDirectNavigation = () => {
+    document.querySelectorAll<HTMLElement>('[data-reveal-section]').forEach(section => {
+        section.dataset.revealState = 'visible';
+    });
+};
+
 export const ScrollRail: FC = () => {
     const railRef = useRef<HTMLDivElement | null>(null);
     const barRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -174,7 +180,7 @@ export const ScrollRail: FC = () => {
                       metrics.maximumScroll
                   );
 
-        window.scrollTo({ top: scrollPosition });
+        window.scrollTo({ behavior: 'instant', top: scrollPosition });
     };
 
     const queueTouchScroll = (clientY: number) => {
@@ -196,6 +202,7 @@ export const ScrollRail: FC = () => {
         if (!event.isPrimary || event.button !== 0) return;
 
         event.preventDefault();
+        revealSectionsForDirectNavigation();
         const bounds = event.currentTarget.getBoundingClientRect();
 
         dragMetricsRef.current = {
