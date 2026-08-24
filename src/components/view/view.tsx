@@ -20,6 +20,7 @@ const LINKEDIN_URL = 'https://www.linkedin.com/in/anthony-griffin-0513271aa/';
 const EMAIL_ADDRESS = 'anthony.js.griffin@gmail.com';
 const PHONE_DISPLAY = '971-488-6554';
 const PHONE_URL = 'tel:+19714886554';
+const CONTACT_COPY_RESET_MS = 1800;
 const CURRENT_ROLE_SUMMARY =
     'Building developer-platform experiences, shared frontend architecture, and testing infrastructure across Workday.';
 const THEME_STORAGE_KEY = 'portfolio-theme';
@@ -172,6 +173,96 @@ const PhoneIcon = () => (
         <path d='M7.1 3.5 9.4 8l-2.1 1.8a15.8 15.8 0 0 0 6.9 6.9l1.8-2.1 4.5 2.3-.8 3a2 2 0 0 1-2 1.5C9.35 20.7 3.3 14.65 2.6 6.3a2 2 0 0 1 1.5-2l3-.8Z' />
     </svg>
 );
+
+const CopyIcon = () => (
+    <svg aria-hidden='true' className='portfolio-copy-button__svg' viewBox='0 0 20 20'>
+        <rect height='11' rx='2' width='10' x='6.25' y='5.25' />
+        <path d='M4.25 13.25v-7a2.5 2.5 0 0 1 2.5-2.5h6.5' />
+    </svg>
+);
+
+const CheckIcon = () => (
+    <svg aria-hidden='true' className='portfolio-copy-button__svg' viewBox='0 0 20 20'>
+        <path d='m4.5 10.25 3.25 3.25 7.75-8' />
+    </svg>
+);
+
+const copyTextToClipboard = async (value: string) => {
+    try {
+        await navigator.clipboard.writeText(value);
+        return true;
+    } catch {
+        const activeElement = document.activeElement as HTMLElement | null;
+        const textarea = document.createElement('textarea');
+
+        textarea.value = value;
+        textarea.setAttribute('readonly', '');
+        textarea.style.opacity = '0';
+        textarea.style.pointerEvents = 'none';
+        textarea.style.position = 'fixed';
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+            return document.execCommand('copy');
+        } finally {
+            textarea.remove();
+            activeElement?.focus();
+        }
+    }
+};
+
+interface ContactCopyButtonProps {
+    label: string;
+    value: string;
+}
+
+const ContactCopyButton: FC<ContactCopyButtonProps> = ({ label, value }) => {
+    const [isCopied, setIsCopied] = useState(false);
+    const resetTimerRef = useRef<number | null>(null);
+
+    useEffect(
+        () => () => {
+            if (resetTimerRef.current !== null) window.clearTimeout(resetTimerRef.current);
+        },
+        []
+    );
+
+    const handleCopy = async () => {
+        if (!(await copyTextToClipboard(value))) return;
+
+        setIsCopied(true);
+        if (resetTimerRef.current !== null) window.clearTimeout(resetTimerRef.current);
+        resetTimerRef.current = window.setTimeout(() => {
+            setIsCopied(false);
+            resetTimerRef.current = null;
+        }, CONTACT_COPY_RESET_MS);
+    };
+
+    const buttonLabel = isCopied ? `Copied ${label}` : `Copy ${label}`;
+
+    return (
+        <button
+            aria-label={buttonLabel}
+            className='portfolio-copy-button'
+            data-copied={isCopied}
+            onClick={handleCopy}
+            title={buttonLabel}
+            type='button'>
+            <span aria-hidden='true' className='portfolio-copy-button__icon-stack'>
+                <span className='portfolio-copy-button__icon portfolio-copy-button__icon--copy'>
+                    <CopyIcon />
+                </span>
+                <span className='portfolio-copy-button__icon portfolio-copy-button__icon--check'>
+                    <CheckIcon />
+                </span>
+            </span>
+            <span aria-live='polite' className='portfolio-sr-only'>
+                {isCopied ? `${label} copied` : ''}
+            </span>
+        </button>
+    );
+};
 
 const ThemeMenuChevron = () => (
     <svg aria-hidden='true' className='portfolio-theme-menu__chevron' viewBox='0 0 16 16'>
@@ -877,23 +968,42 @@ export const View: FC = () => {
                     </header>
 
                     <address className='portfolio-contact__methods'>
-                        <a className='portfolio-contact__method' href={`mailto:${EMAIL_ADDRESS}`}>
-                            <EmailIcon />
-                            <span>
-                                <small>Email</small>
-                                <strong>{EMAIL_ADDRESS}</strong>
-                            </span>
-                        </a>
-                        <a className='portfolio-contact__method' href={PHONE_URL}>
-                            <PhoneIcon />
-                            <span>
-                                <small>Phone</small>
-                                <strong>{PHONE_DISPLAY}</strong>
-                            </span>
-                        </a>
-                        <a className='portfolio-contact__method' href={LINKEDIN_URL} rel='noreferrer' target='_blank'>
+                        <div className='portfolio-contact__method portfolio-contact__method--copyable'>
+                            <a className='portfolio-contact__method-main' href={`mailto:${EMAIL_ADDRESS}`}>
+                                <EmailIcon />
+                                <span className='portfolio-contact__details'>
+                                    <small>Email</small>
+                                    <strong>{EMAIL_ADDRESS}</strong>
+                                </span>
+                            </a>
+                            <ContactCopyButton label='email address' value={EMAIL_ADDRESS} />
+                        </div>
+                        <div className='portfolio-contact__method portfolio-contact__method--copyable'>
+                            <div className='portfolio-contact__method-main portfolio-contact__phone-static'>
+                                <PhoneIcon />
+                                <span className='portfolio-contact__details'>
+                                    <small>Phone</small>
+                                    <strong>{PHONE_DISPLAY}</strong>
+                                </span>
+                            </div>
+                            <a
+                                className='portfolio-contact__method-main portfolio-contact__phone-link'
+                                href={PHONE_URL}>
+                                <PhoneIcon />
+                                <span className='portfolio-contact__details'>
+                                    <small>Phone</small>
+                                    <strong>{PHONE_DISPLAY}</strong>
+                                </span>
+                            </a>
+                            <ContactCopyButton label='phone number' value={PHONE_DISPLAY} />
+                        </div>
+                        <a
+                            className='portfolio-contact__method portfolio-contact__method--linkedin'
+                            href={LINKEDIN_URL}
+                            rel='noreferrer'
+                            target='_blank'>
                             <LinkedInIcon />
-                            <span>
+                            <span className='portfolio-contact__details'>
                                 <small>LinkedIn</small>
                                 <strong>Anthony Griffin</strong>
                             </span>

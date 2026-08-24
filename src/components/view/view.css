@@ -260,7 +260,9 @@
 .portfolio-nav__toggle:focus-visible,
 .portfolio-link:focus-visible,
 .portfolio-intro__profiles a:focus-visible,
-.portfolio-contact__method:focus-visible {
+.portfolio-contact__method-main:focus-visible,
+.portfolio-contact__method--linkedin:focus-visible,
+.portfolio-copy-button:focus-visible {
     border-radius: 4px;
     outline: 2px solid var(--portfolio-accent);
     outline-offset: 4px;
@@ -471,20 +473,20 @@
     border-color: var(--portfolio-accent-border);
 }
 
-.portfolio-contact__method span {
+.portfolio-contact__details {
     display: grid;
     gap: 0.25rem;
     min-width: 0;
 }
 
-.portfolio-contact__method strong {
+.portfolio-contact__details strong {
     font-size: 0.875rem;
     font-weight: 620;
     line-height: 1.35;
     overflow-wrap: anywhere;
 }
 
-.portfolio-contact__method small {
+.portfolio-contact__details small {
     color: var(--portfolio-text-subtle);
     font-size: 0.75rem;
     font-weight: 500;
@@ -493,6 +495,18 @@
 
 .portfolio-contact__method .portfolio-link__icon {
     color: var(--portfolio-text-subtle);
+}
+
+.portfolio-sr-only {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
 }
 
 .portfolio-action-icon {
@@ -829,24 +843,130 @@
     align-items: center;
     color: var(--portfolio-text);
     display: grid;
-    gap: 1rem;
-    grid-template-columns: 22px minmax(0, 1fr);
     min-height: 116px;
     padding: 1.25rem;
-    text-decoration: none;
     transition: background-color 180ms var(--portfolio-ease);
+}
+
+.portfolio-contact__method--copyable {
+    gap: 0.75rem;
+    grid-template-columns: minmax(0, 1fr) 44px;
+}
+
+.portfolio-contact__method-main {
+    align-items: center;
+    color: inherit;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 22px minmax(0, 1fr);
+    min-width: 0;
+    text-decoration: none;
 }
 
 .portfolio-contact__method + .portfolio-contact__method {
     border-left: 1px solid var(--portfolio-line);
 }
 
-.portfolio-contact__method:has(.portfolio-link__icon) {
+.portfolio-contact__method--linkedin {
+    gap: 1rem;
     grid-template-columns: 22px minmax(0, 1fr) 18px;
+    text-decoration: none;
+}
+
+.portfolio-contact__phone-link {
+    display: none;
+}
+
+.portfolio-contact__phone-static {
+    display: grid;
 }
 
 .portfolio-contact__method:hover {
     background: var(--portfolio-accent-soft);
+}
+
+.portfolio-copy-button {
+    align-items: center;
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--portfolio-line);
+    border-radius: 10px;
+    color: var(--portfolio-text-muted);
+    cursor: pointer;
+    display: grid;
+    height: 44px;
+    justify-items: center;
+    padding: 0;
+    position: relative;
+    transition:
+        background-color 180ms var(--portfolio-ease),
+        border-color 180ms var(--portfolio-ease),
+        color 180ms var(--portfolio-ease),
+        transform 140ms var(--portfolio-ease);
+    width: 44px;
+}
+
+.portfolio-copy-button:hover {
+    background: var(--portfolio-accent-soft);
+    border-color: var(--portfolio-accent-border);
+    color: var(--portfolio-text);
+}
+
+.portfolio-copy-button:active {
+    transform: scale(0.94);
+}
+
+.portfolio-copy-button[data-copied='true'] {
+    border-color: var(--portfolio-accent-border);
+    color: var(--portfolio-accent);
+}
+
+.portfolio-copy-button__icon-stack {
+    display: grid;
+    height: 18px;
+    place-items: center;
+    position: relative;
+    width: 18px;
+}
+
+.portfolio-copy-button__icon {
+    display: grid;
+    inset: 0;
+    place-items: center;
+    position: absolute;
+    transition:
+        opacity 140ms var(--portfolio-ease),
+        transform 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.portfolio-copy-button__icon--copy {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.portfolio-copy-button__icon--check {
+    opacity: 0;
+    transform: scale(0.45) rotate(-28deg);
+}
+
+.portfolio-copy-button[data-copied='true'] .portfolio-copy-button__icon--copy {
+    opacity: 0;
+    transform: scale(0.55) rotate(18deg);
+}
+
+.portfolio-copy-button[data-copied='true'] .portfolio-copy-button__icon--check {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.portfolio-copy-button__svg {
+    fill: none;
+    height: 18px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.6;
+    width: 18px;
 }
 
 .portfolio-footer {
@@ -1434,6 +1554,14 @@
         min-height: 88px;
     }
 
+    .portfolio-contact__phone-static {
+        display: none;
+    }
+
+    .portfolio-contact__phone-link {
+        display: grid;
+    }
+
     .portfolio-contact__method + .portfolio-contact__method {
         border-left: 0;
         border-top: 1px solid var(--portfolio-line);
@@ -1470,6 +1598,8 @@
     .portfolio-link__icon,
     .portfolio-intro__profiles a,
     .portfolio-contact__method,
+    .portfolio-copy-button,
+    .portfolio-copy-button__icon,
     .portfolio,
     .portfolio-nav,
     .portfolio-nav__brand,
@@ -1489,6 +1619,13 @@
     .portfolio-scroll-rail__bar {
         animation: none;
         transition: none;
+    }
+
+    .portfolio-copy-button__icon--copy,
+    .portfolio-copy-button__icon--check,
+    .portfolio-copy-button[data-copied='true'] .portfolio-copy-button__icon--copy,
+    .portfolio-copy-button[data-copied='true'] .portfolio-copy-button__icon--check {
+        transform: none;
     }
 
     .portfolio-theme-menu__options {
