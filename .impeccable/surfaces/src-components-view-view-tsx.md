@@ -23,13 +23,14 @@ related_targets:
 ## Audience, job, and action
 
 Hiring managers, recruiters, and technical collaborators need to understand Anthony's engineering focus, scan credible
-employment and project evidence, and continue to a live project or public GitHub profile.
+project and employment evidence, and continue to a live project, professional profile, or direct contact method.
 
 ## Proof and content
 
 Use the approved resume for Workday and Freddie Mac via Hexaware Technologies history and impact metrics. Use the
-existing fmr.fyi, Pokedle, BlockLens, Chrona, pol.ai, and Solas screenshots and links, the established technology list,
-and the verified GitHub profile path. Do not fabricate testimonials, contact details, resume links, or project claims.
+existing fmr.fyi, Pokedle, BlockLens, Chrona, pol.ai, and Solas screenshots and links, the resume-approved technology
+inventory and contact details, and the verified GitHub profile path. Do not fabricate testimonials, resume links, or
+project claims.
 
 ## Chosen direction
 
@@ -54,16 +55,16 @@ point.
 
 | Visible ingredient             | Commitment                                                                                      | Medium                                    |
 | ------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| Slim sticky navigation         | Anthony Griffin plus About, Experience, Work, and GitHub; collapses cleanly on mobile           | Semantic HTML and CSS                     |
+| Slim sticky navigation         | Anthony Griffin plus About, Projects, Experience, and Contact; keeps Projects on mobile         | Semantic HTML and CSS                     |
 | Theme control                  | Icon-led System, Light, and Dark menu; stored preference stays distinct from the resolved theme | Custom accessible menu and localStorage   |
 | Constellation connective layer | Sparse points and faint joining lines; atmospheric, never interactive                           | CSS nodes and pseudo-elements             |
-| Opening split                  | Concise About statement paired with current-role and technology evidence                        | Semantic HTML and responsive CSS grid     |
+| Opening split                  | Concise About statement and profile links paired with current-role evidence                     | Semantic HTML and responsive CSS grid     |
 | Experience ledger              | Compact company metadata paired with top-aligned achievement details                            | Semantic HTML lists and responsive grid   |
-| Selected-work bands            | Screenshot-dominant rows with project name, concise factual description, stack, and live action | Existing raster assets plus semantic HTML |
-| Closing GitHub action          | Visible full-width close with one primary action                                                | Semantic anchor and CSS                   |
+| Project bands                  | Screenshot-dominant rows with project name, concise factual description, and live action        | Existing raster assets plus semantic HTML |
+| Tech stack ledger              | Complete resume stack grouped into compact, wrapping categories                                 | Semantic definition list and CSS          |
+| Contact methods                | Email, phone, and LinkedIn actions grouped into one quiet panel                                 | Semantic address and anchors              |
 | Motion                         | One short entry reveal, then quiet one-shot section continuations that keep content mounted     | IntersectionObserver and CSS transforms   |
 
 ## Unresolved decisions
 
-A public email address, resume URL, and LinkedIn URL are unavailable. The initial close therefore uses the verified
-GitHub profile and existing live-project links.
+A public resume URL remains unavailable. Contact details are sourced from the approved resume.

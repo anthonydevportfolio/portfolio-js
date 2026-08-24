@@ -14,11 +14,50 @@ import { ScrollRail } from './scrollRail';
 import './view.css';
 
 const GITHUB_URL = 'https://github.com/anthonydevportfolio';
+const LINKEDIN_URL = 'https://www.linkedin.com/in/anthony-griffin-0513271aa/';
+const EMAIL_ADDRESS = 'anthony.js.griffin@gmail.com';
+const PHONE_DISPLAY = '971-488-6554';
+const PHONE_URL = 'tel:+19714886554';
 const CURRENT_ROLE_SUMMARY =
     'Building developer-platform experiences, shared frontend architecture, and testing infrastructure across Workday.';
 const THEME_STORAGE_KEY = 'portfolio-theme';
 const experienceEntries = [...ExperienceData].reverse();
 const currentExperience = experienceEntries[0];
+const TECH_STACK_GROUPS = [
+    {
+        label: 'Languages',
+        items: ['TypeScript', 'JavaScript', 'Kotlin', 'Java', 'SQL', 'HTML/CSS']
+    },
+    {
+        label: 'Frontend & architecture',
+        items: [
+            'React',
+            'Redux Toolkit',
+            'RTK Query',
+            'Nx',
+            'Micro-frontends',
+            'Design systems',
+            'Accessibility',
+            'Internationalization'
+        ]
+    },
+    {
+        label: 'Backend & data',
+        items: ['Spring Boot', 'MySQL', 'Redis', 'REST APIs']
+    },
+    {
+        label: 'Testing & delivery',
+        items: ['Cypress', 'Jest', 'Vitest', 'Selenium', 'Cucumber', 'GitHub Actions', 'Jenkins', 'JFrog']
+    },
+    {
+        label: 'Cloud & observability',
+        items: ['AWS', 'CloudWatch', 'Grafana', 'PagerDuty', 'Mixpanel']
+    },
+    {
+        label: 'AI developer tooling',
+        items: ['Claude Code', 'Cursor', 'GitHub Copilot', 'Model Context Protocol (MCP)']
+    }
+] as const;
 
 type Theme = 'dark' | 'light';
 type ThemePreference = Theme | 'system';
@@ -87,6 +126,37 @@ const formatPeriod = (startDate: string, endDate: string) => `${formatDate(start
 const ExternalLinkIcon = () => (
     <svg aria-hidden='true' className='portfolio-link__icon' viewBox='0 0 20 20'>
         <path d='M6.75 13.25 13.25 6.75M8 6.75h5.25V12' />
+    </svg>
+);
+
+const GitHubIcon = () => (
+    <svg aria-hidden='true' className='portfolio-action-icon' viewBox='0 0 24 24'>
+        <path
+            d='M12 2.75a9.5 9.5 0 0 0-3 18.52c.48.09.65-.2.65-.46v-1.67c-2.67.58-3.23-1.13-3.23-1.13-.44-1.11-1.07-1.4-1.07-1.4-.87-.6.07-.59.07-.59.96.07 1.47.99 1.47.99.86 1.47 2.25 1.05 2.8.8.09-.62.34-1.05.61-1.29-2.13-.24-4.37-1.06-4.37-4.7 0-1.04.37-1.89.99-2.56-.1-.24-.43-1.21.09-2.52 0 0 .8-.26 2.61.98A9 9 0 0 1 12 7.44a9 9 0 0 1 2.38.32c1.81-1.24 2.61-.98 2.61-.98.52 1.31.19 2.28.09 2.52.62.67.99 1.52.99 2.56 0 3.65-2.25 4.46-4.39 4.7.35.3.65.88.65 1.78v2.47c0 .26.17.56.66.46A9.5 9.5 0 0 0 12 2.75Z'
+            fill='currentColor'
+        />
+    </svg>
+);
+
+const LinkedInIcon = () => (
+    <svg aria-hidden='true' className='portfolio-action-icon' viewBox='0 0 24 24'>
+        <path
+            d='M5.2 8.4H2.1V21h3.1V8.4ZM3.65 3a1.81 1.81 0 1 0 0 3.62 1.81 1.81 0 0 0 0-3.62ZM21.9 13.77c0-3.8-2.03-5.57-4.74-5.57-2.18 0-3.16 1.2-3.7 2.05V8.4h-3.1V21h3.1v-7.04c0-1.86.35-3.66 2.65-3.66 2.27 0 2.3 2.13 2.3 3.78V21h3.49v-7.23Z'
+            fill='currentColor'
+        />
+    </svg>
+);
+
+const EmailIcon = () => (
+    <svg aria-hidden='true' className='portfolio-action-icon' viewBox='0 0 24 24'>
+        <rect height='14' rx='2' width='18' x='3' y='5' />
+        <path d='m4 7 8 6 8-6' />
+    </svg>
+);
+
+const PhoneIcon = () => (
+    <svg aria-hidden='true' className='portfolio-action-icon' viewBox='0 0 24 24'>
+        <path d='M7.1 3.5 9.4 8l-2.1 1.8a15.8 15.8 0 0 0 6.9 6.9l1.8-2.1 4.5 2.3-.8 3a2 2 0 0 1-2 1.5C9.35 20.7 3.3 14.65 2.6 6.3a2 2 0 0 1 1.5-2l3-.8Z' />
     </svg>
 );
 
@@ -305,9 +375,13 @@ export const View: FC = () => {
                     </a>
                     <div className='portfolio-nav__actions'>
                         <nav aria-label='Portfolio sections' className='portfolio-nav__links'>
-                            <a href='#about'>About</a>
-                            <a href='#experience'>Experience</a>
+                            <a className='portfolio-nav__link--mobile-hidden' href='#about'>
+                                About
+                            </a>
                             <a href='#projects'>Projects</a>
+                            <a className='portfolio-nav__link--mobile-hidden' href='#experience'>
+                                Experience
+                            </a>
                             <a href='#contact'>Contact</a>
                         </nav>
                         <div className='portfolio-theme-menu' onBlur={closeThemeMenuOnBlur} ref={themeMenuRef}>
@@ -371,6 +445,24 @@ export const View: FC = () => {
                             I’m Anthony, a full-stack software engineer based in Portland, Oregon. I build things for
                             the web that just work.
                         </p>
+                        <div aria-label='Professional profiles' className='portfolio-intro__profiles'>
+                            <a href={LINKEDIN_URL} rel='noreferrer' target='_blank'>
+                                <LinkedInIcon />
+                                <span>
+                                    <strong>LinkedIn</strong>
+                                    <small>Work and background</small>
+                                </span>
+                                <ExternalLinkIcon />
+                            </a>
+                            <a href={GITHUB_URL} rel='noreferrer' target='_blank'>
+                                <GitHubIcon />
+                                <span>
+                                    <strong>GitHub</strong>
+                                    <small>Code and experiments</small>
+                                </span>
+                                <ExternalLinkIcon />
+                            </a>
+                        </div>
                     </div>
 
                     <aside aria-label='Current role' className='portfolio-current-role'>
@@ -387,42 +479,6 @@ export const View: FC = () => {
                         </div>
                         <p>{CURRENT_ROLE_SUMMARY}</p>
                     </aside>
-                </section>
-
-                <section
-                    aria-labelledby='experience-title'
-                    className='portfolio-section'
-                    data-reveal-section
-                    id='experience'>
-                    <header className='portfolio-section__header'>
-                        <h2 id='experience-title'>Experience</h2>
-                        <p>A timeline of roles, responsibilities, and outcomes.</p>
-                    </header>
-
-                    <ol className='experience-ledger'>
-                        {experienceEntries.map(experience => (
-                            <li className='experience-entry' key={experience.company}>
-                                <div className='experience-entry__summary'>
-                                    <div className='experience-entry__heading'>
-                                        <CompanyLogo src={experience.img} />
-                                        <div>
-                                            <h3>{experience.company}</h3>
-                                            <p>{experience.title}</p>
-                                        </div>
-                                    </div>
-                                    <div className='experience-entry__period'>
-                                        <time>{formatPeriod(experience.startDate, experience.endDate)}</time>
-                                        <span>{experience.location}</span>
-                                    </div>
-                                </div>
-                                <ul className='experience-entry__details'>
-                                    {experience.description.map(description => (
-                                        <li key={description}>{description}</li>
-                                    ))}
-                                </ul>
-                            </li>
-                        ))}
-                    </ol>
                 </section>
 
                 <section
@@ -477,15 +533,102 @@ export const View: FC = () => {
                     </div>
                 </section>
 
-                <section aria-labelledby='contact-title' className='portfolio-close' data-reveal-section id='contact'>
-                    <div>
-                        <h2 id='contact-title'>Let’s build something useful.</h2>
-                        <p>Have a project or role in mind? Find me on GitHub and take a look at what I’m building.</p>
-                    </div>
-                    <a className='portfolio-close__action' href={GITHUB_URL} rel='noreferrer' target='_blank'>
-                        Find me on GitHub
-                        <ExternalLinkIcon />
-                    </a>
+                <section
+                    aria-labelledby='experience-title'
+                    className='portfolio-section'
+                    data-reveal-section
+                    id='experience'>
+                    <header className='portfolio-section__header'>
+                        <h2 id='experience-title'>Experience</h2>
+                        <p>A timeline of roles, responsibilities, and outcomes.</p>
+                    </header>
+
+                    <ol className='experience-ledger'>
+                        {experienceEntries.map(experience => (
+                            <li className='experience-entry' key={experience.company}>
+                                <div className='experience-entry__summary'>
+                                    <div className='experience-entry__heading'>
+                                        <CompanyLogo src={experience.img} />
+                                        <div>
+                                            <h3>{experience.company}</h3>
+                                            <p>{experience.title}</p>
+                                        </div>
+                                    </div>
+                                    <div className='experience-entry__period'>
+                                        <time>{formatPeriod(experience.startDate, experience.endDate)}</time>
+                                        <span>{experience.location}</span>
+                                    </div>
+                                </div>
+                                <ul className='experience-entry__details'>
+                                    {experience.description.map(description => (
+                                        <li key={description}>{description}</li>
+                                    ))}
+                                </ul>
+                            </li>
+                        ))}
+                    </ol>
+                </section>
+
+                <section
+                    aria-labelledby='stack-title'
+                    className='portfolio-section portfolio-section--compact'
+                    data-reveal-section
+                    id='stack'>
+                    <header className='portfolio-section__header'>
+                        <h2 id='stack-title'>Tech stack</h2>
+                        <p>The languages, platforms, and tools I use to take software from idea to production.</p>
+                    </header>
+
+                    <dl className='tech-stack'>
+                        {TECH_STACK_GROUPS.map(group => (
+                            <div className='tech-stack__group' key={group.label}>
+                                <dt>{group.label}</dt>
+                                <dd>
+                                    <ul>
+                                        {group.items.map(item => (
+                                            <li key={item}>{item}</li>
+                                        ))}
+                                    </ul>
+                                </dd>
+                            </div>
+                        ))}
+                    </dl>
+                </section>
+
+                <section
+                    aria-labelledby='contact-title'
+                    className='portfolio-section portfolio-contact'
+                    data-reveal-section
+                    id='contact'>
+                    <header className='portfolio-section__header portfolio-contact__intro'>
+                        <h2 id='contact-title'>Contact</h2>
+                        <p>Have a project, role, or collaboration in mind? Here are the fastest ways to reach me.</p>
+                    </header>
+
+                    <address className='portfolio-contact__methods'>
+                        <a className='portfolio-contact__method' href={`mailto:${EMAIL_ADDRESS}`}>
+                            <EmailIcon />
+                            <span>
+                                <small>Email</small>
+                                <strong>{EMAIL_ADDRESS}</strong>
+                            </span>
+                        </a>
+                        <a className='portfolio-contact__method' href={PHONE_URL}>
+                            <PhoneIcon />
+                            <span>
+                                <small>Phone</small>
+                                <strong>{PHONE_DISPLAY}</strong>
+                            </span>
+                        </a>
+                        <a className='portfolio-contact__method' href={LINKEDIN_URL} rel='noreferrer' target='_blank'>
+                            <LinkedInIcon />
+                            <span>
+                                <small>LinkedIn</small>
+                                <strong>Anthony Griffin</strong>
+                            </span>
+                            <ExternalLinkIcon />
+                        </a>
+                    </address>
                 </section>
 
                 <footer className='portfolio-footer'>

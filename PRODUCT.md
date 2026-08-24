@@ -26,8 +26,9 @@ relying on generic claims.
 
 ## Operating Context
 
-Visitors enter through an animated landing screen, then explore About, Experience, and Projects as a continuous page.
-They may compare employment entries, inspect screenshots, and open deployed projects or Anthony's public GitHub profile.
+Visitors enter through an animated landing screen, then explore About, Projects, Experience, Tech Stack, and Contact as
+a continuous page. They may inspect deployed projects, compare employment entries, scan Anthony's working stack, or
+reach him directly.
 
 ## Capabilities and Constraints
 
@@ -37,8 +38,7 @@ They may compare employment entries, inspect screenshots, and open deployed proj
 -   Existing employment history, project names, project URLs, and technology information are factual source material and
     must remain accurate. `Anthony-Griffin-Resume-0826.pdf` is the approved source for current employment dates,
     responsibilities, and quantified impact.
--   A public email address, resume URL, and LinkedIn URL are not present in the repository. Future work must not invent
-    them.
+-   Contact details and the complete technology inventory must match `Anthony-Griffin-Resume-0826.pdf`.
 
 ## Brand Commitments
 
@@ -50,13 +50,14 @@ They may compare employment entries, inspect screenshots, and open deployed proj
 
 -   Employment history and descriptions for Workday and Freddie Mac via Hexaware Technologies in
     `src/components/experience/data.ts`, sourced from `Anthony-Griffin-Resume-0826.pdf`.
--   Project screenshots, descriptions, technology stacks, and live URLs for fmr.fyi, Pokedle, BlockLens, Chrona,
-    pol.ai, and Solas in `src/components/projects/projectsData.ts`.
+-   Project screenshots, descriptions, technology stacks, and live URLs for fmr.fyi, Pokedle, BlockLens, Chrona, pol.ai,
+    and Solas in `src/components/projects/projectsData.ts`.
 -   Anthony's public GitHub organization/profile path is supported by the repository remote:
     `https://github.com/anthonydevportfolio`.
--   Technology references are available in `src/components/me/data.ts`.
+-   Anthony's email address, phone number, LinkedIn profile, and current technology inventory are approved by
+    `Anthony-Griffin-Resume-0826.pdf`.
 -   The resume approves the quantitative impact metrics used in the experience ledger. The repository still contains no
-    approved testimonials, public resume asset, direct contact address, or LinkedIn URL. These must not be fabricated.
+    approved testimonials or public resume asset. These must not be fabricated.
 
 ## Product Principles
 

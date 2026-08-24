@@ -113,8 +113,8 @@ The palette is a restrained cool-dark system in which the accent behaves like a 
 
 ## Typography
 
-**Display Font:** Manrope (with Segoe UI and sans-serif fallbacks)
-**Body Font:** Manrope (with Segoe UI and sans-serif fallbacks)
+**Display Font:** Manrope (with Segoe UI and sans-serif fallbacks) **Body Font:** Manrope (with Segoe UI and sans-serif
+fallbacks)
 
 **Character:** Manrope keeps the interface contemporary and human without leaning on a monospace developer costume.
 Weight and measure create hierarchy; decoration does not.
@@ -180,7 +180,13 @@ containers around ordinary text.
     blur.
 -   **Targets:** Every link, including the brand, is at least 44px high.
 -   **Typography:** Compact Cool Steel labels; the brand and hover/focus states move to Warm White.
--   **Mobile:** The bar becomes 58px, preserves horizontal flow, and hides only redundant About and GitHub links.
+-   **Mobile:** The bar becomes 58px, keeps Projects and Contact visible, and hides only redundant About and Experience
+    links.
+
+### Profile Actions
+
+LinkedIn and GitHub sit directly below the introduction as two compact, equal tiles. Each uses an authored service icon,
+a short description, and a visible external-link cue without competing with the current-role panel.
 
 ### Experience Ledger
 
@@ -190,9 +196,19 @@ sequence.
 
 ### Project Artifact
 
-The screenshot is the dominant proof surface, framed by a single hairline and a 14px radius. Its paired copy carries
-version metadata, a factual description, an unboxed technology list, and one live-project action. Hover may scale the
-image by no more than 1.012.
+The screenshot is the dominant proof surface, framed by a single hairline and a 14px radius. Its paired copy carries a
+factual description and one live-project action. Hover may scale the image by no more than 1.012.
+
+### Tech Stack Ledger
+
+Resume-approved tools are grouped by working context in a two-column ledger. Items stay inline with quiet separators,
+then collapse to one column on mobile. The stack remains searchable and complete without becoming a logo wall or badge
+cloud.
+
+### Contact Methods
+
+Email, phone, and LinkedIn share one bordered contact group with three equal desktop actions. On mobile, the actions
+stack with internal hairlines and preserve direct `mailto:` and `tel:` behavior.
 
 ### Constellation Layer
 
