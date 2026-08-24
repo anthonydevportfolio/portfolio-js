@@ -12,6 +12,10 @@ export const LANDING_EXIT_DURATION_MS = 450;
 const BUTTON_ANIMATION_DURATION_MS = 1000;
 const BUTTON_SETTLE_DURATION_MS = 25;
 const LANDING_EXIT_START_MS = BUTTON_ANIMATION_DURATION_MS + BUTTON_SETTLE_DURATION_MS;
+const GREETING_COPY_EXIT_DURATION_MS = 600;
+const GREETING_COPY_EXIT_DELAY_MS = LANDING_EXIT_START_MS - GREETING_COPY_EXIT_DURATION_MS;
+const REDUCED_MOTION_COPY_EXIT_DURATION_MS = 180;
+const REDUCED_MOTION_COPY_EXIT_DELAY_MS = LANDING_EXIT_START_MS - REDUCED_MOTION_COPY_EXIT_DURATION_MS;
 
 export const Greeting = () => {
     const dispatch = useDispatchw();
@@ -45,10 +49,12 @@ export const Greeting = () => {
 
     return (
         <GreetingBase exited={isExited}>
-            <GreetingHeader>Hello, World!</GreetingHeader>
-            <GreetingTextContainer>
-                <GreetingText>I'm Anthony</GreetingText>
-            </GreetingTextContainer>
+            <GreetingCopy isTransitioning={isTransitioning}>
+                <GreetingHeader>Hello, World!</GreetingHeader>
+                <GreetingTextContainer>
+                    <GreetingText>I'm Anthony</GreetingText>
+                </GreetingTextContainer>
+            </GreetingCopy>
             <FancyButton
                 onClick={handleClick}
                 disabled={isTransitioning}
@@ -73,6 +79,28 @@ const focusReveal = keyframes({
     }
 });
 
+const focusExit = keyframes({
+    from: {
+        opacity: 1,
+        filter: 'blur(0)',
+        transform: 'translateY(0)'
+    },
+    to: {
+        opacity: 0.01,
+        filter: 'blur(4px)',
+        transform: 'translateY(-12px)'
+    }
+});
+
+const reducedMotionFocusExit = keyframes({
+    from: {
+        opacity: 1
+    },
+    to: {
+        opacity: 0.01
+    }
+});
+
 const GreetingBase = styled('div')<{ exited: boolean }>(({ exited }) => ({
     flexDirection: 'column',
     position: 'absolute',
@@ -88,6 +116,19 @@ const GreetingBase = styled('div')<{ exited: boolean }>(({ exited }) => ({
 
     '@media (max-width: 768px)': {
         transform: 'translateY(100%)'
+    }
+}));
+
+const GreetingCopy = styled('div')<{ isTransitioning: boolean }>(({ isTransitioning }) => ({
+    animation: isTransitioning
+        ? `${focusExit} ${GREETING_COPY_EXIT_DURATION_MS}ms cubic-bezier(0.4, 0, 1, 1) ${GREETING_COPY_EXIT_DELAY_MS}ms both`
+        : 'none',
+    position: 'relative',
+
+    '@media (prefers-reduced-motion: reduce)': {
+        animation: isTransitioning
+            ? `${reducedMotionFocusExit} ${REDUCED_MOTION_COPY_EXIT_DURATION_MS}ms linear ${REDUCED_MOTION_COPY_EXIT_DELAY_MS}ms both`
+            : 'none'
     }
 }));
 
