@@ -10,6 +10,13 @@ import {
 import linkedinLogo from '../../assets/linkedin-in.png';
 import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
+import {
+    THEME_PREFERENCES,
+    THEME_PREFERENCE_LABELS,
+    ThemePreferenceIcon,
+    type ThemePreference,
+    useTheme
+} from '../../theme';
 import { ExperienceData } from '../experience/data';
 import { projectsData } from '../projects/projectsData';
 import { ScrollRail } from './scrollRail';
@@ -23,7 +30,6 @@ const PHONE_URL = 'tel:+19714886554';
 const CONTACT_COPY_RESET_MS = 1250;
 const CURRENT_ROLE_SUMMARY =
     'Building developer-platform experiences, shared frontend architecture, and testing infrastructure across Workday.';
-const THEME_STORAGE_KEY = 'portfolio-theme';
 const experienceEntries = [...ExperienceData].reverse();
 const currentExperience = experienceEntries[0];
 const TECH_STACK_GROUPS = [
@@ -62,9 +68,6 @@ const TECH_STACK_GROUPS = [
     }
 ] as const;
 
-type Theme = 'dark' | 'light';
-type ThemePreference = Theme | 'system';
-
 const PORTFOLIO_SECTIONS = [
     { id: 'about', label: 'About' },
     { id: 'projects', label: 'Projects' },
@@ -73,43 +76,6 @@ const PORTFOLIO_SECTIONS = [
 ] as const;
 
 type PortfolioSection = (typeof PORTFOLIO_SECTIONS)[number]['id'];
-
-const THEME_PREFERENCES: ThemePreference[] = ['system', 'light', 'dark'];
-const THEME_PREFERENCE_LABELS: Record<ThemePreference, string> = {
-    system: 'System',
-    light: 'Light',
-    dark: 'Dark'
-};
-
-const readSavedThemePreference = (): ThemePreference | null => {
-    try {
-        const savedPreference = window.localStorage.getItem(THEME_STORAGE_KEY);
-        return savedPreference === 'system' || savedPreference === 'dark' || savedPreference === 'light'
-            ? savedPreference
-            : null;
-    } catch {
-        return null;
-    }
-};
-
-const getSystemTheme = (): Theme => {
-    if (typeof window === 'undefined') return 'dark';
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-};
-
-const getInitialThemePreference = (): ThemePreference => {
-    if (typeof window === 'undefined') return 'system';
-
-    return readSavedThemePreference() ?? 'system';
-};
-
-const saveThemePreference = (themePreference: ThemePreference) => {
-    try {
-        window.localStorage.setItem(THEME_STORAGE_KEY, themePreference);
-    } catch {
-        // The theme still applies for this visit when storage is unavailable.
-    }
-};
 
 const projectImageDimensions: Record<string, { width: number; height: number }> = {
     'fmr.fyi': { width: 1920, height: 961 },
@@ -276,32 +242,6 @@ const ThemeMenuBackIcon = () => (
     </svg>
 );
 
-const ThemePreferenceIcon: FC<{ preference: ThemePreference }> = ({ preference }) => {
-    if (preference === 'system') {
-        return (
-            <svg aria-hidden='true' className='portfolio-theme-menu__icon' viewBox='0 0 20 20'>
-                <rect height='9.25' rx='1.75' width='13.5' x='3.25' y='3.75' />
-                <path d='M10 13v3.25M7.25 16.25h5.5' />
-            </svg>
-        );
-    }
-
-    if (preference === 'light') {
-        return (
-            <svg aria-hidden='true' className='portfolio-theme-menu__icon' viewBox='0 0 20 20'>
-                <circle cx='10' cy='10' r='3.25' />
-                <path d='M10 2.25v1.5M10 16.25v1.5M2.25 10h1.5M16.25 10h1.5M4.52 4.52l1.06 1.06M14.42 14.42l1.06 1.06M15.48 4.52l-1.06 1.06M5.58 14.42l-1.06 1.06' />
-            </svg>
-        );
-    }
-
-    return (
-        <svg aria-hidden='true' className='portfolio-theme-menu__icon' viewBox='0 0 20 20'>
-            <path d='M16.35 12.52A7 7 0 0 1 7.48 3.65a7 7 0 1 0 8.87 8.87Z' />
-        </svg>
-    );
-};
-
 const ThemeCheckIcon = () => (
     <svg aria-hidden='true' className='portfolio-theme-menu__check-icon' viewBox='0 0 16 16'>
         <path d='m3.75 8.25 2.5 2.5 6-6' />
@@ -347,14 +287,11 @@ export const View: FC = () => {
     const themeMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
     const mobileThemeTriggerRef = useRef<HTMLButtonElement | null>(null);
     const mobileThemeSubmenuRef = useRef<HTMLDivElement | null>(null);
-    const [themePreference, setThemePreference] = useState<ThemePreference>(getInitialThemePreference);
-    const [systemTheme, setSystemTheme] = useState<Theme>(getSystemTheme);
+    const { setThemePreference, theme, themePreference } = useTheme();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
     const [isMobileThemeSubmenuOpen, setIsMobileThemeSubmenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState<PortfolioSection>('about');
-    const theme = themePreference === 'system' ? systemTheme : themePreference;
-
     const suppressMobileMenuMotion = useCallback(() => {
         const mobileNav = mobileNavRef.current;
 
@@ -380,21 +317,6 @@ export const View: FC = () => {
         },
         [suppressMobileMenuMotion]
     );
-
-    useEffect(() => {
-        const systemTheme = window.matchMedia('(prefers-color-scheme: light)');
-        const syncWithSystem = (event: MediaQueryListEvent) => {
-            setSystemTheme(event.matches ? 'light' : 'dark');
-        };
-
-        systemTheme.addEventListener('change', syncWithSystem);
-        return () => systemTheme.removeEventListener('change', syncWithSystem);
-    }, []);
-
-    useEffect(() => {
-        if (!isExited) return;
-        document.documentElement.dataset.portfolioTheme = theme;
-    }, [isExited, theme]);
 
     useEffect(() => {
         const portfolio = portfolioRef.current;
@@ -573,14 +495,12 @@ export const View: FC = () => {
     if (!isExited) return null;
 
     const chooseThemePreference = (nextPreference: ThemePreference) => {
-        saveThemePreference(nextPreference);
         setThemePreference(nextPreference);
         setIsThemeMenuOpen(false);
         window.requestAnimationFrame(() => themeMenuTriggerRef.current?.focus());
     };
 
     const chooseMobileThemePreference = (nextPreference: ThemePreference) => {
-        saveThemePreference(nextPreference);
         setThemePreference(nextPreference);
     };
 
@@ -678,7 +598,10 @@ export const View: FC = () => {
                                     onClick={() => setIsThemeMenuOpen(isOpen => !isOpen)}
                                     ref={themeMenuTriggerRef}
                                     type='button'>
-                                    <ThemePreferenceIcon preference={themePreference} />
+                                    <ThemePreferenceIcon
+                                        className='portfolio-theme-menu__icon'
+                                        preference={themePreference}
+                                    />
                                     <span className='portfolio-theme-menu__label'>
                                         {THEME_PREFERENCE_LABELS[themePreference]}
                                     </span>
@@ -704,7 +627,10 @@ export const View: FC = () => {
                                                     onClick={() => chooseThemePreference(preference)}
                                                     role='menuitemradio'
                                                     type='button'>
-                                                    <ThemePreferenceIcon preference={preference} />
+                                                    <ThemePreferenceIcon
+                                                        className='portfolio-theme-menu__icon'
+                                                        preference={preference}
+                                                    />
                                                     <span className='portfolio-theme-menu__label'>
                                                         {THEME_PREFERENCE_LABELS[preference]}
                                                     </span>
@@ -734,7 +660,10 @@ export const View: FC = () => {
                                         }}
                                         ref={mobileThemeTriggerRef}
                                         type='button'>
-                                        <ThemePreferenceIcon preference={themePreference} />
+                                        <ThemePreferenceIcon
+                                            className='portfolio-theme-menu__icon'
+                                            preference={themePreference}
+                                        />
                                         <span>Theme</span>
                                         <span className='portfolio-mobile-theme-trigger__preference'>
                                             {THEME_PREFERENCE_LABELS[themePreference]}
@@ -784,7 +713,10 @@ export const View: FC = () => {
                                                 onClick={() => chooseMobileThemePreference(preference)}
                                                 role='menuitemradio'
                                                 type='button'>
-                                                <ThemePreferenceIcon preference={preference} />
+                                                <ThemePreferenceIcon
+                                                    className='portfolio-theme-menu__icon'
+                                                    preference={preference}
+                                                />
                                                 <span className='portfolio-theme-menu__label'>
                                                     {THEME_PREFERENCE_LABELS[preference]}
                                                 </span>

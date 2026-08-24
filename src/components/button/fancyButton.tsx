@@ -66,11 +66,6 @@ const focusReveal = keyframes`
 `;
 
 const FancyButtonBase = styled('button')<{ active: boolean }>(({ active }) => ({
-    '--landing-button-foreground': '#ffffff',
-    '--landing-button-bg': 'rgba(255, 255, 255, 0.3)',
-    '--landing-button-hover-bg': 'rgba(255, 255, 255, 0.4)',
-    '--landing-button-active-bg': 'rgba(255, 255, 255, 1)',
-    '--landing-button-settled-bg': 'rgba(255, 255, 255, 0.2)',
     overflow: 'visible',
     padding: '1rem',
     background: 'var(--landing-button-bg)',
@@ -93,14 +88,6 @@ const FancyButtonBase = styled('button')<{ active: boolean }>(({ active }) => ({
 
     '&:disabled': {
         cursor: 'default'
-    },
-
-    '@media (prefers-color-scheme: light)': {
-        '--landing-button-foreground': '#171922',
-        '--landing-button-bg': 'rgba(23, 25, 34, 0.12)',
-        '--landing-button-hover-bg': 'rgba(23, 25, 34, 0.18)',
-        '--landing-button-active-bg': 'rgba(23, 25, 34, 1)',
-        '--landing-button-settled-bg': 'rgba(23, 25, 34, 0.14)'
     },
 
     '@media (prefers-reduced-motion: reduce)': {

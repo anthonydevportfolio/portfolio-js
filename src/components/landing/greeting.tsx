@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useDispatchw, useSelectorw } from '../../redux/hooks';
 import { setIsOnLandingPage } from '../../redux/slices/global';
 import { setIsExited, setIsExiting, setIsHoveringButton } from '../../redux/slices/landing';
+import { useTheme } from '../../theme';
 import { FancyButton } from '../button/fancyButton';
 
 export const cb = 'cubic-bezier(.28,.83,0,.99)';
@@ -21,6 +22,7 @@ export const Greeting = () => {
     const dispatch = useDispatchw();
     const isExited = useSelectorw(state => state.landing.isExited);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const { theme } = useTheme();
 
     useEffect(() => {
         if (!isTransitioning) return;
@@ -48,7 +50,7 @@ export const Greeting = () => {
     };
 
     return (
-        <GreetingBase exited={isExited} data-landing-reading-zone>
+        <GreetingBase data-landing-reading-zone exited={isExited} resolvedTheme={theme}>
             <GreetingCopy isTransitioning={isTransitioning}>
                 <GreetingHeader>Hello, World!</GreetingHeader>
                 <GreetingTextContainer>
@@ -101,23 +103,32 @@ const reducedMotionFocusExit = keyframes({
     }
 });
 
-const GreetingBase = styled('div')<{ exited: boolean }>(({ exited }) => ({
-    flexDirection: 'column',
-    position: 'absolute',
-    display: exited ? 'none' : 'flex',
-    padding: '1rem',
-    zIndex: 5,
-    textAlign: 'center',
-    overflow: 'visible',
+const GreetingBase = styled('div')<{ exited: boolean; resolvedTheme: 'dark' | 'light' }>(
+    ({ exited, resolvedTheme }) => ({
+        '--landing-foreground': resolvedTheme === 'light' ? '#171922' : '#ffffff',
+        '--landing-button-foreground': resolvedTheme === 'light' ? '#171922' : '#ffffff',
+        '--landing-button-bg': resolvedTheme === 'light' ? 'rgba(23, 25, 34, 0.12)' : 'rgba(255, 255, 255, 0.3)',
+        '--landing-button-hover-bg': resolvedTheme === 'light' ? 'rgba(23, 25, 34, 0.18)' : 'rgba(255, 255, 255, 0.4)',
+        '--landing-button-active-bg': resolvedTheme === 'light' ? 'rgba(23, 25, 34, 1)' : 'rgba(255, 255, 255, 1)',
+        '--landing-button-settled-bg':
+            resolvedTheme === 'light' ? 'rgba(23, 25, 34, 0.14)' : 'rgba(255, 255, 255, 0.2)',
+        flexDirection: 'column',
+        position: 'absolute',
+        display: exited ? 'none' : 'flex',
+        padding: '1rem',
+        zIndex: 5,
+        textAlign: 'center',
+        overflow: 'visible',
 
-    '& > *': {
-        position: 'relative'
-    },
+        '& > *': {
+            position: 'relative'
+        },
 
-    '@media (max-width: 768px)': {
-        transform: 'translateY(100%)'
-    }
-}));
+        '@media (max-width: 768px)': {
+            transform: 'translateY(100%)'
+        }
+    })
+);
 
 const GreetingCopy = styled('div')<{ isTransitioning: boolean }>(({ isTransitioning }) => ({
     animation: isTransitioning
@@ -135,12 +146,8 @@ const GreetingCopy = styled('div')<{ isTransitioning: boolean }>(({ isTransition
 const GreetingHeader = styled('h1')({
     animation: `${focusReveal} 550ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both`,
     fontSize: '3rem',
-    color: 'white',
+    color: 'var(--landing-foreground)',
     userSelect: 'none',
-
-    '@media (prefers-color-scheme: light)': {
-        color: '#171922'
-    },
 
     '@media (prefers-reduced-motion: reduce)': {
         animation: 'none'
@@ -162,12 +169,8 @@ const GreetingText = styled('p')({
     position: 'relative',
     animation: `${focusReveal} 550ms cubic-bezier(0.16, 1, 0.3, 1) 250ms both`,
     fontSize: '1.7rem',
-    color: 'white',
+    color: 'var(--landing-foreground)',
     userSelect: 'none',
-
-    '@media (prefers-color-scheme: light)': {
-        color: '#171922'
-    },
 
     '@media (prefers-reduced-motion: reduce)': {
         animation: 'none'

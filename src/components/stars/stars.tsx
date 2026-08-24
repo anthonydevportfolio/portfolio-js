@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useLogger } from '../../redux/hooks';
+import { useTheme } from '../../theme';
 import { useMouse } from './hooks/useMouse';
 import { Star, useStars } from './hooks/useStars';
 
@@ -65,6 +66,7 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const starsRef = useStars();
     const { mouseXRef, mouseYRef, mouseHasMovedRef, mouseTrackingExitedRef } = useMouse();
+    const { theme } = useTheme();
     const isMobile = window.innerWidth < 768;
 
     useEffect(() => {
@@ -77,7 +79,6 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
 
         let animationFrameId: number;
         let readingZone: ReadingZoneBounds | null = null;
-        const lightModePreference = window.matchMedia('(prefers-color-scheme: light)');
         const readingZoneElement = document.querySelector<HTMLElement>(READING_ZONE_SELECTOR);
 
         const updateReadingZone = () => {
@@ -107,7 +108,7 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
         const render = () => {
             const maxX = canvas.width;
             const maxY = canvas.height;
-            const palette = lightModePreference.matches ? LANDING_PALETTES.light : LANDING_PALETTES.dark;
+            const palette = LANDING_PALETTES[theme];
 
             // Clear and set up the system-aware neutral landing-page gradient.
             context.clearRect(0, 0, maxX, maxY);
@@ -232,7 +233,7 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
             readingZoneObserver?.disconnect();
             context.clearRect(0, 0, canvas.width, canvas.height);
         };
-    }, [starsRef, isOnLandingPage, isMobile, mouseXRef, mouseYRef, mouseHasMovedRef, mouseTrackingExitedRef]);
+    }, [starsRef, isOnLandingPage, isMobile, mouseXRef, mouseYRef, mouseHasMovedRef, mouseTrackingExitedRef, theme]);
 
     return (
         <canvas
