@@ -138,7 +138,7 @@ Anthony's introduction and current role. Section headers and experience rows use
 existing screenshot the larger share of a two-column band.
 
 At 900px, complex rows simplify and project bands stack. At 640px, all ledgers become one column, side gutters reduce to
-16px, project copy precedes its screenshot, and the navigation keeps only the most useful section links. Heights remain
+16px, project copy precedes its screenshot, and the navigation moves into a name-led disclosure panel. Heights remain
 content-driven at every breakpoint.
 
 Spacing follows related-content grouping: 8–24px within a group, roughly 48px between neighboring ideas, and responsive
@@ -180,8 +180,8 @@ containers around ordinary text.
     blur.
 -   **Targets:** Every link, including the brand, is at least 44px high.
 -   **Typography:** Compact Cool Steel labels; the brand and hover/focus states move to Warm White.
--   **Mobile:** The name yields to a single compact row so About, Projects, Experience, and Contact all remain directly
-    available beside an icon-only theme control.
+-   **Mobile:** The name remains visible beside a compact disclosure button. Opening it reveals About, Projects,
+    Experience, Contact, and the labeled theme control in one quiet full-width panel.
 
 ### Scroll Rail
 

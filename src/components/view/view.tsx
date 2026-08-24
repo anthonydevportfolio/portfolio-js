@@ -2,6 +2,7 @@ import {
     FC,
     FocusEvent as ReactFocusEvent,
     KeyboardEvent as ReactKeyboardEvent,
+    useCallback,
     useEffect,
     useRef,
     useState
@@ -243,13 +244,41 @@ export const View: FC = () => {
 
     const isExited = useSelectorw(state => state.landing.isExited);
     const portfolioRef = useRef<HTMLElement | null>(null);
+    const mobileNavRef = useRef<HTMLDivElement | null>(null);
+    const mobileMenuToggleRef = useRef<HTMLButtonElement | null>(null);
     const themeMenuRef = useRef<HTMLDivElement | null>(null);
     const themeMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
     const [themePreference, setThemePreference] = useState<ThemePreference>(getInitialThemePreference);
     const [systemTheme, setSystemTheme] = useState<Theme>(getSystemTheme);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState<PortfolioSection>('about');
     const theme = themePreference === 'system' ? systemTheme : themePreference;
+
+    const suppressMobileMenuMotion = useCallback(() => {
+        const mobileNav = mobileNavRef.current;
+
+        if (!mobileNav) return;
+
+        mobileNav.dataset.mobileMenuImmediate = 'true';
+        window.requestAnimationFrame(() => {
+            delete mobileNav.dataset.mobileMenuImmediate;
+        });
+    }, []);
+
+    const closeMobileMenu = useCallback(
+        (restoreFocus = false, skipMotion = false) => {
+            if (skipMotion) suppressMobileMenuMotion();
+
+            setIsMobileMenuOpen(false);
+            setIsThemeMenuOpen(false);
+
+            if (restoreFocus) {
+                window.requestAnimationFrame(() => mobileMenuToggleRef.current?.focus());
+            }
+        },
+        [suppressMobileMenuMotion]
+    );
 
     useEffect(() => {
         const systemTheme = window.matchMedia('(prefers-color-scheme: light)');
@@ -345,6 +374,33 @@ export const View: FC = () => {
     }, [isThemeMenuOpen]);
 
     useEffect(() => {
+        if (!isMobileMenuOpen) return;
+
+        const mobileNavigation = window.matchMedia('(max-width: 640px)');
+        const closeOnOutsidePointer = (event: PointerEvent) => {
+            if (!mobileNavRef.current?.contains(event.target as Node)) closeMobileMenu();
+        };
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key !== 'Escape') return;
+            if (isThemeMenuOpen) return;
+            closeMobileMenu(true, true);
+        };
+        const closeAtDesktopWidth = (event: MediaQueryListEvent) => {
+            if (!event.matches) closeMobileMenu(false, true);
+        };
+
+        document.addEventListener('pointerdown', closeOnOutsidePointer);
+        document.addEventListener('keydown', closeOnEscape);
+        mobileNavigation.addEventListener('change', closeAtDesktopWidth);
+
+        return () => {
+            document.removeEventListener('pointerdown', closeOnOutsidePointer);
+            document.removeEventListener('keydown', closeOnEscape);
+            mobileNavigation.removeEventListener('change', closeAtDesktopWidth);
+        };
+    }, [closeMobileMenu, isMobileMenuOpen, isThemeMenuOpen]);
+
+    useEffect(() => {
         const portfolio = portfolioRef.current;
 
         if (!isExited || !portfolio) return;
@@ -432,20 +488,50 @@ export const View: FC = () => {
             <Constellation />
 
             <header className='portfolio-nav'>
-                <div className='portfolio-nav__inner'>
+                <div className='portfolio-nav__inner' ref={mobileNavRef}>
                     <a
                         aria-label='Anthony Griffin, back to introduction'
                         className='portfolio-nav__brand'
-                        href='#about'>
+                        href='#about'
+                        onClick={event => {
+                            if (!window.matchMedia('(max-width: 640px)').matches) return;
+                            closeMobileMenu(true, event.detail === 0);
+                        }}>
                         Anthony Griffin
                     </a>
-                    <div className='portfolio-nav__actions'>
+                    <button
+                        aria-controls='portfolio-mobile-menu'
+                        aria-expanded={isMobileMenuOpen}
+                        aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                        className='portfolio-nav__toggle'
+                        onClick={event => {
+                            const skipMotion = event.detail === 0;
+
+                            if (skipMotion) suppressMobileMenuMotion();
+                            if (isMobileMenuOpen) setIsThemeMenuOpen(false);
+                            setIsMobileMenuOpen(isOpen => !isOpen);
+                        }}
+                        ref={mobileMenuToggleRef}
+                        type='button'>
+                        <span aria-hidden='true' className='portfolio-nav__toggle-icon'>
+                            <span />
+                            <span />
+                        </span>
+                    </button>
+                    <div
+                        className='portfolio-nav__actions'
+                        data-mobile-open={isMobileMenuOpen}
+                        id='portfolio-mobile-menu'>
                         <nav aria-label='Portfolio sections' className='portfolio-nav__links'>
                             {PORTFOLIO_SECTIONS.map(({ id, label }) => (
                                 <a
                                     aria-current={activeSection === id ? 'location' : undefined}
                                     href={`#${id}`}
-                                    key={id}>
+                                    key={id}
+                                    onClick={event => {
+                                        if (!window.matchMedia('(max-width: 640px)').matches) return;
+                                        closeMobileMenu(true, event.detail === 0);
+                                    }}>
                                     {label}
                                 </a>
                             ))}

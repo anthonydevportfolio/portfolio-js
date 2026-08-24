@@ -55,7 +55,7 @@ point.
 
 | Visible ingredient             | Commitment                                                                                      | Medium                                    |
 | ------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| Slim sticky navigation         | All four section links plus the theme control in one mobile row; the name yields below 640px    | Semantic HTML and CSS                     |
+| Slim sticky navigation         | Name plus accessible disclosure button; mobile panel holds all links and the labeled theme UI  | Semantic HTML, React state, and CSS       |
 | Interactive scroll rail        | Dense neutral bars with one dramatic longest bar as the sole page-position signal               | React, CSS transforms, and ARIA scrollbar |
 | Theme control                  | Icon-led System, Light, and Dark menu; stored preference stays distinct from the resolved theme | Custom accessible menu and localStorage   |
 | Constellation connective layer | Sparse points and faint joining lines; atmospheric, never interactive                           | CSS nodes and pseudo-elements             |
