@@ -8,6 +8,7 @@ import {
     useState
 } from 'react';
 import linkedinLogo from '../../assets/linkedin-in.png';
+import { portfolio } from '../../data/portfolio';
 import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import {
@@ -22,51 +23,16 @@ import { projectsData } from '../projects/projectsData';
 import { ScrollRail } from './scrollRail';
 import './view.css';
 
-const GITHUB_URL = 'https://github.com/anthony4834';
-const LINKEDIN_URL = 'https://www.linkedin.com/in/anthony-griffin-0513271aa/';
-const EMAIL_ADDRESS = 'anthony.js.griffin@gmail.com';
-const PHONE_DISPLAY = '971-488-6554';
-const PHONE_URL = 'tel:+19714886554';
+const GITHUB_URL = portfolio.profiles.github;
+const LINKEDIN_URL = portfolio.profiles.linkedin;
+const EMAIL_ADDRESS = portfolio.contact.email;
+const PHONE_DISPLAY = portfolio.contact.phoneDisplay;
+const PHONE_URL = portfolio.contact.phoneUrl;
 const CONTACT_COPY_RESET_MS = 1250;
-const CURRENT_ROLE_SUMMARY =
-    'Building developer-platform experiences, shared frontend architecture, and testing infrastructure across Workday.';
+const CURRENT_ROLE_SUMMARY = portfolio.currentFocus;
 const experienceEntries = [...ExperienceData].reverse();
 const currentExperience = experienceEntries[0];
-const TECH_STACK_GROUPS = [
-    {
-        label: 'Languages',
-        items: ['TypeScript', 'JavaScript', 'Kotlin', 'Java', 'SQL', 'HTML/CSS']
-    },
-    {
-        label: 'Frontend & architecture',
-        items: [
-            'React',
-            'Redux Toolkit',
-            'RTK Query',
-            'Nx',
-            'Micro-frontends',
-            'Design systems',
-            'Accessibility',
-            'Internationalization'
-        ]
-    },
-    {
-        label: 'Backend & data',
-        items: ['Spring Boot', 'MySQL', 'Redis', 'REST APIs']
-    },
-    {
-        label: 'Testing & delivery',
-        items: ['Cypress', 'Jest', 'Vitest', 'Selenium', 'Cucumber', 'GitHub Actions', 'Jenkins', 'JFrog']
-    },
-    {
-        label: 'Cloud & observability',
-        items: ['AWS', 'CloudWatch', 'Grafana', 'PagerDuty', 'Mixpanel']
-    },
-    {
-        label: 'AI developer tooling',
-        items: ['Claude Code', 'Cursor', 'GitHub Copilot', 'Model Context Protocol (MCP)']
-    }
-] as const;
+const TECH_STACK_GROUPS = portfolio.techStack;
 
 const PORTFOLIO_SECTIONS = [
     { id: 'about', label: 'About' },
@@ -533,7 +499,7 @@ export const View: FC = () => {
                             if (!window.matchMedia('(max-width: 640px)').matches) return;
                             closeMobileMenu(true, event.detail === 0);
                         }}>
-                        Anthony Griffin
+                        {portfolio.name}
                     </a>
                     <button
                         aria-controls='portfolio-mobile-menu'
@@ -725,11 +691,8 @@ export const View: FC = () => {
             <div className='portfolio-shell'>
                 <section aria-labelledby='about-title' className='portfolio-intro' data-reveal-section id='about'>
                     <div className='portfolio-intro__copy'>
-                        <h1 id='about-title'>Building thoughtful, reliable products.</h1>
-                        <p>
-                            I’m Anthony, a full-stack software engineer based in Portland, Oregon. I build things for
-                            the web that just work.
-                        </p>
+                        <h1 id='about-title'>{portfolio.introductionHeading}</h1>
+                        <p>{portfolio.introduction}</p>
                         <div aria-label='Professional profiles' className='portfolio-intro__profiles'>
                             <a
                                 aria-label='LinkedIn profile (opens in a new tab)'
@@ -926,7 +889,7 @@ export const View: FC = () => {
                             <LinkedInIcon />
                             <span className='portfolio-contact__details'>
                                 <small>LinkedIn</small>
-                                <strong>Anthony Griffin</strong>
+                                <strong>{portfolio.name}</strong>
                             </span>
                             <ExternalLinkIcon />
                         </a>
