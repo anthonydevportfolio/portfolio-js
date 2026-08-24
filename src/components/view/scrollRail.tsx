@@ -14,6 +14,15 @@ const NEIGHBOR_EMPHASIS = 0.94;
 
 const clamp = (value: number, minimum: number, maximum: number) => Math.min(Math.max(value, minimum), maximum);
 
+type DragMetrics = {
+    height: number;
+    maximumScroll: number;
+    pointerType: string;
+    startClientY: number;
+    startScrollPosition: number;
+    top: number;
+};
+
 const getScrollMetrics = () => {
     const maximumScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
     const progress = maximumScroll === 0 ? 0 : clamp(window.scrollY / maximumScroll, 0, 1);
@@ -24,8 +33,10 @@ const getScrollMetrics = () => {
 export const ScrollRail: FC = () => {
     const railRef = useRef<HTMLDivElement | null>(null);
     const barRefs = useRef<Array<HTMLSpanElement | null>>([]);
-    const dragMetricsRef = useRef<{ height: number; maximumScroll: number; top: number } | null>(null);
+    const dragAnimationFrameRef = useRef<number | null>(null);
+    const dragMetricsRef = useRef<DragMetrics | null>(null);
     const isDraggingRef = useRef(false);
+    const pendingPointerYRef = useRef<number | null>(null);
     const prefersReducedMotionRef = useRef(false);
 
     useEffect(() => {
@@ -123,6 +134,7 @@ export const ScrollRail: FC = () => {
 
         return () => {
             if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+            if (dragAnimationFrameRef.current !== null) window.cancelAnimationFrame(dragAnimationFrameRef.current);
             window.removeEventListener('scroll', syncWithDocument);
             window.removeEventListener('resize', syncWithDocument);
             motionPreference.removeEventListener('change', syncMotionPreference);
@@ -145,13 +157,39 @@ export const ScrollRail: FC = () => {
             metrics = {
                 height: bounds.height,
                 maximumScroll: getScrollMetrics().maximumScroll,
+                pointerType: 'mouse',
+                startClientY: clientY,
+                startScrollPosition: window.scrollY,
                 top: bounds.top
             };
         }
 
-        const progress = clamp((clientY - metrics.top) / metrics.height, 0, 1);
+        const scrollPosition =
+            metrics.pointerType === 'mouse'
+                ? clamp((clientY - metrics.top) / metrics.height, 0, 1) * metrics.maximumScroll
+                : clamp(
+                      metrics.startScrollPosition +
+                          ((clientY - metrics.startClientY) / metrics.height) * metrics.maximumScroll,
+                      0,
+                      metrics.maximumScroll
+                  );
 
-        window.scrollTo({ top: progress * metrics.maximumScroll });
+        window.scrollTo({ top: scrollPosition });
+    };
+
+    const queueTouchScroll = (clientY: number) => {
+        pendingPointerYRef.current = clientY;
+
+        if (dragAnimationFrameRef.current !== null) return;
+
+        dragAnimationFrameRef.current = window.requestAnimationFrame(() => {
+            dragAnimationFrameRef.current = null;
+            const pendingPointerY = pendingPointerYRef.current;
+
+            pendingPointerYRef.current = null;
+            if (pendingPointerY === null || !dragMetricsRef.current) return;
+            scrollToPointer(pendingPointerY);
+        });
     };
 
     const beginDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -163,27 +201,47 @@ export const ScrollRail: FC = () => {
         dragMetricsRef.current = {
             height: bounds.height,
             maximumScroll: getScrollMetrics().maximumScroll,
+            pointerType: event.pointerType,
+            startClientY: event.clientY,
+            startScrollPosition: window.scrollY,
             top: bounds.top
         };
         isDraggingRef.current = true;
         document.documentElement.classList.add('portfolio-scrollbar-dragging');
         event.currentTarget.setPointerCapture(event.pointerId);
-        scrollToPointer(event.clientY);
+        if (event.pointerType === 'mouse') scrollToPointer(event.clientY);
     };
 
     const continueDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
         if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
-        scrollToPointer(event.clientY);
+        event.preventDefault();
+
+        if (event.pointerType === 'mouse') {
+            scrollToPointer(event.clientY);
+            return;
+        }
+
+        queueTouchScroll(event.clientY);
     };
 
     const endDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
-        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-            event.currentTarget.releasePointerCapture(event.pointerId);
+        if (dragAnimationFrameRef.current !== null) {
+            window.cancelAnimationFrame(dragAnimationFrameRef.current);
+            dragAnimationFrameRef.current = null;
         }
+
+        const pendingPointerY = pendingPointerYRef.current;
+
+        pendingPointerYRef.current = null;
+        if (pendingPointerY !== null && event.type !== 'pointercancel') scrollToPointer(pendingPointerY);
 
         dragMetricsRef.current = null;
         isDraggingRef.current = false;
         document.documentElement.classList.remove('portfolio-scrollbar-dragging');
+
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+        }
     };
 
     const navigateWithKeyboard = (event: ReactKeyboardEvent<HTMLDivElement>) => {
