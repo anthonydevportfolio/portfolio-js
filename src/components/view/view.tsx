@@ -6,6 +6,7 @@ import {
     useRef,
     useState
 } from 'react';
+import linkedinLogo from '../../assets/linkedin-in.png';
 import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import { ExperienceData } from '../experience/data';
@@ -139,12 +140,14 @@ const GitHubIcon = () => (
 );
 
 const LinkedInIcon = () => (
-    <svg aria-hidden='true' className='portfolio-action-icon' viewBox='0 0 24 24'>
-        <path
-            d='M5.2 8.4H2.1V21h3.1V8.4ZM3.65 3a1.81 1.81 0 1 0 0 3.62 1.81 1.81 0 0 0 0-3.62ZM21.9 13.77c0-3.8-2.03-5.57-4.74-5.57-2.18 0-3.16 1.2-3.7 2.05V8.4h-3.1V21h3.1v-7.04c0-1.86.35-3.66 2.65-3.66 2.27 0 2.3 2.13 2.3 3.78V21h3.49v-7.23Z'
-            fill='currentColor'
-        />
-    </svg>
+    <img
+        alt=''
+        aria-hidden='true'
+        className='portfolio-action-icon portfolio-action-icon--linkedin'
+        height='24'
+        src={linkedinLogo}
+        width='26'
+    />
 );
 
 const EmailIcon = () => (

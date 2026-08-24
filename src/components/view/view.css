@@ -400,9 +400,9 @@
 
 .portfolio-intro__profiles {
     display: grid;
-    gap: 0.75rem;
-    grid-template-columns: repeat(2, 52px);
-    margin-top: 2rem;
+    gap: 0.5rem;
+    grid-template-columns: repeat(2, 44px);
+    margin-top: 1.5rem;
 }
 
 .portfolio-intro__profiles a {
@@ -411,7 +411,7 @@
     border-radius: 12px;
     color: var(--portfolio-text);
     display: grid;
-    min-height: 52px;
+    min-height: 44px;
     place-items: center;
     text-decoration: none;
     transition:
@@ -457,6 +457,11 @@
     stroke-linejoin: round;
     stroke-width: 1.5;
     width: 22px;
+}
+
+.portfolio-action-icon--linkedin {
+    height: 24px;
+    width: 26px;
 }
 
 .portfolio-action-icon path[fill='currentColor'] {
