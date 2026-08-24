@@ -125,11 +125,26 @@
 .portfolio-scroll-rail__bar {
     --scroll-rail-opacity: 0.18;
     --scroll-rail-scale: 0.14;
+    animation: portfolio-scroll-rail-enter 240ms var(--portfolio-ease) backwards;
+    animation-delay: calc(200ms + var(--scroll-rail-index) * 9ms);
     background: var(--portfolio-text-muted);
+    clip-path: inset(0);
     height: 2px;
     opacity: var(--scroll-rail-opacity);
     transform: scaleX(var(--scroll-rail-scale));
     transition: background-color 120ms var(--portfolio-ease);
+}
+
+@keyframes portfolio-scroll-rail-enter {
+    from {
+        clip-path: inset(0 0 0 100%);
+        opacity: 0;
+    }
+
+    to {
+        clip-path: inset(0);
+        opacity: var(--scroll-rail-opacity);
+    }
 }
 
 .portfolio-scroll-rail__bar[data-active='true'] {
@@ -1444,6 +1459,7 @@
     .portfolio-theme-menu__option,
     .portfolio-theme-menu__chevron,
     .portfolio-scroll-rail__bar {
+        animation: none;
         transition: none;
     }
 

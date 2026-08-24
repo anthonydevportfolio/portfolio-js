@@ -1,4 +1,11 @@
-import { FC, KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent, useEffect, useRef } from 'react';
+import {
+    CSSProperties,
+    FC,
+    KeyboardEvent as ReactKeyboardEvent,
+    PointerEvent as ReactPointerEvent,
+    useEffect,
+    useRef
+} from 'react';
 
 const BAR_COUNT = 65;
 const KEY_SCROLL_STEP = 72;
@@ -187,6 +194,7 @@ export const ScrollRail: FC = () => {
                     ref={bar => {
                         barRefs.current[index] = bar;
                     }}
+                    style={{ '--scroll-rail-index': index } as CSSProperties}
                 />
             ))}
         </div>
