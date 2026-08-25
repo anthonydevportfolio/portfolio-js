@@ -18,16 +18,18 @@ export const useMouse = () => {
 
         mouseTrackingExitedRef.current = false;
 
-        const handleMouseMove = (event: MouseEvent) => {
+        const handlePointerMove = (event: PointerEvent) => {
             mouseXRef.current = event.clientX;
             mouseYRef.current = event.clientY;
             mouseHasMovedRef.current = true;
         };
 
-        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('pointerdown', handlePointerMove, { passive: true });
+        window.addEventListener('pointermove', handlePointerMove, { passive: true });
 
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('pointerdown', handlePointerMove);
+            window.removeEventListener('pointermove', handlePointerMove);
         };
     }, [isOnLandingPage]);
 

@@ -23,20 +23,6 @@ const READING_ZONE_PADDING = 24;
 const READING_ZONE_FEATHER = 72;
 const MOBILE_BREAKPOINT = 768;
 
-const MOBILE_WEB_POINTS = [
-    { x: 0.03, y: 0.2, connections: [1, 2] },
-    { x: 0.22, y: 0.08, connections: [2, 4] },
-    { x: 0.35, y: 0.27, connections: [3] },
-    { x: 0.08, y: 0.42, connections: [] },
-    { x: 0.68, y: 0.1, connections: [5] },
-    { x: 0.96, y: 0.25, connections: [6] },
-    { x: 0.91, y: 0.56, connections: [7, 8] },
-    { x: 0.72, y: 0.73, connections: [8, 9] },
-    { x: 0.96, y: 0.86, connections: [] },
-    { x: 0.45, y: 0.91, connections: [10] },
-    { x: 0.08, y: 0.82, connections: [] }
-] as const;
-
 interface ReadingZoneBounds {
     top: number;
     right: number;
@@ -58,46 +44,6 @@ const getReadingZoneOpacity = (x: number, y: number, readingZone: ReadingZoneBou
     const progress = Math.min(distance / READING_ZONE_FEATHER, 1);
 
     return progress * progress * (3 - 2 * progress);
-};
-
-const drawMobileWeb = (
-    context: CanvasRenderingContext2D,
-    width: number,
-    height: number,
-    constellationColor: string,
-    readingZone: ReadingZoneBounds | null
-) => {
-    const points = MOBILE_WEB_POINTS.map(point => ({
-        x: point.x * width,
-        y: point.y * height,
-        connections: point.connections
-    }));
-
-    points.forEach(point => {
-        point.connections.forEach(connectionIndex => {
-            const connectedPoint = points[connectionIndex];
-            const midpointX = (point.x + connectedPoint.x) / 2;
-            const midpointY = (point.y + connectedPoint.y) / 2;
-            const opacity = 0.2 * getReadingZoneOpacity(midpointX, midpointY, readingZone);
-
-            if (opacity <= 0.01) return;
-
-            context.beginPath();
-            context.moveTo(point.x, point.y);
-            context.lineTo(connectedPoint.x, connectedPoint.y);
-            context.strokeStyle = `rgba(${constellationColor}, ${opacity})`;
-            context.lineWidth = 0.7;
-            context.stroke();
-        });
-
-        const opacity = 0.34 * getReadingZoneOpacity(point.x, point.y, readingZone);
-        if (opacity <= 0.01) return;
-
-        context.beginPath();
-        context.arc(point.x, point.y, 1.35, 0, 2 * Math.PI);
-        context.fillStyle = `rgba(${constellationColor}, ${opacity})`;
-        context.fill();
-    });
 };
 
 // Helper function to determine if two stars can connect
@@ -180,10 +126,6 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
                 return;
             }
 
-            if (isMobile) {
-                drawMobileWeb(context, maxX, maxY, palette.constellation, readingZone);
-            }
-
             // Update mouse star position
             const refX = mouseHasMovedRef.current ? mouseXRef.current : maxX / 2;
             const refY = mouseHasMovedRef.current ? mouseYRef.current : maxY / 2;
@@ -210,7 +152,7 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
             });
 
             // Draw and update stars and lines between them if on landing page
-            if (!isMobile && !mouseTrackingExitedRef.current) {
+            if (!mouseTrackingExitedRef.current) {
                 for (const key in grid) {
                     const starsInCurrentCell = grid[key];
                     for (const starA of starsInCurrentCell) {
@@ -231,7 +173,10 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
                                         mouseDistance < CONSTELLATION_MOUSE_RANGE
                                             ? 1 - mouseDistance / CONSTELLATION_MOUSE_RANGE
                                             : 0;
-                                    const opacity = mouseOpacity * getReadingZoneOpacity(midX, midY, readingZone);
+                                    const opacity =
+                                        mouseOpacity *
+                                        getReadingZoneOpacity(midX, midY, readingZone) *
+                                        (isMobile ? 0.32 : 1);
 
                                     if (opacity > 0) {
                                         context.beginPath();
@@ -272,7 +217,7 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
                     const starOpacity =
                         (1 - distance / (isPartOfCluster ? CONSTELLATION_MOUSE_RANGE : STAR_MOUSE_RANGE)) *
                         getReadingZoneOpacity(star.x, star.y, readingZone);
-                    const starColor = `rgba(${isPartOfCluster && !isMobile ? palette.constellation : star.color}, ${starOpacity})`;
+                    const starColor = `rgba(${isPartOfCluster ? palette.constellation : star.color}, ${starOpacity})`;
                     context.fillStyle = starColor;
                     context.fill();
                 }

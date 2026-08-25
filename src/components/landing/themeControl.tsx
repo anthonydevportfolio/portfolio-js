@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FocusEvent as ReactFocusEvent, KeyboardEvent as ReactKeyboardEvent, useEffect, useRef, useState } from 'react';
+import { KeyboardEvent as ReactKeyboardEvent, useEffect, useRef, useState } from 'react';
 import {
     THEME_PREFERENCES,
     THEME_PREFERENCE_LABELS,
@@ -17,6 +17,7 @@ const ThemeChevronIcon = () => (
 export const LandingThemeControl = () => {
     const { setThemePreference, theme, themePreference } = useTheme();
     const [isOpen, setIsOpen] = useState(false);
+    const focusOptionsOnOpenRef = useRef(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -26,38 +27,38 @@ export const LandingThemeControl = () => {
         const closeOnOutsidePointer = (event: PointerEvent) => {
             if (!menuRef.current?.contains(event.target as Node)) setIsOpen(false);
         };
+        const closeOnOutsideFocus = (event: FocusEvent) => {
+            if (!menuRef.current?.contains(event.target as Node)) setIsOpen(false);
+        };
         const closeOnEscape = (event: KeyboardEvent) => {
             if (event.key !== 'Escape') return;
             setIsOpen(false);
             triggerRef.current?.focus();
         };
-        const focusFrame = window.requestAnimationFrame(() => {
-            menuRef.current?.querySelector<HTMLButtonElement>('[aria-checked="true"]')?.focus();
-        });
+        const focusFrame = focusOptionsOnOpenRef.current
+            ? window.requestAnimationFrame(() => {
+                  menuRef.current?.querySelector<HTMLButtonElement>('[aria-checked="true"]')?.focus();
+              })
+            : null;
+
+        focusOptionsOnOpenRef.current = false;
 
         document.addEventListener('pointerdown', closeOnOutsidePointer);
+        document.addEventListener('focusin', closeOnOutsideFocus);
         document.addEventListener('keydown', closeOnEscape);
 
         return () => {
-            window.cancelAnimationFrame(focusFrame);
+            if (focusFrame !== null) window.cancelAnimationFrame(focusFrame);
             document.removeEventListener('pointerdown', closeOnOutsidePointer);
+            document.removeEventListener('focusin', closeOnOutsideFocus);
             document.removeEventListener('keydown', closeOnEscape);
         };
     }, [isOpen]);
 
-    const chooseTheme = (nextPreference: ThemePreference) => {
+    const chooseTheme = (nextPreference: ThemePreference, restoreFocus: boolean) => {
         setThemePreference(nextPreference);
         setIsOpen(false);
-        window.requestAnimationFrame(() => triggerRef.current?.focus());
-    };
-
-    const chooseMobileTheme = (nextPreference: ThemePreference) => {
-        setThemePreference(nextPreference);
-        setIsOpen(false);
-    };
-
-    const closeOnBlur = (event: ReactFocusEvent<HTMLDivElement>) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setIsOpen(false);
+        if (restoreFocus) window.requestAnimationFrame(() => triggerRef.current?.focus());
     };
 
     const navigateOptions = (event: ReactKeyboardEvent<HTMLDivElement>) => {
@@ -77,13 +78,17 @@ export const LandingThemeControl = () => {
     };
 
     return (
-        <ThemeControlBase data-theme={theme} onBlur={closeOnBlur} ref={menuRef}>
+        <ThemeControlBase data-theme={theme} ref={menuRef}>
             <ThemeTrigger
                 aria-controls='landing-theme-options'
                 aria-expanded={isOpen}
                 aria-haspopup='menu'
                 aria-label={`Theme preference: ${THEME_PREFERENCE_LABELS[themePreference]}`}
-                onClick={() => setIsOpen(current => !current)}
+                onClick={event => {
+                    const nextIsOpen = !isOpen;
+                    focusOptionsOnOpenRef.current = nextIsOpen && event.detail === 0;
+                    setIsOpen(nextIsOpen);
+                }}
                 ref={triggerRef}
                 title={`Theme preference: ${THEME_PREFERENCE_LABELS[themePreference]}`}
                 type='button'>
@@ -106,7 +111,7 @@ export const LandingThemeControl = () => {
                                 aria-label={label}
                                 data-selected={isSelected}
                                 key={preference}
-                                onClick={() => chooseTheme(preference)}
+                                onClick={event => chooseTheme(preference, event.detail === 0)}
                                 role='menuitemradio'
                                 title={label}
                                 type='button'>
@@ -116,26 +121,6 @@ export const LandingThemeControl = () => {
                     })}
                 </ThemeOptions>
             ) : null}
-            <MobileThemeOptions aria-label='Theme preference' role='radiogroup'>
-                {THEME_PREFERENCES.map(preference => {
-                    const isSelected = preference === themePreference;
-                    const label = `${THEME_PREFERENCE_LABELS[preference]} theme`;
-
-                    return (
-                        <ThemeOption
-                            aria-checked={isSelected}
-                            aria-label={label}
-                            data-selected={isSelected}
-                            key={preference}
-                            onClick={() => chooseMobileTheme(preference)}
-                            role='radio'
-                            title={label}
-                            type='button'>
-                            <ThemePreferenceIcon className='landing-theme-control__icon' preference={preference} />
-                        </ThemeOption>
-                    );
-                })}
-            </MobileThemeOptions>
         </ThemeControlBase>
     );
 };
@@ -218,10 +203,6 @@ const ThemeTrigger = styled('button')({
 
     '&[aria-expanded="true"] .landing-theme-control__chevron': {
         transform: 'rotate(180deg)'
-    },
-
-    '@media (max-width: 640px)': {
-        display: 'none'
     }
 });
 
@@ -252,24 +233,6 @@ const ThemeOptions = styled('div')({
 
     '@media (prefers-reduced-motion: reduce)': {
         animation: 'none'
-    },
-
-    '@media (max-width: 640px)': {
-        display: 'none'
-    }
-});
-
-const MobileThemeOptions = styled('div')({
-    background: 'var(--landing-theme-bg)',
-    border: '1px solid var(--landing-theme-line)',
-    borderRadius: '12px',
-    display: 'none',
-    gap: '0.125rem',
-    gridAutoFlow: 'column',
-    padding: '0.1875rem',
-
-    '@media (max-width: 640px)': {
-        display: 'grid'
     }
 });
 
