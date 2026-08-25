@@ -253,6 +253,7 @@ export const View: FC = () => {
     const themeMenuTriggerRef = useRef<HTMLButtonElement | null>(null);
     const mobileThemeTriggerRef = useRef<HTMLButtonElement | null>(null);
     const mobileThemeSubmenuRef = useRef<HTMLDivElement | null>(null);
+    const activeSectionRef = useRef<PortfolioSection>('about');
     const { setThemePreference, theme, themePreference } = useTheme();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
@@ -304,7 +305,7 @@ export const View: FC = () => {
 
         let animationFrame: number | null = null;
 
-        const updateActiveSection = () => {
+        const updateActiveSection = (syncHash = false) => {
             animationFrame = null;
 
             const activationOffset = (nav?.offsetHeight ?? 0) + (mobileNavigation.matches ? 48 : 24);
@@ -322,12 +323,21 @@ export const View: FC = () => {
                 nextSection = sections[sections.length - 1].id as PortfolioSection;
             }
 
-            setActiveSection(currentSection => (currentSection === nextSection ? currentSection : nextSection));
+            if (activeSectionRef.current === nextSection) return;
+
+            activeSectionRef.current = nextSection;
+            setActiveSection(nextSection);
+
+            const nextHash = `#${nextSection}`;
+
+            if (syncHash && window.location.hash !== nextHash) {
+                window.history.replaceState(window.history.state, '', nextHash);
+            }
         };
 
         const queueActiveSectionUpdate = () => {
             if (animationFrame === null) {
-                animationFrame = window.requestAnimationFrame(updateActiveSection);
+                animationFrame = window.requestAnimationFrame(() => updateActiveSection(true));
             }
         };
 

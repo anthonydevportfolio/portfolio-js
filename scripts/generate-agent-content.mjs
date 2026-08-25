@@ -146,7 +146,7 @@ const head = `<!-- agent-head:start -->
 ${JSON.stringify(structuredData, null, 4).replaceAll('<', '\\u003c')}
         </script>
         <style>
-            .static-portfolio { box-sizing: border-box; max-width: 72rem; margin: 0 auto; padding: 3rem 1.5rem 6rem; color: #202124; font: 1rem/1.65 system-ui, sans-serif; }
+            .static-portfolio { display: none; box-sizing: border-box; max-width: 72rem; margin: 0 auto; padding: 3rem 1.5rem 6rem; color: #202124; font: 1rem/1.65 system-ui, sans-serif; }
             .static-portfolio header, .static-portfolio section { margin-bottom: 3rem; }
             .static-portfolio h1, .static-portfolio h2, .static-portfolio h3 { line-height: 1.2; }
             .static-portfolio article { margin-block: 2rem; }
@@ -156,6 +156,7 @@ ${JSON.stringify(structuredData, null, 4).replaceAll('<', '\\u003c')}
                 .static-portfolio a { color: #a9b9ff; }
             }
         </style>
+        <noscript><style>.static-portfolio { display: block; }</style></noscript>
         <!-- agent-head:end -->`;
 
 const staticShell = `<!-- agent-content:start -->
