@@ -51,6 +51,11 @@ export const LandingThemeControl = () => {
         window.requestAnimationFrame(() => triggerRef.current?.focus());
     };
 
+    const chooseMobileTheme = (nextPreference: ThemePreference) => {
+        setThemePreference(nextPreference);
+        setIsOpen(false);
+    };
+
     const closeOnBlur = (event: ReactFocusEvent<HTMLDivElement>) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setIsOpen(false);
     };
@@ -111,6 +116,26 @@ export const LandingThemeControl = () => {
                     })}
                 </ThemeOptions>
             ) : null}
+            <MobileThemeOptions aria-label='Theme preference' role='radiogroup'>
+                {THEME_PREFERENCES.map(preference => {
+                    const isSelected = preference === themePreference;
+                    const label = `${THEME_PREFERENCE_LABELS[preference]} theme`;
+
+                    return (
+                        <ThemeOption
+                            aria-checked={isSelected}
+                            aria-label={label}
+                            data-selected={isSelected}
+                            key={preference}
+                            onClick={() => chooseMobileTheme(preference)}
+                            role='radio'
+                            title={label}
+                            type='button'>
+                            <ThemePreferenceIcon className='landing-theme-control__icon' preference={preference} />
+                        </ThemeOption>
+                    );
+                })}
+            </MobileThemeOptions>
         </ThemeControlBase>
     );
 };
@@ -193,6 +218,10 @@ const ThemeTrigger = styled('button')({
 
     '&[aria-expanded="true"] .landing-theme-control__chevron': {
         transform: 'rotate(180deg)'
+    },
+
+    '@media (max-width: 640px)': {
+        display: 'none'
     }
 });
 
@@ -223,6 +252,24 @@ const ThemeOptions = styled('div')({
 
     '@media (prefers-reduced-motion: reduce)': {
         animation: 'none'
+    },
+
+    '@media (max-width: 640px)': {
+        display: 'none'
+    }
+});
+
+const MobileThemeOptions = styled('div')({
+    background: 'var(--landing-theme-bg)',
+    border: '1px solid var(--landing-theme-line)',
+    borderRadius: '12px',
+    display: 'none',
+    gap: '0.125rem',
+    gridAutoFlow: 'column',
+    padding: '0.1875rem',
+
+    '@media (max-width: 640px)': {
+        display: 'grid'
     }
 });
 
@@ -248,5 +295,10 @@ const ThemeOption = styled('button')({
     '&:focus-visible': {
         outline: '2px solid var(--landing-theme-accent)',
         outlineOffset: '-2px'
+    },
+
+    '@media (pointer: coarse)': {
+        height: '44px',
+        width: '44px'
     }
 });

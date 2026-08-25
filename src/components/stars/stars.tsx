@@ -21,6 +21,21 @@ const STAR_MOUSE_RANGE = CONSTELLATION_MOUSE_RANGE * 3;
 const READING_ZONE_SELECTOR = '[data-landing-reading-zone]';
 const READING_ZONE_PADDING = 24;
 const READING_ZONE_FEATHER = 72;
+const MOBILE_BREAKPOINT = 768;
+
+const MOBILE_WEB_POINTS = [
+    { x: 0.03, y: 0.2, connections: [1, 2] },
+    { x: 0.22, y: 0.08, connections: [2, 4] },
+    { x: 0.35, y: 0.27, connections: [3] },
+    { x: 0.08, y: 0.42, connections: [] },
+    { x: 0.68, y: 0.1, connections: [5] },
+    { x: 0.96, y: 0.25, connections: [6] },
+    { x: 0.91, y: 0.56, connections: [7, 8] },
+    { x: 0.72, y: 0.73, connections: [8, 9] },
+    { x: 0.96, y: 0.86, connections: [] },
+    { x: 0.45, y: 0.91, connections: [10] },
+    { x: 0.08, y: 0.82, connections: [] }
+] as const;
 
 interface ReadingZoneBounds {
     top: number;
@@ -45,6 +60,46 @@ const getReadingZoneOpacity = (x: number, y: number, readingZone: ReadingZoneBou
     return progress * progress * (3 - 2 * progress);
 };
 
+const drawMobileWeb = (
+    context: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    constellationColor: string,
+    readingZone: ReadingZoneBounds | null
+) => {
+    const points = MOBILE_WEB_POINTS.map(point => ({
+        x: point.x * width,
+        y: point.y * height,
+        connections: point.connections
+    }));
+
+    points.forEach(point => {
+        point.connections.forEach(connectionIndex => {
+            const connectedPoint = points[connectionIndex];
+            const midpointX = (point.x + connectedPoint.x) / 2;
+            const midpointY = (point.y + connectedPoint.y) / 2;
+            const opacity = 0.2 * getReadingZoneOpacity(midpointX, midpointY, readingZone);
+
+            if (opacity <= 0.01) return;
+
+            context.beginPath();
+            context.moveTo(point.x, point.y);
+            context.lineTo(connectedPoint.x, connectedPoint.y);
+            context.strokeStyle = `rgba(${constellationColor}, ${opacity})`;
+            context.lineWidth = 0.7;
+            context.stroke();
+        });
+
+        const opacity = 0.34 * getReadingZoneOpacity(point.x, point.y, readingZone);
+        if (opacity <= 0.01) return;
+
+        context.beginPath();
+        context.arc(point.x, point.y, 1.35, 0, 2 * Math.PI);
+        context.fillStyle = `rgba(${constellationColor}, ${opacity})`;
+        context.fill();
+    });
+};
+
 // Helper function to determine if two stars can connect
 const canStarsConnect = (starA: Star, starB: Star): boolean => {
     if (!starA.connectsTo && !starB.connectsTo && !starA.connectionId && !starB.connectionId) {
@@ -67,7 +122,6 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
     const starsRef = useStars();
     const { mouseXRef, mouseYRef, mouseHasMovedRef, mouseTrackingExitedRef } = useMouse();
     const { theme } = useTheme();
-    const isMobile = window.innerWidth < 768;
 
     useEffect(() => {
         // Ensure canvas reference is available
@@ -109,6 +163,7 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
             const maxX = canvas.width;
             const maxY = canvas.height;
             const palette = LANDING_PALETTES[theme];
+            const isMobile = maxX <= MOBILE_BREAKPOINT;
 
             // Clear and set up the system-aware neutral landing-page gradient.
             context.clearRect(0, 0, maxX, maxY);
@@ -123,6 +178,10 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
             if (!isOnLandingPage) {
                 animationFrameId = requestAnimationFrame(render);
                 return;
+            }
+
+            if (isMobile) {
+                drawMobileWeb(context, maxX, maxY, palette.constellation, readingZone);
             }
 
             // Update mouse star position
@@ -151,37 +210,37 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
             });
 
             // Draw and update stars and lines between them if on landing page
-            for (const key in grid) {
-                if (isMobile || mouseTrackingExitedRef.current) break;
+            if (!isMobile && !mouseTrackingExitedRef.current) {
+                for (const key in grid) {
+                    const starsInCurrentCell = grid[key];
+                    for (const starA of starsInCurrentCell) {
+                        for (const starB of allStars) {
+                            if (starA !== starB && canStarsConnect(starA, starB)) {
+                                // Draw lines between stars
+                                const dx = starA.x - starB.x;
+                                const dy = starA.y - starB.y;
+                                const distance = Math.sqrt(dx * dx + dy * dy);
 
-                const starsInCurrentCell = grid[key];
-                for (const starA of starsInCurrentCell) {
-                    for (const starB of allStars) {
-                        if (starA !== starB && canStarsConnect(starA, starB)) {
-                            // Draw lines between stars
-                            const dx = starA.x - starB.x;
-                            const dy = starA.y - starB.y;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
+                                if (distance < MAX_CONSTELLATION_LINE_LENGTH) {
+                                    const midX = (starA.x + starB.x) / 2;
+                                    const midY = (starA.y + starB.y) / 2;
+                                    const mouseDx = midX - refX;
+                                    const mouseDy = midY - refY;
+                                    const mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
+                                    const mouseOpacity =
+                                        mouseDistance < CONSTELLATION_MOUSE_RANGE
+                                            ? 1 - mouseDistance / CONSTELLATION_MOUSE_RANGE
+                                            : 0;
+                                    const opacity = mouseOpacity * getReadingZoneOpacity(midX, midY, readingZone);
 
-                            if (distance < MAX_CONSTELLATION_LINE_LENGTH) {
-                                const midX = (starA.x + starB.x) / 2;
-                                const midY = (starA.y + starB.y) / 2;
-                                const mouseDx = midX - refX;
-                                const mouseDy = midY - refY;
-                                const mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
-                                const mouseOpacity =
-                                    mouseDistance < CONSTELLATION_MOUSE_RANGE
-                                        ? 1 - mouseDistance / CONSTELLATION_MOUSE_RANGE
-                                        : 0;
-                                const opacity = mouseOpacity * getReadingZoneOpacity(midX, midY, readingZone);
-
-                                if (opacity > 0) {
-                                    context.beginPath();
-                                    context.moveTo(starA.x, starA.y);
-                                    context.lineTo(starB.x, starB.y);
-                                    context.strokeStyle = `rgba(${palette.constellation}, ${opacity})`;
-                                    context.lineWidth = 0.5;
-                                    context.stroke();
+                                    if (opacity > 0) {
+                                        context.beginPath();
+                                        context.moveTo(starA.x, starA.y);
+                                        context.lineTo(starB.x, starB.y);
+                                        context.strokeStyle = `rgba(${palette.constellation}, ${opacity})`;
+                                        context.lineWidth = 0.5;
+                                        context.stroke();
+                                    }
                                 }
                             }
                         }
@@ -233,7 +292,7 @@ export const Stars = ({ isOnLandingPage }: { isOnLandingPage: boolean }) => {
             readingZoneObserver?.disconnect();
             context.clearRect(0, 0, canvas.width, canvas.height);
         };
-    }, [starsRef, isOnLandingPage, isMobile, mouseXRef, mouseYRef, mouseHasMovedRef, mouseTrackingExitedRef, theme]);
+    }, [starsRef, isOnLandingPage, mouseXRef, mouseYRef, mouseHasMovedRef, mouseTrackingExitedRef, theme]);
 
     return (
         <canvas

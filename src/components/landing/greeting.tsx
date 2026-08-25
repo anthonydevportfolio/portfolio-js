@@ -126,7 +126,8 @@ const GreetingBase = styled('div')<{ exited: boolean; resolvedTheme: 'dark' | 'l
         },
 
         '@media (max-width: 768px)': {
-            transform: 'translateY(100%)'
+            maxWidth: '32rem',
+            width: '100%'
         }
     })
 );
@@ -147,8 +148,14 @@ const GreetingCopy = styled('div')<{ isTransitioning: boolean }>(({ isTransition
 const GreetingHeader = styled('h1')({
     animation: `${focusReveal} 550ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both`,
     fontSize: '3rem',
+    letterSpacing: '-0.035em',
+    lineHeight: 1.05,
     color: 'var(--landing-foreground)',
     userSelect: 'none',
+
+    '@media (max-width: 480px)': {
+        fontSize: '2.25rem'
+    },
 
     '@media (prefers-reduced-motion: reduce)': {
         animation: 'none'
@@ -172,6 +179,10 @@ const GreetingText = styled('p')({
     fontSize: '1.7rem',
     color: 'var(--landing-foreground)',
     userSelect: 'none',
+
+    '@media (max-width: 480px)': {
+        fontSize: '1.125rem'
+    },
 
     '@media (prefers-reduced-motion: reduce)': {
         animation: 'none'
