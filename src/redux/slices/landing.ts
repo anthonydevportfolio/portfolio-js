@@ -1,11 +1,12 @@
 // src/features/counterSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { shouldSkipLanding } from '../../hashRouting';
 
 export const landingSlice = createSlice({
     name: 'landing',
     initialState: {
         isHoveringButton: false,
-        isExited: false,
+        isExited: shouldSkipLanding,
         isExiting: false
     },
     reducers: {

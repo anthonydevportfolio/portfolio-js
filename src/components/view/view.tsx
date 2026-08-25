@@ -4,11 +4,13 @@ import {
     KeyboardEvent as ReactKeyboardEvent,
     useCallback,
     useEffect,
+    useLayoutEffect,
     useRef,
     useState
 } from 'react';
 import linkedinLogo from '../../assets/linkedin-in.png';
 import { portfolio } from '../../data/portfolio';
+import { scrollToInitialHash } from '../../hashRouting';
 import { handleImageError } from '../../imageFallback';
 import { useLogger, useSelectorw } from '../../redux/hooks';
 import {
@@ -256,6 +258,11 @@ export const View: FC = () => {
     const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
     const [isMobileThemeSubmenuOpen, setIsMobileThemeSubmenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState<PortfolioSection>('about');
+
+    useLayoutEffect(() => {
+        if (isExited) scrollToInitialHash();
+    }, [isExited]);
+
     const suppressMobileMenuMotion = useCallback(() => {
         const mobileNav = mobileNavRef.current;
 
@@ -502,7 +509,7 @@ export const View: FC = () => {
                     <a
                         aria-label='Anthony Griffin, back to introduction'
                         className='portfolio-nav__brand'
-                        href='#about'
+                        href='/'
                         onClick={event => {
                             if (!window.matchMedia('(max-width: 640px)').matches) return;
                             closeMobileMenu(true, event.detail === 0);

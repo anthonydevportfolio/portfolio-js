@@ -1,10 +1,11 @@
 // src/features/counterSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { shouldSkipLanding } from '../../hashRouting';
 
 export const globalSlice = createSlice({
     name: 'global',
     initialState: {
-        isOnLandingPage: true,
+        isOnLandingPage: !shouldSkipLanding,
         containerSizeEstablished: false
     },
     reducers: {
