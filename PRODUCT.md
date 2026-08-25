@@ -55,8 +55,9 @@ reach him directly.
 -   Anthony's public GitHub profile is `https://github.com/anthony4834`.
 -   Anthony's email address, phone number, LinkedIn profile, and current technology inventory are approved by
     `Anthony-Griffin-Resume-0826.pdf`.
--   The resume approves the quantitative impact metrics used in the experience ledger. The repository still contains no
-    approved testimonials or public resume asset. These must not be fabricated.
+-   The resume approves the quantitative impact metrics used in the experience ledger and is published as
+    `public/Anthony-Griffin-Resume-0826.pdf`. The repository still contains no approved testimonials. These must not be
+    fabricated.
 
 ## Product Principles
 

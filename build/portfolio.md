@@ -142,3 +142,4 @@ Feb 2022 — May 2023 · McLean, VA
 - Phone: [971-488-6554](tel:+19714886554)
 - GitHub: https://github.com/anthony4834
 - LinkedIn: https://www.linkedin.com/in/anthony-griffin-0513271aa/
+- Resume: /Anthony-Griffin-Resume-0826.pdf

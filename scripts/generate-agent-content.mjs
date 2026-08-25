@@ -178,9 +178,10 @@ const staticShell = `<!-- agent-content:start -->
                 <section aria-labelledby="static-about-title" id="static-about">
                     <h2 id="static-about-title">${escapeHtml(portfolio.introductionHeading)}</h2>
                     <p>${escapeHtml(portfolio.introduction)}</p>
-                    <nav aria-label="Professional profiles">
+                    <nav aria-label="Professional links">
                         <a href="${escapeHtml(portfolio.profiles.github)}">GitHub</a> ·
-                        <a href="${escapeHtml(portfolio.profiles.linkedin)}">LinkedIn</a>
+                        <a href="${escapeHtml(portfolio.profiles.linkedin)}">LinkedIn</a> ·
+                        <a href="${escapeHtml(portfolio.profiles.resume)}" rel="noreferrer" target="_blank">Resume</a>
                     </nav>
                     <aside aria-labelledby="static-current-role-title">
                         <h3 id="static-current-role-title">${escapeHtml(portfolio.labels.currentRole)} ${escapeHtml(currentExperience.company)}</h3>
@@ -312,6 +313,7 @@ ${group.items.map(item => `- ${item}`).join('\n')}
 - Phone: ${markdownLink(portfolio.contact.phoneDisplay, portfolio.contact.phoneUrl)}
 - GitHub: ${portfolio.profiles.github}
 - LinkedIn: ${portfolio.profiles.linkedin}
+- Resume: ${portfolio.profiles.resume}
 `;
 
 const llmsText = `# ${portfolio.name}
@@ -327,6 +329,7 @@ const llmsText = `# ${portfolio.name}
 
 - ${markdownLink('GitHub', portfolio.profiles.github)}
 - ${markdownLink('LinkedIn', portfolio.profiles.linkedin)}
+- ${markdownLink('Resume', `${siteUrl}${portfolio.profiles.resume}`)}
 `;
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

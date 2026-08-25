@@ -25,6 +25,7 @@ import './view.css';
 
 const GITHUB_URL = portfolio.profiles.github;
 const LINKEDIN_URL = portfolio.profiles.linkedin;
+const RESUME_URL = portfolio.profiles.resume;
 const EMAIL_ADDRESS = portfolio.contact.email;
 const PHONE_DISPLAY = portfolio.contact.phoneDisplay;
 const PHONE_URL = portfolio.contact.phoneUrl;
@@ -91,6 +92,13 @@ const LinkedInIcon = () => (
         src={linkedinLogo}
         width='26'
     />
+);
+
+const ResumeIcon = () => (
+    <svg aria-hidden='true' className='portfolio-action-icon' viewBox='0 0 24 24'>
+        <path d='M6.5 3.5h7l4 4v13h-11z' />
+        <path d='M13.5 3.5v4h4M9.5 12h5M9.5 15.5h5' />
+    </svg>
 );
 
 const EmailIcon = () => (
@@ -693,7 +701,7 @@ export const View: FC = () => {
                     <div className='portfolio-intro__copy'>
                         <h1 id='about-title'>{portfolio.introductionHeading}</h1>
                         <p>{portfolio.introduction}</p>
-                        <div aria-label='Professional profiles' className='portfolio-intro__profiles'>
+                        <div aria-label='Professional links' className='portfolio-intro__profiles'>
                             <a
                                 aria-label='LinkedIn profile (opens in a new tab)'
                                 href={LINKEDIN_URL}
@@ -707,6 +715,13 @@ export const View: FC = () => {
                                 rel='noreferrer'
                                 target='_blank'>
                                 <GitHubIcon />
+                            </a>
+                            <a
+                                aria-label='Resume (opens in a new tab)'
+                                href={RESUME_URL}
+                                rel='noreferrer'
+                                target='_blank'>
+                                <ResumeIcon />
                             </a>
                         </div>
                     </div>

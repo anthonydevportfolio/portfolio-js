@@ -29,8 +29,8 @@ project and employment evidence, and continue to a live project, professional pr
 
 Use the approved resume for Workday and Freddie Mac via Hexaware Technologies history and impact metrics. Use the
 existing fmr.fyi, Pokedle, BlockLens, Chrona, pol.ai, and Solas screenshots and links, the resume-approved technology
-inventory and contact details, and the verified GitHub profile path. Do not fabricate testimonials, resume links, or
-project claims.
+inventory and contact details, the published resume asset, and the verified GitHub profile path. Do not fabricate
+testimonials or project claims.
 
 ## Chosen direction
 
@@ -68,4 +68,4 @@ point.
 
 ## Unresolved decisions
 
-A public resume URL remains unavailable. Contact details are sourced from the approved resume.
+None. Contact details and the published resume are sourced from the approved resume.

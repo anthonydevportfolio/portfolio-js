@@ -447,7 +447,7 @@
 .portfolio-intro__profiles {
     display: grid;
     gap: 0.5rem;
-    grid-template-columns: repeat(2, 44px);
+    grid-template-columns: repeat(3, 44px);
     margin-top: 1.5rem;
 }
 

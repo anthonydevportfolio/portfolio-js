@@ -196,8 +196,9 @@ cursor.
 
 ### Profile Actions
 
-LinkedIn and GitHub sit directly below the introduction as two compact, equal logo-only tiles. Each keeps an accessible
-link name and visible focus treatment without repeating the service name or adding an external-link cue.
+LinkedIn, GitHub, and the current resume sit directly below the introduction as three compact, equal icon-only tiles.
+Each keeps an accessible link name and visible focus treatment without repeating the destination name or adding an
+external-link cue.
 
 ### Experience Ledger
 

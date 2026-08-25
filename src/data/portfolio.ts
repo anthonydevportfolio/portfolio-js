@@ -67,6 +67,7 @@ export interface PortfolioData {
     profiles: {
         github: string;
         linkedin: string;
+        resume: string;
     };
     projects: PortfolioProject[];
     experience: PortfolioExperience[];
