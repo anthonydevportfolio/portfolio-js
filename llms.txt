@@ -1,0 +1,14 @@
+# Anthony Griffin
+
+> Personal portfolio of Anthony Griffin, a full-stack software engineer building thoughtful, reliable products.
+
+## Portfolio
+
+- [Portfolio overview](https://anthony-dev.com/portfolio.md): Biography, skills, experience, contact details, and selected software projects.
+- [Interactive portfolio](https://anthony-dev.com/): Visual, interactive version of the same portfolio.
+
+## Profiles
+
+- [GitHub](https://github.com/anthony4834)
+- [LinkedIn](https://www.linkedin.com/in/anthony-griffin-0513271aa/)
+- [Resume](https://anthony-dev.com/Anthony-Griffin-Resume-0826.pdf)
